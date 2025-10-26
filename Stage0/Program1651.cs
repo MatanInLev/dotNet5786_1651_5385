@@ -7,7 +7,7 @@
         System.Console.ReadKey();
     }
 
-    static partial void Welcome7440();
+    static partial void Welcome5385();
     private static void Welcome1651()
     {
         System.Console.Write("Enter your name: ");
