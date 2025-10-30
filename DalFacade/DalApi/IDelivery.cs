@@ -1,6 +1,7 @@
 ﻿// Module IDelivery.cs
+using DO;
 namespace DalApi;
-using global::DO;
+
 public interface IDelivery
 {
     void Create(Delivery item); //Creates new entity object in DAL

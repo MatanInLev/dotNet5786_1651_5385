@@ -1,6 +1,6 @@
-﻿
+﻿using DO;
 namespace DalApi;
-using DO;
+
 public interface IOrder
 {
     void Create(Order iOrderem); //Creates new entity object in DAL
