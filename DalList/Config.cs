@@ -6,9 +6,9 @@ static internal class Config
     private static int nextOrderId = OrderStartId;
     internal static int NextOrderId { get => ++nextOrderId; }
 
-    const internal int DeliveryStartId = 1;
+    const internal static int DeliveryStartId = 1;
     private static int nextDeliveryId = DeliveryStartId;
-    internal static in NextDeliveryId { get => ++nextDeliveryId; } 
+    internal static int NextDeliveryId { get => ++nextDeliveryId; } 
 
  	internal static DateTime Clock { get; set; } = DateTime.Now;
 
