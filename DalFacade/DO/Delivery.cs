@@ -14,7 +14,7 @@ namespace DO;
 /// <param name="EndTime">Time when the delivery ended (if completed)</param>
 internal class Delivery
 {
-    public required int Id { get; init; }
+    public required int Id { get; init; }/// running ID number
     public required int OrderId { get; init; }
     public required int CourierId { get; init; }
     public OrderType OrderType { get; init; } = OrderType.Other;

@@ -17,7 +17,7 @@ namespace DO;
 /// <param name="OrderTime">Time when the order was placed</param>
 public record Order
 {
-    public required int Id { get; init; }
+    public required int Id { get; init; }/// running ID number
     public string? Description { get; set; } = null;
     public string Address { get; set; } = "Unknown";
     public double Latitude { get; set; } = 0.0;
