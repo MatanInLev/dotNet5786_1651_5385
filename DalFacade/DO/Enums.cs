@@ -1,5 +1,6 @@
 ﻿namespace DO;
 
+
 public enum VehicleType
 {
     Bike,

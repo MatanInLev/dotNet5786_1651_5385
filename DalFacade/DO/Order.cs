@@ -1,4 +1,14 @@
-﻿// Module Order.cs
+﻿/// Module Order.cs
+/// 
+/*
+AI PROMPT (for documentation):
+"Based on the project specification PDFs (General + Stage 1), generate the 'DO.Order'
+ entity as a C# record. 
+- Ensure all properties match the 'ישות נתונים הזמנה' table.
+- Use nullable types where specified (e.g., Description, Volume).
+- Include a parameterless constructor for XML serialization, as required by Stage 3.
+- All documentation comments (///) must be in English."
+*/
 namespace DO;
 
 /// <summary>

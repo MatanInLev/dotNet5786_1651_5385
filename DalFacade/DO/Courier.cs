@@ -1,4 +1,15 @@
-﻿// Module Courier.cs
+﻿///Module Courier.cs
+
+/*
+AI PROMPT (for documentation):
+"Based on the project specification PDFs, generate the 'DO.Courier' entity as a 
+C# record.
+- Ensure all properties match the 'ישות נתונים שליח' table.
+- Use nullable types where specified (e.g., MaxDistance).
+- Omit the 'Password' property as it is an optional add-on.
+- Include a parameterless constructor for XML serialization.
+- All documentation comments (///) must be in English."
+*/
 namespace DO;
 
 /// <summary>
