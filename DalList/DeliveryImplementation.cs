@@ -1,4 +1,5 @@
 ﻿using DalApi;
+using DalList;
 using DO;
 
 namespace Dal;
@@ -7,31 +8,40 @@ public class DeliveryImplementation : IDelivery
 {
     public void Create(Delivery item)
     {
-        throw new NotImplementedException();
+        int newId = Config.NextDeliveryId;
+        Delivery deliveryToAdd = item with { Id = newId };
+        DataSource.Deliveries.Add(deliveryToAdd);
     }
 
     public void Delete(int id)
     {
-        throw new NotImplementedException();
+        int index = DataSource.Deliveries.FindIndex(delivery => delivery.Id == id);
+        if (index == -1)
+            throw new InvalidOperationException("An object of type Delivery with ID: {id} does not exist.");
+        DataSource.Deliveries.RemoveAt(index);
     }
 
     public void DeleteAll()
     {
-        throw new NotImplementedException();
+        DataSource.Deliveries.Clear();
     }
 
     public Delivery? Read(int id)
     {
-        throw new NotImplementedException();
+        Delivery? deliveryToFind = DataSource.Deliveries.Find(delivery => delivery.Id == id);
+        return deliveryToFind;
     }
 
     public List<Delivery> ReadAll()
     {
-        throw new NotImplementedException();
+        return new List<Delivery>(DataSource.Deliveries);
     }
 
     public void Update(Delivery item)
     {
-        throw new NotImplementedException();
+        int index = DataSource.Deliveries.FindIndex(delivery => delivery.Id == item.Id);
+        if (index == -1)
+            throw new InvalidOperationException("An object of type Delivery with ID: {item.Id} does not exist.");
+        DataSource.Deliveries[index] = item;
     }
 }
