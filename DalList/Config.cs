@@ -2,11 +2,11 @@
 
 static internal class Config
 {
-    const internal int OrderStartId = 1;
+    internal const int OrderStartId = 1;
     private static int nextOrderId = OrderStartId;
     internal static int NextOrderId { get => ++nextOrderId; }
 
-    const internal static int DeliveryStartId = 1;
+    internal const int DeliveryStartId = 1;
     private static int nextDeliveryId = DeliveryStartId;
     internal static int NextDeliveryId { get => ++nextDeliveryId; } 
 
