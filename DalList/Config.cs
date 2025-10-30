@@ -3,19 +3,19 @@
 static internal class Config
 {
     internal const int OrderStartId = 1;
-    private static int nextOrderId = OrderStartId;
-    internal static int NextOrderId { get => ++nextOrderId; }
+    private static int _nextOrderId = OrderStartId;
+    internal static int NextOrderId { get => ++_nextOrderId; }
 
     internal const int DeliveryStartId = 1;
-    private static int nextDeliveryId = DeliveryStartId;
-    internal static int NextDeliveryId { get => ++nextDeliveryId; } 
+    private static int _nextDeliveryId = DeliveryStartId;
+    internal static int NextDeliveryId { get => ++_nextDeliveryId; } 
 
  	internal static DateTime Clock { get; set; } = DateTime.Now;
 
     internal static void Reset()
     {
-        nextOrderId = OrderStartId;
-        nextDeliveryId = DeliveryStartId;
+        _nextOrderId = OrderStartId;
+        _nextDeliveryId = DeliveryStartId;
         Clock = DateTime.Now;
 
     }

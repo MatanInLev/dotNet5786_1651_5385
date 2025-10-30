@@ -7,7 +7,7 @@ public class CourierImplementation : ICourier
 {
     public void Create(Courier item)
     {
-        throw new NotImplementedException();
+
     }
 
     public void Delete(int id)
