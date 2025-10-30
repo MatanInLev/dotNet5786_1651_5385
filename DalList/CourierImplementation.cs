@@ -1,5 +1,6 @@
 ﻿namespace Dal;
 using DalApi;
+using DalList;
 using DO;
 using System.Collections.Generic;
 
@@ -7,31 +8,43 @@ public class CourierImplementation : ICourier
 {
     public void Create(Courier item)
     {
-
+        if (DataSource.Couriers.Find(Courier => Courier.Id == item.Id) == null)
+        {
+            throw new InvalidOperationException("An object of type courier with such ID does not exist.");
+        }
+        
+        DataSource.Couriers.Add(item);
     }
 
     public void Delete(int id)
     {
-        throw new NotImplementedException();
+        int index = DataSource.Couriers.FindIndex(Courier => Courier.Id == id);
+        if (index == -1)
+            throw new InvalidOperationException("An object of type courier with such ID does not exist.");
+        DataSource.Couriers.RemoveAt(index);
     }
 
     public void DeleteAll()
     {
-        throw new NotImplementedException();
+        DataSource.Couriers.Clear();
     }
 
     public Courier? Read(int id)
     {
-        throw new NotImplementedException();
+        Courier? orderToFind = DataSource.Couriers.Find(Courier => Courier.Id == id);
+        return orderToFind;
     }
 
     public List<Courier> ReadAll()
     {
-        throw new NotImplementedException();
+        return new List<Courier>(DataSource.Couriers);
     }
 
     public void Update(Courier item)
     {
-        throw new NotImplementedException();
+        int index = DataSource.Couriers.FindIndex(Courier => Courier.Id == item.Id);
+        if (index == -1)
+            throw new InvalidOperationException("An object of type courier with such ID does not exist.");
+        DataSource.Couriers[index] = item;
     }
 }
