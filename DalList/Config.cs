@@ -1,22 +1,25 @@
-﻿namespace DalList;
+﻿using DalApi;
+namespace DalList;
 
-static internal class Config
+ internal class Config: IConfig
 {
+    internal static Config Instance { get; } = new();
     internal const int OrderStartId = 1;
-    private static int _nextOrderId = OrderStartId;
-    internal static int NextOrderId { get => ++_nextOrderId; }
+    private  int _nextOrderId = OrderStartId;
+    internal  int NextOrderId { get => ++_nextOrderId; }
 
     internal const int DeliveryStartId = 1;
-    private static int _nextDeliveryId = DeliveryStartId;
-    internal static int NextDeliveryId { get => ++_nextDeliveryId; } 
+    private  int _nextDeliveryId = DeliveryStartId;
+    internal int NextDeliveryId { get => ++_nextDeliveryId; } 
 
- 	internal static DateTime Clock { get; set; } = DateTime.Now;
+ 	public DateTime Clock { get; set; } = DateTime.Now;
+    public int MaxRange { get; set; } = 50;
 
-    internal static void Reset()
+    public void Reset()
     {
         _nextOrderId = OrderStartId;
         _nextDeliveryId = DeliveryStartId;
         Clock = DateTime.Now;
-
+        MaxRange = 50;
     }
 }

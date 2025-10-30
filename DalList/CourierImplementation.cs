@@ -8,14 +8,14 @@ public class CourierImplementation : ICourier
 {
     public void Create(Courier item)
     {
-        if (DataSource.Couriers.Find(Courier => Courier.Id == item.Id) == null)
+        if (DataSource.Couriers.Find(item => item.Id == item.Id)!=null)
         {
-            throw new InvalidOperationException("An object of type courier with ID: {id} does not exist.");
+            throw new InvalidOperationException("An object of type courier with ID: {id} already exist.");
         }
-        
         DataSource.Couriers.Add(item);
-    }
 
+    }
+   
     public void Delete(int id)
     {
         int index = DataSource.Couriers.FindIndex(Courier => Courier.Id == id);

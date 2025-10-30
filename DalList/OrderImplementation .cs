@@ -9,7 +9,7 @@ public class OrderImplementation : IOrder
 {
     public void Create(Order item)
     {
-        int newId = Config.NextOrderId;
+        int newId = Config.Instance.NextOrderId;
         Order orderToAdd = item with { Id = newId };
         DataSource.Orders.Add(orderToAdd);
     }

@@ -8,7 +8,7 @@ public class DeliveryImplementation : IDelivery
 {
     public void Create(Delivery item)
     {
-        int newId = Config.NextDeliveryId;
+        int newId = Config.Instance.NextDeliveryId;
         Delivery deliveryToAdd = item with { Id = newId };
         DataSource.Deliveries.Add(deliveryToAdd);
     }
