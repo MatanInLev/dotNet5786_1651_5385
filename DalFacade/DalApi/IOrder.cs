@@ -3,7 +3,7 @@ namespace DalApi;
 
 public interface IOrder
 {
-    void Create(Order iOrderem); //Creates new entity object in DAL
+    void Create(Order item); //Creates new entity object in DAL
     Order? Read(int id); //Reads entity object by its ID 
     List<Order> ReadAll(); //stage 1 only, Reads all entity objects
     void Update(Order item); //Updates entity object
