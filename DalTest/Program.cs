@@ -1,4 +1,15 @@
-﻿using DalApi;
+﻿/*
+AI PROMPT (for documentation):
+"Create the complete 'DalTest/Program.cs' file based on all rules in Chapter 11.
+- It must include a main loop and sub-menus for all entities.
+- It must use Enums for menu choices.
+- All DAL calls must be wrapped in 'try-catch' blocks.
+- All user input must use 'TryParse' (11d, Sec 8).
+- Implement the 'Create' (manual input) for the 'Courier' entity fully.
+- All XML documentation comments (///) must be in English."
+*/
+
+using DalApi;
 using DO; // Required for entity types and Enums
 using Dal; // Required to instantiate concrete implementation classes
 using System;
@@ -36,16 +47,14 @@ public enum CrudMenuOptions
 }
 
 /// <summary>
-/// Main program class for manually testing the Data Access Layer (DAL).
-/// This implements the Console Line Interface (CLI) as required by Stage 1, Chapter 11.
+/// Main program class for manually testing the DAL layer.
+/// (Implements Stage 1, Chapter 11)
 /// </summary>
 public static class Program
 {
-    // --- 11a: Initialization of Interfaces ---
+    // --- 11a: Interface Initialization ---
 
-    /// <summary>
-    /// Initializes concrete DAL implementation instances for each interface.
-    /// </summary>
+    // Instantiate concrete implementation classes from the DalList layer
     private static IConfig s_dalIConfig = new ConfigImplementation();
     private static ICourier s_dalICourier = new CourierImplementation();
     private static IOrder s_dalIOrder = new OrderImplementation();
@@ -54,16 +63,12 @@ public static class Program
 
     // --- Main Entry Point ---
 
-    /// <summary>
-    /// The entry point of the DAL Test Program. Runs the main menu loop.
-    /// </summary>
-    /// <paramname="args">Command line arguments (unused).</param>
     public static void Main(string[] args)
     {
-        // 11a, Sec 2: Wrap the main program logic in a try-catch block to handle exceptions
+        // 11a, Sec 2: Wrap the main logic in a try-catch block
         try
         {
-            // Set the Configuration clock to a specific past time for predictable data initialization
+            // Set a fixed past system clock time for predictable data initialization
             s_dalIConfig.Clock = new DateTime(2025, 10, 15, 10, 0, 0);
 
             // 11c: Main loop
@@ -76,9 +81,9 @@ public static class Program
                 Console.WriteLine("2: Order Management (CRUD)");
                 Console.WriteLine("3: Delivery Management (CRUD)");
                 Console.WriteLine("4: Configuration Settings");
-                Console.WriteLine("5: Initialize All Data");
+                Console.WriteLine("5: Initialize All Data (Initialization.Do)");
                 Console.WriteLine("6: Show All Entities");
-                Console.WriteLine("7: Reset All Data");
+                Console.WriteLine("7: Reset All Data (DeleteAll + Config.Reset)");
 
                 Console.Write("\nEnter your choice: ");
 
@@ -126,7 +131,7 @@ public static class Program
         }
         catch (Exception ex)
         {
-            // 11a, Sec 2: Catch any unhandled exceptions (e.g., initialization issues)
+            // 11a, Sec 2: Catch any unhandled exceptions (e.g., interface instantiation issues)
             Console.WriteLine($"\n--- FATAL ERROR ---");
             Console.WriteLine($"An unhandled exception occurred: {ex.Message}");
         }
@@ -136,7 +141,7 @@ public static class Program
     // --- Helper Methods (11d, Sec 2) ---
 
     /// <summary>
-    /// Calls the data initialization routine in DalTest/Initialization.cs.
+    /// Calls the initialization routine in DalTest/Initialization.cs.
     /// (Implements 11b: Initialization)
     /// </summary>
     private static void InitializeData()
@@ -187,7 +192,6 @@ public static class Program
         try
         {
             Console.WriteLine("\n--- ALL COURIERS ---");
-            // 11d, Sec 5: Use ForEach for iteration (no 'for' loop)
             s_dalICourier.ReadAll().ForEach(c => Console.WriteLine(c));
 
             Console.WriteLine("\n--- ALL ORDERS ---");
@@ -208,12 +212,11 @@ public static class Program
     }
 
 
-    // --- Entity Sub-Menus ---
+    // --- Sub-Menus ---
 
     /// <summary>
-    /// Handles the Courier CRUD menu operations.
+    /// Displays the CRUD menu for the Courier entity.
     /// </summary>
-    /// <paramname="dal">The ICourier interface implementation.</param>
     private static void ShowCourierMenu(ICourier dal)
     {
         CrudMenuOptions choice = CrudMenuOptions.Return;
@@ -221,7 +224,7 @@ public static class Program
         {
             Console.WriteLine("\n--- Courier CRUD Menu ---");
             Console.WriteLine("0: Return");
-            Console.WriteLine("1: Create (Requires complex manual input, skipping here)");
+            Console.WriteLine("1: Create (Manual Input)");
             Console.WriteLine("2: Read Single (by ID)");
             Console.WriteLine("3: Read All");
             Console.WriteLine("6: Delete All");
@@ -234,13 +237,17 @@ public static class Program
             {
                 switch (choice)
                 {
+                    case CrudMenuOptions.Create:
+                        // Call the complex input helper method
+                        DO.Courier newCourier = InputCourier();
+                        dal.Create(newCourier);
+                        Console.WriteLine($"Courier created successfully with ID: {newCourier.Id}");
+                        break;
                     case CrudMenuOptions.ReadSingle:
-                        Console.Write("Enter Courier ID (T\"Z): ");
-                        if (int.TryParse(Console.ReadLine(), out int id))
-                        {
-                            var courier = dal.Read(id);
-                            Console.WriteLine(courier != null ? courier.ToString() : "Courier not found.");
-                        }
+                        int id = ReadInt("Enter Courier ID (T\"Z): ");
+                        var courier = dal.Read(id);
+                        // CS0019 FIX: Use conditional expression for printing
+                        Console.WriteLine(courier != null ? courier.ToString() : "Courier not found.");
                         break;
                     case CrudMenuOptions.ReadAll:
                         // 11d, Sec 4: ReadAll and print with implicit ToString
@@ -262,9 +269,8 @@ public static class Program
     }
 
     /// <summary>
-    /// Handles the Order CRUD menu operations.
+    /// Displays the CRUD menu for the Order entity.
     /// </summary>
-    /// <paramname="dal">The IOrder interface implementation.</param>
     private static void ShowOrderMenu(IOrder dal)
     {
         CrudMenuOptions choice = CrudMenuOptions.Return;
@@ -272,6 +278,7 @@ public static class Program
         {
             Console.WriteLine("\n--- Order CRUD Menu ---");
             Console.WriteLine("0: Return | 2: Read Single (by ID) | 3: Read All | 6: Delete All");
+            Console.WriteLine("(Create and Update skipped due to complexity in CLI)");
             Console.Write("Enter choice: ");
             if (!int.TryParse(Console.ReadLine(), out int numChoice)) continue;
             choice = (CrudMenuOptions)numChoice;
@@ -281,12 +288,10 @@ public static class Program
                 switch (choice)
                 {
                     case CrudMenuOptions.ReadSingle:
-                        Console.Write("Enter Order ID: ");
-                        if (int.TryParse(Console.ReadLine(), out int id))
-                        {
-                            var order = dal.Read(id);
-                            Console.WriteLine(order != null ? order.ToString() : "Order not found.");
-                        }
+                        int id = ReadInt("Enter Order ID: ");
+                        var order = dal.Read(id);
+                        // CS0019 FIX: Use conditional expression
+                        Console.WriteLine(order != null ? order.ToString() : "Order not found.");
                         break;
                     case CrudMenuOptions.ReadAll:
                         dal.ReadAll().ForEach(o => Console.WriteLine(o));
@@ -306,9 +311,8 @@ public static class Program
     }
 
     /// <summary>
-    /// Handles the Delivery CRUD menu operations.
+    /// Displays the CRUD menu for the Delivery entity.
     /// </summary>
-    /// <paramname="dal">The IDelivery interface implementation.</param>
     private static void ShowDeliveryMenu(IDelivery dal)
     {
         CrudMenuOptions choice = CrudMenuOptions.Return;
@@ -316,6 +320,7 @@ public static class Program
         {
             Console.WriteLine("\n--- Delivery CRUD Menu ---");
             Console.WriteLine("0: Return | 2: Read Single (by ID) | 3: Read All | 6: Delete All");
+            Console.WriteLine("(Create and Update skipped due to complexity in CLI)");
             Console.Write("Enter choice: ");
             if (!int.TryParse(Console.ReadLine(), out int numChoice)) continue;
             choice = (CrudMenuOptions)numChoice;
@@ -325,12 +330,10 @@ public static class Program
                 switch (choice)
                 {
                     case CrudMenuOptions.ReadSingle:
-                        Console.Write("Enter Delivery ID: ");
-                        if (int.TryParse(Console.ReadLine(), out int id))
-                        {
-                            var delivery = dal.Read(id);
-                            Console.WriteLine(delivery != null ? delivery.ToString() : "Delivery not found.");
-                        }
+                        int id = ReadInt("Enter Delivery ID: ");
+                        var delivery = dal.Read(id);
+                        // CS0019 FIX: Use conditional expression
+                        Console.WriteLine(delivery != null ? delivery.ToString() : "Delivery not found.");
                         break;
                     case CrudMenuOptions.ReadAll:
                         dal.ReadAll().ForEach(d => Console.WriteLine(d));
@@ -350,8 +353,7 @@ public static class Program
     }
 
     /// <summary>
-    /// Handles the Configuration management menu.
-    /// (Implements 11c: Configuration Menu)
+    /// Displays the Configuration menu for managing the system clock and variables.
     /// </summary>
     private static void ShowConfigMenu()
     {
@@ -374,16 +376,9 @@ public static class Program
                         Console.WriteLine($"Current System Clock: {s_dalIConfig.Clock}");
                         break;
                     case 2:
-                        Console.Write("Enter hours to advance: ");
-                        if (double.TryParse(Console.ReadLine(), out double hours))
-                        {
-                            s_dalIConfig.Clock = s_dalIConfig.Clock.AddHours(hours);
-                            Console.WriteLine($"Clock advanced. New time: {s_dalIConfig.Clock}");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Invalid hour input.");
-                        }
+                        double hours = ReadDouble("Enter hours to advance: ");
+                        s_dalIConfig.Clock = s_dalIConfig.Clock.AddHours(hours);
+                        Console.WriteLine($"Clock advanced. New time: {s_dalIConfig.Clock}");
                         break;
                     case 3:
                         Console.WriteLine($"Current Max Range: {s_dalIConfig.MaxRange}");
@@ -397,4 +392,134 @@ public static class Program
             }
         } while (choice != 0);
     }
+
+    // --- Complex Input Helper Methods ---
+
+    /// <summary>
+    /// Interactively prompts the user for all details needed to create a new Courier.
+    /// (Implements 11c input requirement)
+    /// </summary>
+    private static DO.Courier InputCourier()
+    {
+        Console.WriteLine("\n--- Create New Courier ---");
+
+        int id = ReadInt("Enter ID (T\"Z): ");
+        string name = ReadString("Enter Name: ");
+        string phone = ReadString("Enter Phone (e.g., 0501234567): ");
+        string email = ReadString("Enter Email: ");
+
+        // Enum input
+        DO.VehicleType vehicle = ReadEnum<DO.VehicleType>("Enter Vehicle Type (Car=0, Motorcycle=1, Bicycle=2, Foot=3): ");
+
+        // Nullable double input
+        double? maxDistance = ReadDoubleNull("Enter Max Distance (in km, leave blank for null): ");
+
+        // Bool input
+        bool isActive = ReadBool("Is courier active? (yes/no): ");
+
+        // Use system clock for start date
+        DateTime startDate = s_dalIConfig.Clock;
+        Console.WriteLine($"Setting Start Date to current system clock: {startDate}");
+
+        // CS1739 FIX: Changed from positional constructor ( ... )
+        // to object initializer syntax { ... }
+        // This must match the DO.Courier.cs record definition.
+        return new Courier() // Call the parameterless constructor
+        {
+            Id = id,
+            Name = name,
+            PhoneNumber = phone,
+            Email = email,
+            IsActive = isActive,
+            Distance = maxDistance,
+            VehicleType = vehicle
+        };
+    }
+
+    // --- Safe Input Helper Methods (using TryParse) ---
+
+    /// <summary>
+    /// Reads a non-empty string from the console.
+    /// </summary>
+    private static string ReadString(string prompt)
+    {
+        string? input;
+        do
+        {
+            Console.Write(prompt);
+            input = Console.ReadLine();
+        } while (string.IsNullOrWhiteSpace(input));
+        return input;
+    }
+
+    /// <summary>
+    /// Reads a valid integer from the console.
+    /// </summary>
+    private static int ReadInt(string prompt)
+    {
+        int result;
+        while (!int.TryParse(ReadString(prompt), out result))
+        {
+            Console.WriteLine("Invalid input. Please enter a valid integer.");
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Reads a valid double from the console.
+    /// </summary>
+    private static double ReadDouble(string prompt)
+    {
+        double result;
+        while (!double.TryParse(ReadString(prompt), out result))
+        {
+            Console.WriteLine("Invalid input. Please enter a valid number.");
+        }
+        return result;
+    }
+
+    /// <summary>
+    /// Reads a valid nullable double from the console.
+    /// </summary>
+    private static double? ReadDoubleNull(string prompt)
+    {
+        Console.Write(prompt);
+        string? input = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(input))
+        {
+            return null; // Allows empty input for nullable
+        }
+        if (double.TryParse(input, out double result))
+        {
+            return result;
+        }
+        Console.WriteLine("Invalid input. Setting to null.");
+        return null;
+    }
+
+    /// <summary>
+    /// Reads a boolean value from the console (y/yes/true).
+    /// </summary>
+    private static bool ReadBool(string prompt)
+    {
+        string input = ReadString(prompt).ToLower();
+        return input == "y" || input == "yes" || input == "true";
+    }
+
+    /// <summary>
+    /// Reads a valid Enum value from the console.
+    /// </summary>
+    private static T ReadEnum<T>(string prompt) where T : struct, Enum
+    {
+        T result;
+        string input = ReadString(prompt);
+        while (!Enum.TryParse(input, true, out result) || !Enum.IsDefined(typeof(T), result))
+        {
+            Console.WriteLine("Invalid type. Please enter one of the listed options.");
+            input = ReadString(prompt);
+        }
+        return result;
+    }
 }
+
+
