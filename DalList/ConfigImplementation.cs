@@ -15,10 +15,11 @@ AI PROMPT (for documentation):
 - The 'Reset' method should simply call 'Config.Reset()'."
 */
 using DalList;
+using DalApi;
 
 namespace Dal;
 
-public class ConfigImplementation
+public class ConfigImplementation : IConfig
 {
     
     public DateTime Clock
