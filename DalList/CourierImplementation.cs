@@ -8,7 +8,7 @@ public class CourierImplementation : ICourier
 {
     public void Create(Courier item)
     {
-        if (DataSource.Couriers.Find(item => item.Id == item.Id)!=null)
+        if (DataSource.Couriers.Find(c => c.Id == item.Id)!=null)
         {
             throw new InvalidOperationException($"An object of type courier with ID: {item.Id} already exist.");
         }
