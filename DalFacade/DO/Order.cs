@@ -28,6 +28,7 @@ namespace DO;
 public record Order
 {
     public required int Id { get; init; }/// running ID number
+    public OrderType OrderType { get; init; } = OrderType.Other;
     public string? Description { get; set; } = null;
     public string Address { get; set; } = "Unknown";
     public double Latitude { get; set; } = 0.0;
@@ -36,7 +37,7 @@ public record Order
     public string CustomerPhone { get; set; } = "0000000000";
     public double? Weight { get; set; } = null;
     public double? Volume { get; set; } = null;
-    public bool Fragile { get; set; } = false;
+    public bool? Fragile { get; set; } = null;
     public DateTime OrderTime { get; set; } = DateTime.Now;
 
     /// <summary>

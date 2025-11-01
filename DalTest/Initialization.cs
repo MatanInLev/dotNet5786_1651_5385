@@ -73,21 +73,21 @@ public static class Initialization
                 OrderType type = (OrderType)s_rand.Next(Enum.GetValues(typeof(OrderType)).Length);
                 DateTime openTime = s_dalIConfig!.Clock.AddDays(-s_rand.Next(1, 60));
 
-                Order newOrder = new(
-                    
-                    Id: 0,
-                    Type: type,
-                    Description: $"{type} order for {customerName}",
-                    Address: randomAddress.Address,
-                    Latitude: randomAddress.Latitude,
-                    Longitude: randomAddress.Longitude,
-                    CustomerName: customerName,
-                    CustomerPhone: customerPhone,
-                    Volume: s_rand.NextDouble() > 0.5 ? s_rand.Next(1, 5) : null,
-                    Weight: s_rand.NextDouble() > 0.5 ? s_rand.Next(1, 10) : null,
-                    Fragile: s_rand.NextDouble() > 0.5 ? (s_rand.Next(0, 2) == 0) : null,
-                    OpenTime: openTime
-                );
+                Order newOrder = new()
+                {
+                    Id = 0,
+                    OrderType = type,
+                    Description = $"{type} order for {customerName}",
+                    Address = randomAddress.Address,
+                    Latitude = randomAddress.Latitude,
+                    Longitude = randomAddress.Longitude,
+                    CustomerName = customerName,
+                    CustomerPhone = customerPhone,
+                    Volume = s_rand.NextDouble() > 0.5 ? s_rand.Next(1, 5) : null,
+                    Weight = s_rand.NextDouble() > 0.5 ? s_rand.Next(1, 10) : null,
+                    Fragile = s_rand.NextDouble() > 0.5 ? (s_rand.Next(0, 2) == 0) : null,
+                    OrderTime = openTime
+                };
  
                 s_dalIOrder!.Create(newOrder);
             }
@@ -133,16 +133,17 @@ public static class Initialization
                 startTime = s_dalIConfig.Clock.AddMinutes(-s_rand.Next(1, 30));
 
 
-            DO.Delivery newDelivery = new(
-                Id: 0, /// Running ID
-                OrderId: orderToAssign.Id,
-                CourierId: courier.Id,
-                VehicleType: courier.VehicleType, /// Vehicle type at the time of delivery
-                StartTime: startTime,
-                Distance: null, /// Distance is calculated in BL.
-                DeliveryEndType: null, /// null = In Progress
-                EndTime: null          /// null = In Progress
-            );
+            Delivery newDelivery = new()
+            {
+                Id = 0, /// Running ID
+                OrderId = orderToAssign.Id,
+                CourierId = courier.Id,
+                VehicleType = courier.VehicleType, /// Vehicle type at the time of delivery
+                StartTime = startTime,
+                Distance = null, /// Distance is calculated in BL.
+                EndOfDelivery = null, /// null = In Progress
+                EndTime = null          /// null = In Progress
+            };
 
             /// Rule: Use Interface to create (10c, 4)
             s_dalIDelivery!.Create(newDelivery);
@@ -169,16 +170,17 @@ public static class Initialization
             /// Rule: Random end type (General p. 21)
             EndOfDelivery endType = (EndOfDelivery)s_rand.Next(Enum.GetValues(typeof(EndOfDelivery)).Length);
 
-            DO.Delivery newDelivery = new(
-                Id: 0, /// Running ID
-                OrderId: orderToAssign.Id,
-                CourierId: courier.Id,
-                VehicleType: courier.VehicleType,
-                StartTime: startTime,
-                Distance: null,
-                DeliveryEndType: endType, /// Closed status
-                EndTime: endTime        /// Closed status
-            );
+            Delivery newDelivery = new()
+            {
+                Id = 0, /// Running ID
+                OrderId = orderToAssign.Id,
+                CourierId = courier.Id,
+                VehicleType = courier.VehicleType,
+                StartTime = startTime,
+                Distance = null,
+                EndOfDelivery = endType, /// Closed status
+                EndTime = endTime        /// Closed status
+            };
 
             s_dalIDelivery!.Create(newDelivery);
         }
@@ -213,20 +215,20 @@ public static class Initialization
 
                 bool isActive = s_rand.NextDouble() > 0.1; /// 90% chance to be active
 
-                double? maxDistance = s_rand.NextDouble() > 0.5 ? s_rand.Next(5, 100) : null;
+                double? maxDistance = s_rand.NextDouble() > 0.5 ? s_rand.Next(5, 30) : null;
 
                 DateTime startDate = s_dalIConfig!.Clock.AddDays(-s_rand.Next(30, 1000));
 
-                DO.Courier newCourier = new(
-                    Id: id,
-                    Name: name,
-                    Phone: phone,
-                    Email: email,
-                    IsActive: isActive,
-                    MaxDistance: maxDistance,
-                    VehicleType: vehicle,
-                    StartDate: startDate
-                );
+                Courier newCourier = new()
+                {
+                    Id = id,
+                    Name = name,
+                    PhoneNumber = phone,
+                    Email = email,
+                    Distance = maxDistance,
+                    IsActive = isActive,
+                    VehicleType = vehicle
+                };
 
                 s_dalICourier.Create(newCourier);
             }

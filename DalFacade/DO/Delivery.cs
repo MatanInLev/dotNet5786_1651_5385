@@ -17,7 +17,7 @@ public record Delivery
     public required int Id { get; init; }/// running ID number
     public required int OrderId { get; init; }
     public required int CourierId { get; init; }
-    public OrderType OrderType { get; init; } = OrderType.Other;
+    public VehicleType VehicleType { get; set; } = VehicleType.Bike;
     public DateTime StartTime { get; set; } = DateTime.Now;
     public double? Distance { get; init; } = null;
     public EndOfDelivery? EndOfDelivery { get; init; } = null;
