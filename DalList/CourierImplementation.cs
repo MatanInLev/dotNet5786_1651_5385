@@ -10,7 +10,7 @@ public class CourierImplementation : ICourier
     {
         if (DataSource.Couriers.Find(item => item.Id == item.Id)!=null)
         {
-            throw new InvalidOperationException("An object of type courier with ID: {id} already exist.");
+            throw new InvalidOperationException($"An object of type courier with ID: {item.Id} already exist.");
         }
         DataSource.Couriers.Add(item);
 
@@ -20,7 +20,7 @@ public class CourierImplementation : ICourier
     {
         int index = DataSource.Couriers.FindIndex(Courier => Courier.Id == id);
         if (index == -1)
-            throw new InvalidOperationException("An object of type courier with ID: {id} does not exist.");
+            throw new InvalidOperationException($"An object of type courier with ID: {id} does not exist.");
         DataSource.Couriers.RemoveAt(index);
     }
 
@@ -44,7 +44,7 @@ public class CourierImplementation : ICourier
     {
         int index = DataSource.Couriers.FindIndex(Courier => Courier.Id == item.Id);
         if (index == -1)
-            throw new InvalidOperationException("An object of type courier with ID: {item.Id} does not exist.");
+            throw new InvalidOperationException($"An object of type courier with ID: {item.Id} does not exist.");
         DataSource.Couriers[index] = item;
     }
 }

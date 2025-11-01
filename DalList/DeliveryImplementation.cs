@@ -17,7 +17,7 @@ public class DeliveryImplementation : IDelivery
     {
         int index = DataSource.Deliveries.FindIndex(delivery => delivery.Id == id);
         if (index == -1)
-            throw new InvalidOperationException("An object of type Delivery with ID: {id} does not exist.");
+            throw new InvalidOperationException($"An object of type Delivery with ID: {id} does not exist.");
         DataSource.Deliveries.RemoveAt(index);
     }
 
@@ -41,7 +41,7 @@ public class DeliveryImplementation : IDelivery
     {
         int index = DataSource.Deliveries.FindIndex(delivery => delivery.Id == item.Id);
         if (index == -1)
-            throw new InvalidOperationException("An object of type Delivery with ID: {item.Id} does not exist.");
+            throw new InvalidOperationException($"An object of type Delivery with ID: {item.Id} does not exist.");
         DataSource.Deliveries[index] = item;
     }
 }

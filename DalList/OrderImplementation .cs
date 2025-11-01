@@ -18,7 +18,7 @@ public class OrderImplementation : IOrder
     {
         int index =DataSource.Orders.FindIndex(order=>order.Id == id);
         if (index == -1)
-            throw new InvalidOperationException("An object of type Order with sID: {id} does not exist.");
+            throw new InvalidOperationException($"An object of type Order with sID: {id} does not exist.");
         DataSource.Orders.RemoveAt(index);
     }
 
@@ -42,7 +42,7 @@ public class OrderImplementation : IOrder
     {
         int index = DataSource.Orders.FindIndex(order => order.Id == item.Id);
         if (index == -1)
-            throw new InvalidOperationException("An object of type Order with ID: {item.Id} does not exist.");
+            throw new InvalidOperationException($"An object of type Order with ID: {item.Id} does not exist.");
         DataSource.Orders[index] = item;
     }
 }
