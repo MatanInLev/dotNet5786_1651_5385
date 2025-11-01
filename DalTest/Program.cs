@@ -36,14 +36,16 @@ public enum CrudMenuOptions
 }
 
 /// <summary>
-/// Main program class for manually testing the DAL layer.
-/// (Implements Stage 1, Chapter 11)
+/// Main program class for manually testing the Data Access Layer (DAL).
+/// This implements the Console Line Interface (CLI) as required by Stage 1, Chapter 11.
 /// </summary>
 public static class Program
 {
     // --- 11a: Initialization of Interfaces ---
 
-    // Instantiate concrete implementation classes. Assumes they exist in the 'Dal' namespace.
+    /// <summary>
+    /// Initializes concrete DAL implementation instances for each interface.
+    /// </summary>
     private static IConfig s_dalIConfig = new ConfigImplementation();
     private static ICourier s_dalICourier = new CourierImplementation();
     private static IOrder s_dalIOrder = new OrderImplementation();
@@ -52,6 +54,10 @@ public static class Program
 
     // --- Main Entry Point ---
 
+    /// <summary>
+    /// The entry point of the DAL Test Program. Runs the main menu loop.
+    /// </summary>
+    /// <paramname="args">Command line arguments (unused).</param>
     public static void Main(string[] args)
     {
         // 11a, Sec 2: Wrap the main program logic in a try-catch block to handle exceptions
@@ -130,7 +136,7 @@ public static class Program
     // --- Helper Methods (11d, Sec 2) ---
 
     /// <summary>
-    /// Calls the initialization routine in DalTest/Initialization.cs.
+    /// Calls the data initialization routine in DalTest/Initialization.cs.
     /// (Implements 11b: Initialization)
     /// </summary>
     private static void InitializeData()
@@ -181,6 +187,7 @@ public static class Program
         try
         {
             Console.WriteLine("\n--- ALL COURIERS ---");
+            // 11d, Sec 5: Use ForEach for iteration (no 'for' loop)
             s_dalICourier.ReadAll().ForEach(c => Console.WriteLine(c));
 
             Console.WriteLine("\n--- ALL ORDERS ---");
@@ -201,8 +208,12 @@ public static class Program
     }
 
 
-    // --- Sub-Menus ---
+    // --- Entity Sub-Menus ---
 
+    /// <summary>
+    /// Handles the Courier CRUD menu operations.
+    /// </summary>
+    /// <paramname="dal">The ICourier interface implementation.</param>
     private static void ShowCourierMenu(ICourier dal)
     {
         CrudMenuOptions choice = CrudMenuOptions.Return;
@@ -228,7 +239,6 @@ public static class Program
                         if (int.TryParse(Console.ReadLine(), out int id))
                         {
                             var courier = dal.Read(id);
-                            // CS0019 FIX: Use conditional expression to print the object or the string
                             Console.WriteLine(courier != null ? courier.ToString() : "Courier not found.");
                         }
                         break;
@@ -251,6 +261,10 @@ public static class Program
         } while (choice != CrudMenuOptions.Return);
     }
 
+    /// <summary>
+    /// Handles the Order CRUD menu operations.
+    /// </summary>
+    /// <paramname="dal">The IOrder interface implementation.</param>
     private static void ShowOrderMenu(IOrder dal)
     {
         CrudMenuOptions choice = CrudMenuOptions.Return;
@@ -271,7 +285,6 @@ public static class Program
                         if (int.TryParse(Console.ReadLine(), out int id))
                         {
                             var order = dal.Read(id);
-                            // CS0019 FIX: Use conditional expression to print the object or the string
                             Console.WriteLine(order != null ? order.ToString() : "Order not found.");
                         }
                         break;
@@ -292,6 +305,10 @@ public static class Program
         } while (choice != CrudMenuOptions.Return);
     }
 
+    /// <summary>
+    /// Handles the Delivery CRUD menu operations.
+    /// </summary>
+    /// <paramname="dal">The IDelivery interface implementation.</param>
     private static void ShowDeliveryMenu(IDelivery dal)
     {
         CrudMenuOptions choice = CrudMenuOptions.Return;
@@ -312,7 +329,6 @@ public static class Program
                         if (int.TryParse(Console.ReadLine(), out int id))
                         {
                             var delivery = dal.Read(id);
-                            // CS0019 FIX: Use conditional expression to print the object or the string
                             Console.WriteLine(delivery != null ? delivery.ToString() : "Delivery not found.");
                         }
                         break;
@@ -333,6 +349,10 @@ public static class Program
         } while (choice != CrudMenuOptions.Return);
     }
 
+    /// <summary>
+    /// Handles the Configuration management menu.
+    /// (Implements 11c: Configuration Menu)
+    /// </summary>
     private static void ShowConfigMenu()
     {
         int choice = 0;
