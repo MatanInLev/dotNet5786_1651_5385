@@ -1,25 +1,31 @@
-﻿/*
-AI PROMPT (for documentation):
-"Create the complete 'DalTest/Program.cs' file based on all rules in Chapter 11.
-- It must include a main loop and sub-menus for all entities.
-- It must use Enums for menu choices.
-- All DAL calls must be wrapped in 'try-catch' blocks.
-- All user input must use 'TryParse' (11d, Sec 8).
-- Implement the 'Create' (manual input) for the 'Courier' entity fully.
-- All XML documentation comments (///) must be in English."
-*/
+﻿/// <summary>
+/// AI PROMPT (for documentation):
+/// "Create the complete 'DalTest/Program.cs' file based on all rules in Chapter11.
+/// - It must include a main loop and sub-menus for all entities.
+/// - It must use Enums for menu choices.
+/// - All DAL calls must be wrapped in 'try-catch' blocks.
+/// - All user input must use 'TryParse' (11d, Sec8).
+/// - Implement the 'Create' (manual input) for the 'Courier' entity fully.
+/// - All XML documentation comments (///) must be in English."
+/// </summary>
+/// <remarks>
+/// This XML block documents the original task / prompt for maintainers. Keep it current
+/// so future contributors understand why this test harness exists and which rules it follows.
+/// </remarks>
 
 using DalApi;
-using DO; // Required for entity types and Enums
-using Dal; // Required to instantiate concrete implementation classes
-using System;
-using System.Linq; // Required for LINQ operations like Any() and ToList()
+using DO;
+using Dal;
 
 namespace DalTest;
 
 /// <summary>
 /// Defines the options for the main application menu.
 /// </summary>
+/// <remarks>
+/// Each enum value maps to a top-level menu action in the interactive console.
+/// Use these values when parsing user input in the main loop.
+/// </remarks>
 public enum MainMenuOptions
 {
     Exit = 0,
@@ -35,6 +41,10 @@ public enum MainMenuOptions
 /// <summary>
 /// Defines the CRUD operations available in the entity sub-menus.
 /// </summary>
+/// <remarks>
+/// The values correspond to the sub-menu options shown to the user.
+/// Use TryParse to convert numeric input into this enum safely.
+/// </remarks>
 public enum CrudMenuOptions
 {
     Return = 0,
@@ -50,28 +60,50 @@ public enum CrudMenuOptions
 /// Main program class for manually testing the DAL layer.
 /// (Implements Stage 1, Chapter 11)
 /// </summary>
+/// <remarks>
+/// This program is a developer/test harness that exercises DAL implementations.
+/// It intentionally performs simple console-based CRUD operations to validate DAL behavior.
+/// </remarks>
 public static class Program
 {
-    // --- 11a: Interface Initialization ---
-
-    // Instantiate concrete implementation classes from the DalList layer
+    /// <summary>
+    /// DAL configuration interface instance used to read and mutate global settings.
+    /// </summary>
+    /// <remarks>
+    /// The configuration object exposes the system clock and other global parameters
+    /// used by initialization and certain helper methods in this test harness.
+    /// </remarks>
     private static IConfig s_dalIConfig = new ConfigImplementation();
+
+    /// <summary>
+    /// DAL courier interface instance used to create/read/update/delete couriers.
+    /// </summary>
     private static ICourier s_dalICourier = new CourierImplementation();
+
+    /// <summary>
+    /// DAL order interface instance used to create/read/update/delete orders.
+    /// </summary>
     private static IOrder s_dalIOrder = new OrderImplementation();
+
+    /// <summary>
+    /// DAL delivery interface instance used to create/read/update/delete deliveries.
+    /// </summary>
     private static IDelivery s_dalIDelivery = new DeliveryImplementation();
 
-
-    // --- Main Entry Point ---
-
+    /// <summary>
+    /// Program entry point and main loop.
+    /// </summary>
+    /// <param name="args">Command-line arguments (ignored by this harness).</param>
+    /// <remarks>
+    /// The main loop prints a top-level menu, reads numeric input using TryParse,
+    /// and dispatches to sub-menus. All DAL calls are wrapped in try/catch to show errors.
+    /// </remarks>
     public static void Main(string[] args)
     {
-        // 11a, Sec 2: Wrap the main logic in a try-catch block
         try
         {
-            // Set a fixed past system clock time for predictable data initialization
             s_dalIConfig.Clock = new DateTime(2025, 10, 15, 10, 0, 0);
 
-            // 11c: Main loop
             MainMenuOptions choice = MainMenuOptions.Exit;
             do
             {
@@ -87,7 +119,6 @@ public static class Program
 
                 Console.Write("\nEnter your choice: ");
 
-                // 11d, Sec 8: Use TryParse for input safety
                 if (!int.TryParse(Console.ReadLine(), out int numChoice))
                 {
                     Console.WriteLine("Invalid input. Please enter a number.");
@@ -131,62 +162,65 @@ public static class Program
         }
         catch (Exception ex)
         {
-            // 11a, Sec 2: Catch any unhandled exceptions (e.g., interface instantiation issues)
             Console.WriteLine($"\n--- FATAL ERROR ---");
             Console.WriteLine($"An unhandled exception occurred: {ex.Message}");
         }
     }
 
-
-    // --- Helper Methods (11d, Sec 2) ---
-
     /// <summary>
-    /// Calls the initialization routine in DalTest/Initialization.cs.
-    /// (Implements 11b: Initialization)
+    /// Calls the initialization routine in DalTest/Initialization.cs and handles errors.
     /// </summary>
+    /// <remarks>
+    /// This method delegates to the static Initialization.Do method which populates
+    /// the DAL with sample couriers, orders and deliveries. Exceptions are caught and printed.
+    /// </remarks>
     private static void InitializeData()
     {
         try
         {
-            // 11b: Call the static Do method, passing all initialized DAL interfaces.
             Initialization.Do(s_dalICourier, s_dalIOrder, s_dalIDelivery, s_dalIConfig);
             Console.WriteLine("Data initialization successful.");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"\n--- ERROR during Initialization ---");
+            Console.WriteLine("\n--- ERROR during Initialization ---");
             Console.WriteLine(ex.Message);
         }
     }
 
     /// <summary>
     /// Resets all data by deleting all entities and resetting configuration.
-    /// (Implements 11b: Reset)
     /// </summary>
+    /// <remarks>
+    /// Deletes all deliveries, orders and couriers from DAL and resets configuration values.
+    /// This is useful for starting a fresh test run. All operations are wrapped in try/catch.
+    /// </remarks>
     private static void ResetAllData()
     {
         try
         {
-            // Call DeleteAll on each entity
             s_dalIDelivery.DeleteAll();
             s_dalIOrder.DeleteAll();
             s_dalICourier.DeleteAll();
 
-            // Reset configuration values
             s_dalIConfig.Reset();
 
             Console.WriteLine("Database and Configuration successfully reset.");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"\n--- ERROR during Reset ---");
+            Console.WriteLine("\n--- ERROR during Reset ---");
             Console.WriteLine(ex.Message);
         }
     }
 
     /// <summary>
-    /// Displays all data entities by calling ReadAll on each interface.
+    /// Displays all data entities by calling ReadAll on each interface and prints configuration.
     /// </summary>
+    /// <remarks>
+    /// Uses the DAL ReadAll() methods to enumerate existing entities and prints them using ToString().
+    /// If the DAL implementation hasn't overridden ToString, you may see type names instead of content.
+    /// </remarks>
     private static void ShowAllData()
     {
         try
@@ -206,17 +240,20 @@ public static class Program
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"\n--- ERROR reading data ---");
+            Console.WriteLine("\n--- ERROR reading data ---");
             Console.WriteLine(ex.Message);
         }
     }
 
-
-    // --- Sub-Menus ---
-
     /// <summary>
-    /// Displays the CRUD menu for the Courier entity.
+    /// Displays the CRUD menu for the Courier entity and handles user choices.
     /// </summary>
+    /// <param name="dal">DAL courier interface to operate on.</param>
+    /// <remarks>
+    /// Sub-menu supports Create, ReadSingle, ReadAll and DeleteAll options.
+    /// The Create option uses InputCourier() to collect validated user input.
+    /// All DAL calls are executed inside try/catch to surface DAL exceptions.
+    /// </remarks>
     private static void ShowCourierMenu(ICourier dal)
     {
         CrudMenuOptions choice = CrudMenuOptions.Return;
@@ -238,7 +275,6 @@ public static class Program
                 switch (choice)
                 {
                     case CrudMenuOptions.Create:
-                        // Call the complex input helper method
                         DO.Courier newCourier = InputCourier();
                         dal.Create(newCourier);
                         Console.WriteLine($"Courier created successfully with ID: {newCourier.Id}");
@@ -246,11 +282,9 @@ public static class Program
                     case CrudMenuOptions.ReadSingle:
                         int id = ReadInt("Enter Courier ID (T\"Z): ");
                         var courier = dal.Read(id);
-                        // CS0019 FIX: Use conditional expression for printing
                         Console.WriteLine(courier != null ? courier.ToString() : "Courier not found.");
                         break;
                     case CrudMenuOptions.ReadAll:
-                        // 11d, Sec 4: ReadAll and print with implicit ToString
                         dal.ReadAll().ForEach(c => Console.WriteLine(c));
                         break;
                     case CrudMenuOptions.DeleteAll:
@@ -261,16 +295,20 @@ public static class Program
             }
             catch (Exception ex)
             {
-                // 11a, Sec 2: Catch DAL exception and print message
-                Console.WriteLine($"\n--- COURIER ERROR ---");
+                Console.WriteLine("\n--- COURIER ERROR ---");
                 Console.WriteLine(ex.Message);
             }
         } while (choice != CrudMenuOptions.Return);
     }
 
     /// <summary>
-    /// Displays the CRUD menu for the Order entity.
+    /// Displays the CRUD menu for the Order entity and handles user choices.
     /// </summary>
+    /// <param name="dal">DAL order interface to operate on.</param>
+    /// <remarks>
+    /// Create/Update operations are omitted because interactive entry for all Order fields
+    /// would be verbose; read/delete operations are available for test verification.
+    /// </remarks>
     private static void ShowOrderMenu(IOrder dal)
     {
         CrudMenuOptions choice = CrudMenuOptions.Return;
@@ -290,7 +328,6 @@ public static class Program
                     case CrudMenuOptions.ReadSingle:
                         int id = ReadInt("Enter Order ID: ");
                         var order = dal.Read(id);
-                        // CS0019 FIX: Use conditional expression
                         Console.WriteLine(order != null ? order.ToString() : "Order not found.");
                         break;
                     case CrudMenuOptions.ReadAll:
@@ -304,15 +341,20 @@ public static class Program
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"\n--- ORDER ERROR ---");
+                Console.WriteLine("\n--- ORDER ERROR ---");
                 Console.WriteLine(ex.Message);
             }
         } while (choice != CrudMenuOptions.Return);
     }
 
     /// <summary>
-    /// Displays the CRUD menu for the Delivery entity.
+    /// Displays the CRUD menu for the Delivery entity and handles user choices.
     /// </summary>
+    /// <param name="dal">DAL delivery interface to operate on.</param>
+    /// <remarks>
+    /// Delivery creation and update are omitted in this stage. Read and delete operations
+    /// are provided for testing the DAL's stored delivery records.
+    /// </remarks>
     private static void ShowDeliveryMenu(IDelivery dal)
     {
         CrudMenuOptions choice = CrudMenuOptions.Return;
@@ -332,7 +374,6 @@ public static class Program
                     case CrudMenuOptions.ReadSingle:
                         int id = ReadInt("Enter Delivery ID: ");
                         var delivery = dal.Read(id);
-                        // CS0019 FIX: Use conditional expression
                         Console.WriteLine(delivery != null ? delivery.ToString() : "Delivery not found.");
                         break;
                     case CrudMenuOptions.ReadAll:
@@ -346,7 +387,7 @@ public static class Program
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"\n--- DELIVERY ERROR ---");
+                Console.WriteLine("\n--- DELIVERY ERROR ---");
                 Console.WriteLine(ex.Message);
             }
         } while (choice != CrudMenuOptions.Return);
@@ -355,9 +396,13 @@ public static class Program
     /// <summary>
     /// Displays the Configuration menu for managing the system clock and variables.
     /// </summary>
+    /// <remarks>
+    /// Option 2 advances the system clock by a double number of hours (can be fractional).
+    /// The clock is used by initialization to compute realistic timestamps for generated data.
+    /// </remarks>
     private static void ShowConfigMenu()
     {
-        int choice = 0;
+        int choice = 0;     
         do
         {
             Console.WriteLine("\n--- Configuration Menu ---");
@@ -387,18 +432,21 @@ public static class Program
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"\n--- CONFIG ERROR ---");
+                Console.WriteLine("\n--- CONFIG ERROR ---");
                 Console.WriteLine(ex.Message);
             }
         } while (choice != 0);
     }
 
-    // --- Complex Input Helper Methods ---
-
     /// <summary>
     /// Interactively prompts the user for all details needed to create a new Courier.
-    /// (Implements 11c input requirement)
     /// </summary>
+    /// <returns>A new <see cref="DO.Courier"/> instance populated from user input.</returns>
+    /// <remarks>
+    /// This helper validates user input using TryParse loops and returns a populated Courier
+    /// using object-initializer syntax so it matches the DO record definition. The routine
+    /// intentionally uses the system clock for the courier's start date display only.
+    /// </remarks>
     private static DO.Courier InputCourier()
     {
         Console.WriteLine("\n--- Create New Courier ---");
@@ -408,23 +456,16 @@ public static class Program
         string phone = ReadString("Enter Phone (e.g., 0501234567): ");
         string email = ReadString("Enter Email: ");
 
-        // Enum input
         DO.VehicleType vehicle = ReadEnum<DO.VehicleType>("Enter Vehicle Type (Car=0, Motorcycle=1, Bicycle=2, Foot=3): ");
 
-        // Nullable double input
         double? maxDistance = ReadDoubleNull("Enter Max Distance (in km, leave blank for null): ");
 
-        // Bool input
         bool isActive = ReadBool("Is courier active? (yes/no): ");
 
-        // Use system clock for start date
         DateTime startDate = s_dalIConfig.Clock;
         Console.WriteLine($"Setting Start Date to current system clock: {startDate}");
 
-        // CS1739 FIX: Changed from positional constructor ( ... )
-        // to object initializer syntax { ... }
-        // This must match the DO.Courier.cs record definition.
-        return new Courier() // Call the parameterless constructor
+        return new Courier()
         {
             Id = id,
             Name = name,
@@ -436,11 +477,15 @@ public static class Program
         };
     }
 
-    // --- Safe Input Helper Methods (using TryParse) ---
-
     /// <summary>
     /// Reads a non-empty string from the console.
     /// </summary>
+    /// <param name="prompt">Prompt text to display to the user.</param>
+    /// <returns>User input string (never null or whitespace).</returns>
+    /// <remarks>
+    /// This method keeps prompting until the user submits a non-empty value.
+    /// Use for required text fields such as names and emails.
+    /// </remarks>
     private static string ReadString(string prompt)
     {
         string? input;
@@ -449,12 +494,17 @@ public static class Program
             Console.Write(prompt);
             input = Console.ReadLine();
         } while (string.IsNullOrWhiteSpace(input));
-        return input;
+        return input!;
     }
 
     /// <summary>
-    /// Reads a valid integer from the console.
+    /// Reads a valid integer from the console using a TryParse loop.
     /// </summary>
+    /// <param name="prompt">Prompt text to display to the user.</param>
+    /// <returns>Parsed integer value.</returns>
+    /// <remarks>
+    /// Continues prompting until TryParse succeeds. Suitable for numeric IDs and menu selection.
+    /// </remarks>
     private static int ReadInt(string prompt)
     {
         int result;
@@ -466,8 +516,13 @@ public static class Program
     }
 
     /// <summary>
-    /// Reads a valid double from the console.
+    /// Reads a valid double from the console using a TryParse loop.
     /// </summary>
+    /// <param name="prompt">Prompt text to display to the user.</param>
+    /// <returns>Parsed double value.</returns>
+    /// <remarks>
+    /// Accepts decimal numbers; useful for fractional hours or distances.
+    /// </remarks>
     private static double ReadDouble(string prompt)
     {
         double result;
@@ -479,15 +534,20 @@ public static class Program
     }
 
     /// <summary>
-    /// Reads a valid nullable double from the console.
+    /// Reads a valid nullable double from the console. Returns null for empty input.
     /// </summary>
+    /// <param name="prompt">Prompt text to display to the user.</param>
+    /// <returns>Parsed double value or null when the user provides empty input.</returns>
+    /// <remarks>
+    /// Useful for optional numeric fields such as MaxDistance where the user may leave blank.
+    /// </remarks>
     private static double? ReadDoubleNull(string prompt)
     {
         Console.Write(prompt);
         string? input = Console.ReadLine();
         if (string.IsNullOrWhiteSpace(input))
         {
-            return null; // Allows empty input for nullable
+            return null;
         }
         if (double.TryParse(input, out double result))
         {
@@ -498,8 +558,13 @@ public static class Program
     }
 
     /// <summary>
-    /// Reads a boolean value from the console (y/yes/true).
+    /// Reads a boolean value from the console (y/yes/true accepted).
     /// </summary>
+    /// <param name="prompt">Prompt text to display to the user.</param>
+    /// <returns>Parsed boolean value (true for y/yes/true).</returns>
+    /// <remarks>
+    /// Use for toggles such as IsActive. Input is case-insensitive.
+    /// </remarks>
     private static bool ReadBool(string prompt)
     {
         string input = ReadString(prompt).ToLower();
@@ -507,8 +572,15 @@ public static class Program
     }
 
     /// <summary>
-    /// Reads a valid Enum value from the console.
+    /// Reads a valid Enum value from the console using TryParse and validation.
     /// </summary>
+    /// <typeparam name="T">Enum type to parse.</typeparam>
+    /// <param name="prompt">Prompt text to display to the user.</param>
+    /// <returns>Parsed enum value of type T.</returns>
+    /// <remarks>
+    /// The method loops until the user enters a valid enum name or numeric value acceptable by Enum.TryParse.
+    /// It also checks Enum.IsDefined to avoid out-of-range numeric values.
+    /// </remarks>
     private static T ReadEnum<T>(string prompt) where T : struct, Enum
     {
         T result;

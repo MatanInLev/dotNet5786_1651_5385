@@ -1,40 +1,86 @@
 ﻿using DalApi;
 using DO;
+
 namespace DalTest;
 
+/// <summary>
+/// Helper class that populates the DAL with realistic sample data for manual testing.
+/// </summary>
+/// <remarks>
+/// Responsibilities:
+/// - Create a set of Couriers, Orders and Deliveries in the provided DAL interfaces.
+/// - Use the provided <see cref="IConfig"/> clock to create deterministic timestamps.
+/// - Keep generated data realistic (addresses, names, phone numbers) and satisfy business rules:
+///   * Create 20 couriers (with mostly active status).
+///   * Create 50 orders (open orders initially).
+///   * Create 10 deliveries in-progress and 20 closed deliveries, leaving the rest open.
+/// Usage:
+/// - Call <see cref="Do(ICourier?, IOrder?, IDelivery?, IConfig?)"/> once to reset the DAL and populate data.
+/// - This class expects the DAL interfaces provided to be non-null and will throw if any are null.
+/// Threading:
+/// - This class modifies the DAL via its interfaces; it is not thread-safe and should be used from a single thread
+///   in test harness scenarios.
+/// </remarks>
 public static class Initialization
 {
+    /// <summary>
+    /// DAL configuration interface used for reading/writing configuration values (clock, ranges, etc.).
+    /// </summary>
     private static IConfig? s_dalIConfig;
+
+    /// <summary>
+    /// DAL courier interface used to create/read couriers during initialization.
+    /// </summary>
     private static ICourier? s_dalICourier;
+
+    /// <summary>
+    /// DAL delivery interface used to create/read deliveries during initialization.
+    /// </summary>
     private static IDelivery? s_dalIDelivery;
+
+    /// <summary>
+    /// DAL order interface used to create/read orders during initialization.
+    /// </summary>
     private static IOrder? s_dalIOrder;
 
     ///random parameter
-    private static readonly Random s_rand = new();
     /// <summary>
-    /// Customer names for randomizer
+    /// Random number generator used to produce variable test data (IDs, choices, times).
+    /// </summary>
+    private static readonly Random s_rand = new();
+
+    /// <summary>
+    /// Customer names used by the order generator.
     /// </summary>
     private static readonly string[] s_customerNames =
     {
         "Israel Israeli", "Moshe Cohen", "Avi Levi", "Sarah Schwartz", "Rivkah Avram",
         "David Biton", "Yosef Kaplan", "Chana Berkovich", "Miriam Hadad", "Shlomo Friedman"
     };
+
     /// <summary>
-    /// Courier names for randomizer
+    /// Courier names used by the courier generator.
     /// </summary>
     private static readonly string[] s_courierNames =
     {
         "Daniel Levi", "Eliran Golan", "Yair Kahana", "Ariela Levin", "Dina Klein",
         "Shir Israeli", "Omer Adam", "Noa Kirel", "Ben-El Tavori", "Itay Levi"
     };
+
     /// <summary>
-    /// Helper record to store realistic address data for initialization.
+    /// Lightweight record used to hold an address and its geographic coordinates for generating orders.
     /// </summary>
+    /// <param name="Address">Human-readable address string.</param>
+    /// <param name="Latitude">Latitude coordinate in decimal degrees.</param>
+    /// <param name="Longitude">Longitude coordinate in decimal degrees.</param>
     private readonly record struct AddressData(string Address, double Latitude, double Longitude);
 
     /// <summary>
-    /// A list of addresses for randomizing orders.
+    /// A curated list of plausible addresses (with coordinates) used when creating sample orders.
     /// </summary>
+    /// <remarks>
+    /// Random selection from this list produces geographically consistent test data for routing or distance calculations.
+    /// </remarks>
     private static readonly AddressData[] s_addresses =
     {
         new("97 Jaffa Road, Jerusalem", 31.784321307301173, 35.21492818699034),
@@ -59,6 +105,19 @@ public static class Initialization
         new("Mount Zion, Jerusalem", 31.771432755523676, 35.228548482787225)
     };
 
+    /// <summary>
+    /// Generate and insert a fixed number of orders into the DAL.
+    /// </summary>
+    /// <remarks>
+    /// Implementation details and guarantees:
+    /// - Creates exactly 50 orders (unless DAL.Create throws for individual orders).
+    /// - Uses <see cref="s_dalIConfig"/>.<see cref="IConfig.Clock"/> as the time reference and backs each order's
+    ///   Open/OrderTime into the past by 1..59 days for realistic history.
+    /// - Some optional numeric fields (Weight, Volume, Fragile) are randomly omitted (null) to exercise null-handling.
+    /// - Each created order is passed to the DAL via <see cref="IOrder.Create(Order)"/>.
+    /// Exceptions:
+    /// - Exceptions thrown by DAL.Create are caught and logged to the console; generation continues for remaining orders.
+    /// </remarks>
     private static void createOrders()
     {
         const int orderCount = 50;
@@ -88,21 +147,33 @@ public static class Initialization
                     Fragile = s_rand.NextDouble() > 0.5 ? (s_rand.Next(0, 2) == 0) : null,
                     OrderTime = openTime
                 };
- 
+
                 s_dalIOrder!.Create(newOrder);
             }
             catch (Exception ex)
             {
+                // Individual creation failures are logged; the loop continues.
                 Console.WriteLine($"Failed to create order: {ex.Message}");
             }
         }
-
     }
+
     /// <summary>
-    /// Creates and adds Deliveries to the database.
-    /// This method links Orders to Couriers and creates the
-    /// "In Progress" and "Closed" statuses.
+    /// Create deliveries and link them to existing orders and active couriers.
     /// </summary>
+    /// <remarks>
+    /// Behavior and important rules enforced by this generator:
+    /// - Reads all current orders via <see cref="IOrder.ReadAll"/> and uses them as candidate orders to assign.
+    /// - Only couriers with <see cref="DO.Courier.IsActive"/> are considered for assignment.
+    /// - Creates 10 "In Progress" deliveries (EndOfDelivery and EndTime null) and 20 "Closed" deliveries
+    ///   (EndOfDelivery set and EndTime non-null).
+    /// - Ensures StartTime is not in the future relative to <see cref="IConfig.Clock"/> and that EndTime &gt; StartTime.
+    /// - Distance is left null because it is expected to be calculated by the business layer.
+    /// - Uses <see cref="IDelivery.Create(Delivery)"/> to persist each generated delivery.
+    /// Error handling:
+    /// - If there are no active couriers, the method logs a message and returns early without creating deliveries.
+    /// - DAL exceptions during create are propagated to the caller (they are not swallowed here).
+    /// </remarks>
     private static void createDeliveries()
     {
         var allOrders = s_dalIOrder!.ReadAll().ToList(); /// Get all 50 open orders
@@ -190,8 +261,14 @@ public static class Initialization
     }
 
     /// <summary>
-    /// Creates and adds 20 Couriers to the database.
+    /// Generate and insert a fixed number of couriers into the DAL.
     /// </summary>
+    /// <remarks>
+    /// - Creates 20 couriers (IDs generated randomly within a range and deduplicated against existing DAL entries).
+    /// - Sets realistic names, phone numbers and emails; randomly assigns vehicle types and optionally MaxDistance.
+    /// - StartDate is set relative to <see cref="IConfig.Clock"/> (random days in the past).
+    /// - Exceptions from DAL operations are caught and logged; generation continues for remaining couriers.
+    /// </remarks>
     private static void createCouriers()
     {
         int courierCount = 20; /// As required
@@ -239,6 +316,22 @@ public static class Initialization
         }
     }
 
+    /// <summary>
+    /// Main entry method that resets the DAL and populates it with sample data.
+    /// </summary>
+    /// <param name="dalCourier">DAL courier implementation to use for creating courier records. Must not be null.</param>
+    /// <param name="dalOrder">DAL order implementation to use for creating order records. Must not be null.</param>
+    /// <param name="dalDelivery">DAL delivery implementation to use for creating delivery records. Must not be null.</param>
+    /// <param name="dalConfig">DAL configuration proxy used to read/set the system clock and reset configuration. Must not be null.</param>
+    /// <exception cref="NullReferenceException">Thrown when any provided DAL interface is null.</exception>
+    /// <remarks>
+    /// Steps performed:
+    /// 1. Validate and assign provided interfaces to internal static fields (throws if any are null).
+    /// 2. Reset configuration via <see cref="IConfig.Reset"/> and delete all existing deliveries, orders and couriers.
+    /// 3. Create couriers, then orders, then deliveries in that order to ensure referential integrity.
+    /// 4. Log progress and completion to the console.
+    /// This method is intended for test/setup scenarios and mutates the DAL state irreversibly for the current process.
+    /// </remarks>
     public static void Do(ICourier? dalCourier, IOrder? dalOrder, IDelivery? dalDelivery, IConfig? dalConfig)
     {
         /// Assign DAL interfaces to static fields
@@ -266,6 +359,5 @@ public static class Initialization
         createDeliveries();
 
         Console.WriteLine("Initialization complete.");
-
     }
 }
