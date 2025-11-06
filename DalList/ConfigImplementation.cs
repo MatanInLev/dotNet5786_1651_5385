@@ -35,7 +35,7 @@ namespace Dal;
 /// - <see cref="Reset"/> invokes <see cref="Config.Reset"/> which resets both instance counters and static defaults.
 /// - This proxy does not add validation; callers must ensure values are meaningful before assignment.
 /// </remarks>
-public class ConfigImplementation : IConfig
+internal class ConfigImplementation : IConfig
 {
     /// <summary>
     /// Gets or sets the system clock exposed via the <see cref="IConfig"/> interface.

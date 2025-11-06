@@ -6,6 +6,7 @@
 /// - Describe units (km, km/h, TimeSpan semantics), read-only vs read-write properties, and intended usage.
 /// - Keep comments in English and consistent with the rest of the DalApi documentation."
 /// </aiPrompt>
+using DO;
 using System;
 
 namespace DalApi;

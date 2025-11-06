@@ -9,7 +9,7 @@ namespace DalApi;
 /// Implementations should persist courier records and expose simple CRUD operations.
 /// The interface intentionally mirrors other DAL entity interfaces to keep usage consistent across entities.
 /// </remarks>
-public interface ICourier
+public interface ICourier: ICrud<Courier>
 {
     /// <summary>
     /// Creates a new <see cref="Courier"/> record in the DAL.

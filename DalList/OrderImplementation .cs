@@ -27,7 +27,7 @@ namespace Dal;
 /// var read = dal.Read(order.Id);
 /// </code>
 /// </example>
-public class OrderImplementation : IOrder
+internal class OrderImplementation : IOrder
 {
     /// <summary>
     /// Creates a new order in the DAL collection.

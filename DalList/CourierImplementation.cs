@@ -1,6 +1,6 @@
 ﻿namespace Dal;
 using DalApi;
-using DalList;
+using global::DalList;
 using DO;
 using System.Collections.Generic;
 
@@ -28,7 +28,7 @@ using System.Collections.Generic;
 /// var all = dal.ReadAll();
 /// </code>
 /// </example>
-public class CourierImplementation : ICourier
+internal class CourierImplementation : ICourier
 {
     /// <summary>
     /// Creates a new courier record in the DAL collection.

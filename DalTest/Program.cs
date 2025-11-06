@@ -66,43 +66,13 @@ public enum CrudMenuOptions
 /// </remarks>
 public static class Program
 {
-    /// <summary>
-    /// DAL configuration interface instance used to read and mutate global settings.
-    /// </summary>
-    /// <remarks>
-    /// The configuration object exposes the system clock and other global parameters
-    /// used by initialization and certain helper methods in this test harness.
-    /// </remarks>
-    private static IConfig s_dalIConfig = new ConfigImplementation();
+    private static IDal s_dal ;
 
-    /// <summary>
-    /// DAL courier interface instance used to create/read/update/delete couriers.
-    /// </summary>
-    private static ICourier s_dalICourier = new CourierImplementation();
-
-    /// <summary>
-    /// DAL order interface instance used to create/read/update/delete orders.
-    /// </summary>
-    private static IOrder s_dalIOrder = new OrderImplementation();
-
-    /// <summary>
-    /// DAL delivery interface instance used to create/read/update/delete deliveries.
-    /// </summary>
-    private static IDelivery s_dalIDelivery = new DeliveryImplementation();
-
-    /// <summary>
-    /// Program entry point and main loop.
-    /// </summary>
-    /// <param name="args">Command-line arguments (ignored by this harness).</param>
-    /// <remarks>
-    /// The main loop prints a top-level menu, reads numeric input using TryParse,
-    /// and dispatches to sub-menus. All DAL calls are wrapped in try/catch to show errors.
-    /// </remarks>
     public static void Main(string[] args)
     {
         try
         {
-            s_dalIConfig.Clock = new DateTime(2025, 10, 15, 10, 0, 0);
+            s_dal.Config.Clock = new DateTime(2025, 10, 15, 10, 0, 0);
 
             MainMenuOptions choice = MainMenuOptions.Exit;
             do
@@ -130,13 +100,13 @@ public static class Program
                 switch (choice)
                 {
                     case MainMenuOptions.Courier:
-                        ShowCourierMenu(s_dalICourier);
+                        ShowCourierMenu(s_dal.Courier);
                         break;
                     case MainMenuOptions.Order:
-                        ShowOrderMenu(s_dalIOrder);
+                        ShowOrderMenu(s_dal.Order);
                         break;
                     case MainMenuOptions.Delivery:
-                        ShowDeliveryMenu(s_dalIDelivery);
+                        ShowDeliveryMenu(s_dal.Delivery);
                         break;
                     case MainMenuOptions.Configuration:
                         ShowConfigMenu();
@@ -178,7 +148,7 @@ public static class Program
     {
         try
         {
-            Initialization.Do(s_dalICourier, s_dalIOrder, s_dalIDelivery, s_dalIConfig);
+            Initialization.Do(s_dal);
             Console.WriteLine("Data initialization successful.");
         }
         catch (Exception ex)
@@ -199,11 +169,11 @@ public static class Program
     {
         try
         {
-            s_dalIDelivery.DeleteAll();
-            s_dalIOrder.DeleteAll();
-            s_dalICourier.DeleteAll();
+            s_dal.Delivery.DeleteAll();
+            s_dal.Order.DeleteAll();
+            s_dal.Courier.DeleteAll();
 
-            s_dalIConfig.Reset();
+            s_dal.Config.Reset();
 
             Console.WriteLine("Database and Configuration successfully reset.");
         }
@@ -226,17 +196,17 @@ public static class Program
         try
         {
             Console.WriteLine("\n--- ALL COURIERS ---");
-            s_dalICourier.ReadAll().ForEach(c => Console.WriteLine(c));
+            s_dal.Courier.ReadAll().ForEach(c => Console.WriteLine(c));
 
             Console.WriteLine("\n--- ALL ORDERS ---");
-            s_dalIOrder.ReadAll().ForEach(o => Console.WriteLine(o));
+            s_dal.Order.ReadAll().ForEach(o => Console.WriteLine(o));
 
             Console.WriteLine("\n--- ALL DELIVERIES ---");
-            s_dalIDelivery.ReadAll().ForEach(d => Console.WriteLine(d));
+            s_dal.Delivery.ReadAll().ForEach(d => Console.WriteLine(d));
 
             Console.WriteLine("\n--- CURRENT CONFIGURATION ---");
-            Console.WriteLine($"Clock: {s_dalIConfig.Clock}");
-            Console.WriteLine($"Admin ID: {s_dalIConfig.AdminId}");
+            Console.WriteLine($"Clock: {s_dal.Config.Clock}");
+            Console.WriteLine($"Admin ID: {s_dal.Config.AdminId}");
         }
         catch (Exception ex)
         {
@@ -407,9 +377,9 @@ public static class Program
         {
             Console.WriteLine("\n--- Configuration Menu ---");
             Console.WriteLine("0: Return");
-            Console.WriteLine($"1: Show Current Clock ({s_dalIConfig.Clock})");
+            Console.WriteLine($"1: Show Current Clock ({s_dal.Config.Clock})");
             Console.WriteLine("2: Advance Clock (Manual Input)");
-            Console.WriteLine($"3: Show Max Range ({s_dalIConfig.MaxRange})");
+            Console.WriteLine($"3: Show Max Range ({s_dal.Config.MaxRange})");
             Console.Write("\nEnter choice: ");
             if (!int.TryParse(Console.ReadLine(), out choice)) continue;
 
@@ -418,15 +388,15 @@ public static class Program
                 switch (choice)
                 {
                     case 1:
-                        Console.WriteLine($"Current System Clock: {s_dalIConfig.Clock}");
+                        Console.WriteLine($"Current System Clock: {s_dal.Config.Clock}");
                         break;
                     case 2:
                         double hours = ReadDouble("Enter hours to advance: ");
-                        s_dalIConfig.Clock = s_dalIConfig.Clock.AddHours(hours);
-                        Console.WriteLine($"Clock advanced. New time: {s_dalIConfig.Clock}");
+                        s_dal.Config.Clock = s_dal.Config.Clock.AddHours(hours);
+                        Console.WriteLine($"Clock advanced. New time: {s_dal.Config.Clock}");
                         break;
                     case 3:
-                        Console.WriteLine($"Current Max Range: {s_dalIConfig.MaxRange}");
+                        Console.WriteLine($"Current Max Range: {s_dal.Config.MaxRange}");
                         break;
                 }
             }
@@ -462,7 +432,7 @@ public static class Program
 
         bool isActive = ReadBool("Is courier active? (yes/no): ");
 
-        DateTime startDate = s_dalIConfig.Clock;
+        DateTime startDate = s_dal.Config.Clock;
         Console.WriteLine($"Setting Start Date to current system clock: {startDate}");
 
         return new Courier()
@@ -593,5 +563,3 @@ public static class Program
         return result;
     }
 }
-
-

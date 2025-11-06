@@ -32,7 +32,7 @@ namespace Dal;
 /// var all = dal.ReadAll();
 /// </code>
 /// </example>
-public class DeliveryImplementation : IDelivery
+internal class DeliveryImplementation : IDelivery
 {
     /// <summary>
     /// Creates a new delivery record in the DAL collection.

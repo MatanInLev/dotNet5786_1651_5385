@@ -18,7 +18,7 @@ namespace DalApi;
 /// Implementations should persist Delivery records and follow the documented method semantics.
 /// Typically the DAL assigns unique Ids for created deliveries and stores start/end timestamps and status.
 /// </remarks>
-public interface IDelivery
+public interface IDelivery: ICrud<Delivery>
 {
     /// <summary>
     /// Creates a new <see cref="Delivery"/> record in the DAL.

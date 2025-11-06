@@ -10,7 +10,7 @@ namespace DalApi;
 /// semantics documented on individual members. Implementations are not required
 /// to be thread-safe unless explicitly documented by the concrete type.
 /// </remarks>
-public interface IOrder
+public interface IOrder: ICrud<Order>
 {
     /// <summary>
     /// Creates a new <see cref="Order"/> in the DAL.
