@@ -16,6 +16,7 @@
 using DalApi;
 using DO;
 using Dal;
+using DalListClass = Dal.DalList;
 
 namespace DalTest;
 
@@ -66,7 +67,8 @@ public enum CrudMenuOptions
 /// </remarks>
 public static class Program
 {
-    private static IDal s_dal ;
+
+    static readonly IDal s_dal = new DalListClass();
 
     public static void Main(string[] args)
     {
