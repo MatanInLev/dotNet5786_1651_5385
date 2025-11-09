@@ -138,3 +138,41 @@ public enum EndOfDelivery
     /// </summary>
     NotThere
 }
+
+
+/// <summary>
+/// Defines the CRUD operations available in the entity sub-menus.
+/// </summary>
+/// <remarks>
+/// The values correspond to the sub-menu options shown to the user.
+/// Use TryParse to convert numeric input into this enum safely.
+/// </remarks>
+public enum CrudMenuOptions
+{
+    Return = 0,
+    Create = 1,
+    ReadSingle = 2,
+    ReadAll = 3,
+    Update = 4,
+    DeleteSingle = 5,
+    DeleteAll = 6
+}
+
+/// <summary>
+/// Defines the options for the main application menu.
+/// </summary>
+/// <remarks>
+/// Each enum value maps to a top-level menu action in the interactive console.
+/// Use these values when parsing user input in the main loop.
+/// </remarks>
+public enum MainMenuOptions
+{
+    Exit = 0,
+    Courier = 1,
+    Order = 2,
+    Delivery = 3,
+    Configuration = 4,
+    InitializeData = 5,
+    ShowAllData = 6,
+    ResetAllData = 7
+}

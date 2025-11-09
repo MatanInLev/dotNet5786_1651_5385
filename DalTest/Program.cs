@@ -21,43 +21,6 @@ using DalListClass = Dal.DalList;
 namespace DalTest;
 
 /// <summary>
-/// Defines the options for the main application menu.
-/// </summary>
-/// <remarks>
-/// Each enum value maps to a top-level menu action in the interactive console.
-/// Use these values when parsing user input in the main loop.
-/// </remarks>
-public enum MainMenuOptions
-{
-    Exit = 0,
-    Courier = 1,
-    Order = 2,
-    Delivery = 3,
-    Configuration = 4,
-    InitializeData = 5,
-    ShowAllData = 6,
-    ResetAllData = 7
-}
-
-/// <summary>
-/// Defines the CRUD operations available in the entity sub-menus.
-/// </summary>
-/// <remarks>
-/// The values correspond to the sub-menu options shown to the user.
-/// Use TryParse to convert numeric input into this enum safely.
-/// </remarks>
-public enum CrudMenuOptions
-{
-    Return = 0,
-    Create = 1,
-    ReadSingle = 2,
-    ReadAll = 3,
-    Update = 4,
-    DeleteSingle = 5,
-    DeleteAll = 6
-}
-
-/// <summary>
 /// Main program class for manually testing the DAL layer.
 /// (Implements Stage 1, Chapter 11)
 /// </summary>
@@ -68,6 +31,9 @@ public enum CrudMenuOptions
 public static class Program
 {
 
+    /// <summary>
+    /// The static, singleton instance of the DAL implementation (DalList).
+    /// </summary>
     static readonly IDal s_dal = new DalListClass();
 
     public static void Main(string[] args)
@@ -198,13 +164,19 @@ public static class Program
         try
         {
             Console.WriteLine("\n--- ALL COURIERS ---");
-            s_dal.Courier.ReadAll().ForEach(c => Console.WriteLine(c));
+            var AllCouriers = s_dal.Courier.ReadAll();
+            foreach (var c in AllCouriers)
+                Console.WriteLine(c);
 
             Console.WriteLine("\n--- ALL ORDERS ---");
-            s_dal.Order.ReadAll().ForEach(o => Console.WriteLine(o));
+            var AllOrders = s_dal.Order.ReadAll();
+            foreach (var c in AllOrders)
+                Console.WriteLine(c);
 
             Console.WriteLine("\n--- ALL DELIVERIES ---");
-            s_dal.Delivery.ReadAll().ForEach(d => Console.WriteLine(d));
+            var AllDeliveries = s_dal.Delivery.ReadAll();
+            foreach (var c in AllDeliveries)
+                Console.WriteLine(c);
 
             Console.WriteLine("\n--- CURRENT CONFIGURATION ---");
             Console.WriteLine($"Clock: {s_dal.Config.Clock}");
@@ -257,7 +229,9 @@ public static class Program
                         Console.WriteLine(courier != null ? courier.ToString() : "Courier not found.");
                         break;
                     case CrudMenuOptions.ReadAll:
-                        dal.ReadAll().ForEach(c => Console.WriteLine(c));
+                        var PrintCouriers = dal.ReadAll();
+                        foreach (var c in PrintCouriers)
+                            Console.WriteLine(c);
                         break;
                     case CrudMenuOptions.DeleteAll:
                         dal.DeleteAll();
@@ -303,7 +277,9 @@ public static class Program
                         Console.WriteLine(order != null ? order.ToString() : "Order not found.");
                         break;
                     case CrudMenuOptions.ReadAll:
-                        dal.ReadAll().ForEach(o => Console.WriteLine(o));
+                        var PrintOrders = dal.ReadAll();
+                        foreach (var c in PrintOrders)
+                            Console.WriteLine(c);
                         break;
                     case CrudMenuOptions.DeleteAll:
                         dal.DeleteAll();
@@ -318,6 +294,8 @@ public static class Program
             }
         } while (choice != CrudMenuOptions.Return);
     }
+
+
 
     /// <summary>
     /// Displays the CRUD menu for the Delivery entity and handles user choices.
@@ -349,7 +327,9 @@ public static class Program
                         Console.WriteLine(delivery != null ? delivery.ToString() : "Delivery not found.");
                         break;
                     case CrudMenuOptions.ReadAll:
-                        dal.ReadAll().ForEach(d => Console.WriteLine(d));
+                        var PrintDeliveries = dal.ReadAll();
+                        foreach (var c in PrintDeliveries)
+                            Console.WriteLine(c);
                         break;
                     case CrudMenuOptions.DeleteAll:
                         dal.DeleteAll();
@@ -374,7 +354,7 @@ public static class Program
     /// </remarks>
     private static void ShowConfigMenu()
     {
-        int choice = 0;     
+        int choice = 0;
         do
         {
             Console.WriteLine("\n--- Configuration Menu ---");
@@ -446,6 +426,7 @@ public static class Program
             IsActive = isActive,
             Distance = maxDistance,
             VehicleType = vehicle
+            // StartDate = startDate // Note: StartDate is not part of the Courier DO in this implementation
         };
     }
 

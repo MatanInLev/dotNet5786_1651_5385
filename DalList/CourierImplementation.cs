@@ -1,8 +1,9 @@
 ﻿namespace Dal;
 using DalApi;
-using global::DalList;
 using DO;
+using global::DalList;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 /// <summary>
 /// Concrete DAL implementation for managing <see cref="DO.Courier"/> entities in the in-memory <c>DataSource</c>.
@@ -35,42 +36,44 @@ internal class CourierImplementation : ICourier
     /// </summary>
     /// <param name="item">
     /// The <see cref="DO.Courier"/> instance to add. This method requires that no existing courier in
-    /// <c>DataSource.Couriers</c> has the same <see cref="DO.Courier.Id"/>. If a courier with the same Id exists,
-    /// an <see cref="InvalidOperationException"/> is thrown.
+    /// <c>DataSource.Couriers</c> has the same <see cref="DO.Courier.Id"/>.
     /// </param>
-    /// <exception cref="InvalidOperationException">
+    /// <exception cref="DalAlreadyExistsException">
     /// Thrown when a courier with the same <see cref="DO.Courier.Id"/> already exists in the data source.
     /// </exception>
     /// <remarks>
     /// - The provided instance is appended directly to the in-memory collection; a defensive copy is not created.
-    /// - The method does not auto-generate an Id; callers must supply a unique Id (or BL should generate it).
+    /// - The method does not auto-generate an Id; callers must supply a unique Id.
     /// </remarks>
     public void Create(Courier item)
     {
-        if (DataSource.Couriers.Find(c => c.Id == item.Id) != null)
+        if (DataSource.Couriers.FirstOrDefault(c => c.Id == item.Id) != null)
         {
-            throw new InvalidOperationException($"An object of type courier with ID: {item.Id} already exist.");
+            throw new DalAlreadyExistsException($"An object of type courier with ID: {item.Id} already exist.");
         }
         DataSource.Couriers.Add(item);
     }
 
     /// <summary>
-    /// Deletes the courier with the specified identifier from the in-memory collection.
+    /// Deletes the courier with the specified identifier using LINQ.
+    /// (Updated for Stage 2, Chapter 8 & 9)
     /// </summary>
     /// <param name="id">Unique identifier of the courier to delete.</param>
-    /// <exception cref="InvalidOperationException">
-    /// Thrown when no courier with the provided <paramref name="id"/> exists in <c>DataSource.Couriers</c>.
+    /// <exception cref="DalDoesNotExistException">
+    /// Thrown when no courier with the provided id exists.
     /// </exception>
-    /// <remarks>
-    /// Uses <see cref="List{T}.FindIndex(Predicate{T})"/> to locate the element and removes it using
-    /// <see cref="List{T}.RemoveAt(int)"/>. This mutates the shared DataSource and affects all consumers.
-    /// </remarks>
     public void Delete(int id)
+
     {
+
         int index = DataSource.Couriers.FindIndex(Courier => Courier.Id == id);
+
         if (index == -1)
-            throw new InvalidOperationException($"An object of type courier with ID: {id} does not exist.");
+
+            throw new DalDoesNotExistException($"An object of type courier with ID: {id} does not exist.");
+
         DataSource.Couriers.RemoveAt(index);
+
     }
 
     /// <summary>
@@ -86,6 +89,22 @@ internal class CourierImplementation : ICourier
     }
 
     /// <summary>
+    /// Reads a single courier based on a provided filter condition.
+    /// </summary>
+    /// <param name="filter">A function to test each courier for a condition.</param>
+    /// <returns>
+    /// The first stored <see cref="DO.Courier"/> instance matching the filter; otherwise <c>null</c>.
+    /// </returns>
+    /// <remarks>
+    /// The returned reference points to the same object stored in the internal list. Modifying the returned object
+    /// will mutate the DAL's stored instance unless the caller clones it first.
+    /// </remarks>
+    public Courier? Read(Func<Courier, bool> filter)
+    {
+        return DataSource.Couriers.FirstOrDefault(filter);
+    }
+
+    /// <summary>
     /// Reads a single courier by its unique identifier.
     /// </summary>
     /// <param name="id">Unique identifier of the courier to read.</param>
@@ -94,28 +113,32 @@ internal class CourierImplementation : ICourier
     /// </returns>
     /// <remarks>
     /// The returned reference points to the same object stored in the internal list. Modifying the returned object
-    /// will mutate the DAL's stored instance unless the caller clones it first.
+    /// will mutate the DAL's stored instance.
     /// </remarks>
     public Courier? Read(int id)
     {
-        Courier? orderToFind = DataSource.Couriers.Find(Courier => Courier.Id == id);
-        return orderToFind;
+        return DataSource.Couriers.FirstOrDefault(c => c.Id == id);
     }
 
     /// <summary>
-    /// Reads all couriers currently stored in the in-memory collection.
+    /// Reads all couriers currently stored in the in-memory collection, optionally filtering them.
     /// </summary>
+    /// <param name="filter">
+    /// A function to test each element for a condition (optional).
+    /// If <c>null</c>, all couriers are returned.
+    /// </param>
     /// <returns>
-    /// A new <see cref="List{Courier}"/> containing a shallow copy of the elements from <c>DataSource.Couriers</c>.
+    /// An <see cref="IEnumerable{Courier}"/> containing the elements from <c>DataSource.Couriers</c> that pass the filter.
     /// </returns>
     /// <remarks>
-    /// Returning a copy prevents callers from modifying the internal list reference. However, the elements inside the
-    /// returned list are the same instances as stored internally (shallow copy semantics).
+    /// This method returns an enumerable wrapper around the internal collection (or a filtered view).
+    /// The elements returned are the same instances as stored internally (shallow copy semantics).
     /// </remarks>
-    public List<Courier> ReadAll()
-    {
-        return new List<Courier>(DataSource.Couriers);
-    }
+    public IEnumerable<Courier> ReadAll(Func<Courier, bool>? filter = null)
+        => filter == null
+            ? DataSource.Couriers.Select(item => item)
+            : DataSource.Couriers.Where(filter);
+
 
     /// <summary>
     /// Updates an existing courier stored in the DAL.
@@ -123,18 +146,20 @@ internal class CourierImplementation : ICourier
     /// <param name="item">
     /// The <see cref="DO.Courier"/> instance to store. The <see cref="DO.Courier.Id"/> property identifies which record to update.
     /// </param>
-    /// <exception cref="InvalidOperationException">
-    /// Thrown when no existing courier with <see cref="DO.Courier.Id"/> matching <paramref name="item"/> can be found.
+    /// <exception cref="DalDoesNotExistException">
+    /// Thrown when no existing courier with the <see cref="DO.Courier.Id"/> matching <paramref name="item"/> can be found.
     /// </exception>
     /// <remarks>
-    /// The method performs a full replacement of the stored element at the found index. To perform a partial update,
-    /// callers should read the existing record, modify the fields they want to change, and call this method with the modified record.
+    /// The method finds the index of the existing courier and performs a full replacement of the stored element at that index.
+    /// To perform a partial update, callers should read the existing record, modify the fields, and then call this method.
     /// </remarks>
     public void Update(Courier item)
+
     {
         int index = DataSource.Couriers.FindIndex(Courier => Courier.Id == item.Id);
         if (index == -1)
-            throw new InvalidOperationException($"An object of type courier with ID: {item.Id} does not exist.");
+            throw new DalDoesNotExistException($"An object of type courier with ID: {item.Id} does not exist.");
         DataSource.Couriers[index] = item;
+
     }
 }

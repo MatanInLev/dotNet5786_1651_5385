@@ -12,9 +12,9 @@ namespace Dal;
 /// static in-memory collection `DataSource.Orders`. Behavior notes:
 /// - `Create` assigns a new unique ID using <see cref="Config.Instance.NextOrderId"/> and appends the order.
 /// - `Read` returns a reference to an existing order from the collection or `null` if not found.
-/// - `ReadAll` returns a shallow copy of the internal list to avoid exposing the internal collection.
+/// - `ReadAll` returns an enumerable wrapper of the internal list.
 /// - `Update` replaces the stored order that matches the supplied ID.
-/// - `Delete` removes the item with the specified ID or throws if it does not exist.
+/// - `Delete` removes the item with the specified ID or throws <see cref="DalDoesNotExistException"/> if it does not exist.
 /// Thread-safety: the implementation is not synchronized. If multiple threads access the DAL concurrently,
 /// synchronization must be provided externally.
 /// </remarks>
@@ -55,7 +55,7 @@ internal class OrderImplementation : IOrder
     /// Deletes the order with the specified identifier from the in-memory collection.
     /// </summary>
     /// <param name="id">Unique identifier of the order to delete.</param>
-    /// <exception cref="InvalidOperationException">
+    /// <exception cref="DalDoesNotExistException">
     /// Thrown when no order with the provided <paramref name="id"/> exists in <c>DataSource.Orders</c>.
     /// </exception>
     /// <remarks>
@@ -65,7 +65,7 @@ internal class OrderImplementation : IOrder
     {
         int index = DataSource.Orders.FindIndex(order => order.Id == id);
         if (index == -1)
-            throw new InvalidOperationException($"An object of type Order with sID: {id} does not exist.");
+            throw new DalDoesNotExistException($"An object of type Order with sID: {id} does not exist.");
         DataSource.Orders.RemoveAt(index);
     }
 
@@ -82,6 +82,22 @@ internal class OrderImplementation : IOrder
     }
 
     /// <summary>
+    /// Reads a single order based on a provided filter condition.
+    /// </summary>
+    /// <param name="filter">A function to test each order for a condition.</param>
+    /// <returns>
+    /// The first stored <see cref="DO.Order"/> instance matching the filter; otherwise <c>null</c>.
+    /// </returns>
+    /// <remarks>
+    /// The returned reference is the same object stored in the internal list. Modifying the returned
+    /// object will affect the stored value unless the caller explicitly copies it first.
+    /// </remarks>
+    public Order? Read(Func<Order, bool> filter)
+    {
+        return DataSource.Orders.FirstOrDefault(filter);
+    }
+
+    /// <summary>
     /// Reads a single order by its unique identifier.
     /// </summary>
     /// <param name="id">Unique identifier of the order to read.</param>
@@ -94,26 +110,29 @@ internal class OrderImplementation : IOrder
     /// </remarks>
     public Order? Read(int id)
     {
-        Order? orderToFind = DataSource.Orders.Find(order => order.Id == id);
-        return orderToFind;
+        return DataSource.Orders.FirstOrDefault(o => o.Id == id);
     }
 
     /// <summary>
-    /// Reads all orders currently stored in the in-memory collection.
+    /// Reads all orders currently stored in the in-memory collection, optionally filtering them.
     /// </summary>
+    /// <param name="filter">
+    /// A function to test each element for a condition (optional).
+    /// If <c>null</c>, all orders are returned.
+    /// </param>
     /// <returns>
-    /// A new <see cref="List{Order}"/> containing a shallow copy of all orders present in
-    /// <c>DataSource.Orders</c> at the time of the call.
+    /// An <see cref="IEnumerable{Order}"/> containing the elements from <c>DataSource.Orders</c>
+    /// that pass the filter (or all elements if no filter is provided).
     /// </returns>
     /// <remarks>
-    /// Returning a copy prevents external callers from mutating the DAL's internal list directly.
-    /// Each <see cref="Order"/> in the returned list is the same object instance from the internal list
+    /// This method returns an enumerable wrapper around the internal collection (or a filtered view).
+    /// Each <see cref="Order"/> in the returned enumerable is the same object instance from the internal list
     /// (shallow copy).
     /// </remarks>
-    public List<Order> ReadAll()
-    {
-        return new List<Order>(DataSource.Orders);
-    }
+    public IEnumerable<Order> ReadAll(Func<Order, bool>? filter = null)
+        => filter == null
+            ? DataSource.Orders.Select(item => item)
+            : DataSource.Orders.Where(filter);
 
     /// <summary>
     /// Updates an existing order stored in the DAL.
@@ -122,7 +141,7 @@ internal class OrderImplementation : IOrder
     /// The <see cref="Order"/> instance to store. The <see cref="Order.Id"/> property identifies the target record
     /// to update. All fields of the stored record are replaced with the values of <paramref name="item"/>.
     /// </param>
-    /// <exception cref="InvalidOperationException">
+    /// <exception cref="DalDoesNotExistException">
     /// Thrown when no existing order with <see cref="Order.Id"/> matching <paramref name="item"/> can be found.
     /// </exception>
     /// <remarks>
@@ -134,7 +153,7 @@ internal class OrderImplementation : IOrder
     {
         int index = DataSource.Orders.FindIndex(order => order.Id == item.Id);
         if (index == -1)
-            throw new InvalidOperationException($"An object of type Order with ID: {item.Id} does not exist.");
+            throw new DalDoesNotExistException($"An object of type Order with ID: {item.Id} does not exist.");
         DataSource.Orders[index] = item;
     }
 }

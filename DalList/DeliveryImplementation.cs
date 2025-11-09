@@ -14,11 +14,11 @@ namespace Dal;
 ///   the resulting record to the in-memory list.
 /// - <see cref="Read(int)"/> returns the stored instance (reference) or <c>null</c> when not found. Callers who modify
 ///   the returned object will modify the DAL's stored instance unless they clone it first.
-/// - <see cref="ReadAll"/> returns a shallow copy of the internal list to avoid exposing the internal collection itself.
-///   Each element in the returned list is the same instance stored internally (shallow copy semantics).
+/// - <see cref="ReadAll"/> returns an enumerable wrapper of the internal list.
+///   Each element in the returned enumerable is the same instance stored internally (shallow copy semantics).
 /// - <see cref="Update(Delivery)"/> replaces the stored element that matches the supplied Id. This is a full-replacement
 ///   operation; partial updates must be prepared by the caller before invoking Update.
-/// - <see cref="Delete(int)"/> removes the element with the specified Id or throws <see cref="InvalidOperationException"/>
+/// - <see cref="Delete(int)"/> removes the element with the specified Id or throws <see cref="DalDoesNotExistException"/>
 ///   if it does not exist.
 /// Thread-safety: callers must synchronize access if the DAL is used concurrently from multiple threads.
 /// </remarks>
@@ -58,7 +58,7 @@ internal class DeliveryImplementation : IDelivery
     /// Deletes the delivery with the specified identifier from the in-memory collection.
     /// </summary>
     /// <param name="id">Unique identifier of the delivery to delete.</param>
-    /// <exception cref="InvalidOperationException">
+    /// <exception cref="DalDoesNotExistException">
     /// Thrown when no delivery with the provided <paramref name="id"/> exists in <c>DataSource.Deliveries</c>.
     /// </exception>
     /// <remarks>
@@ -69,7 +69,7 @@ internal class DeliveryImplementation : IDelivery
     {
         int index = DataSource.Deliveries.FindIndex(delivery => delivery.Id == id);
         if (index == -1)
-            throw new InvalidOperationException($"An object of type Delivery with ID: {id} does not exist.");
+            throw new DalDoesNotExistException($"An object of type Delivery with ID: {id} does not exist.");
         DataSource.Deliveries.RemoveAt(index);
     }
 
@@ -86,6 +86,22 @@ internal class DeliveryImplementation : IDelivery
     }
 
     /// <summary>
+    /// Reads a single delivery based on a provided filter condition.
+    /// </summary>
+    /// <param name="filter">A function to test each delivery for a condition.</param>
+    /// <returns>
+    /// The first stored <see cref="DO.Delivery"/> instance matching the filter; otherwise <c>null</c>.
+    /// </returns>
+    /// <remarks>
+    /// The returned object is the same instance that is stored in the internal list (no defensive copy).
+    /// Modifying this instance will modify the DAL's stored record.
+    /// </remarks>
+    public Delivery? Read(Func<Delivery, bool> filter)
+    {
+        return DataSource.Deliveries.FirstOrDefault(filter);
+    }
+
+    /// <summary>
     /// Reads a single delivery by its unique identifier.
     /// </summary>
     /// <param name="id">Unique identifier of the delivery to read.</param>
@@ -98,25 +114,28 @@ internal class DeliveryImplementation : IDelivery
     /// </remarks>
     public Delivery? Read(int id)
     {
-        Delivery? deliveryToFind = DataSource.Deliveries.Find(delivery => delivery.Id == id);
-        return deliveryToFind;
+        return DataSource.Deliveries.FirstOrDefault(d => d.Id == id);
     }
 
     /// <summary>
-    /// Reads all deliveries currently stored in the in-memory collection.
+    /// Reads all deliveries currently stored in the in-memory collection, optionally filtering them.
     /// </summary>
+    /// <param name="filter">
+    /// A function to test each element for a condition (optional).
+    /// If <c>null</c>, all deliveries are returned.
+    /// </param>
     /// <returns>
-    /// A new <see cref="List{Delivery}"/> containing a shallow copy of the elements from
-    /// <c>DataSource.Deliveries</c> at the time of the call.
+    /// An <see cref="IEnumerable{Delivery}"/> containing the elements from <c>DataSource.Deliveries</c>
+    /// that pass the filter (or all elements if no filter is provided).
     /// </returns>
     /// <remarks>
-    /// Returning a shallow copy prevents callers from mutating the internal list reference directly.
-    /// However, each <see cref="DO.Delivery"/> element in the returned list is the same instance as in the internal list.
+    /// This method returns an enumerable wrapper around the internal collection (or a filtered view).
+    /// The elements returned are the same instances as stored internally (shallow copy semantics).
     /// </remarks>
-    public List<Delivery> ReadAll()
-    {
-        return new List<Delivery>(DataSource.Deliveries);
-    }
+    public IEnumerable<Delivery> ReadAll(Func<Delivery, bool>? filter = null)
+        => filter == null
+            ? DataSource.Deliveries.Select(item => item)
+            : DataSource.Deliveries.Where(filter);
 
     /// <summary>
     /// Updates an existing delivery stored in the DAL.
@@ -125,7 +144,7 @@ internal class DeliveryImplementation : IDelivery
     /// The <see cref="DO.Delivery"/> instance to store. The <see cref="DO.Delivery.Id"/> property identifies the target record
     /// to update. The stored element is replaced with the supplied <paramref name="item"/>.
     /// </param>
-    /// <exception cref="InvalidOperationException">
+    /// <exception cref="DalDoesNotExistException">
     /// Thrown when no existing delivery with <see cref="DO.Delivery.Id"/> matching <paramref name="item"/> can be found.
     /// </exception>
     /// <remarks>
@@ -136,7 +155,7 @@ internal class DeliveryImplementation : IDelivery
     {
         int index = DataSource.Deliveries.FindIndex(delivery => delivery.Id == item.Id);
         if (index == -1)
-            throw new InvalidOperationException($"An object of type Delivery with ID: {item.Id} does not exist.");
+            throw new DalDoesNotExistException($"An object of type Delivery with ID: {item.Id} does not exist.");
         DataSource.Deliveries[index] = item;
     }
 }

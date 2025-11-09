@@ -15,8 +15,8 @@ namespace DalTest;
 ///   * Create 50 orders (open orders initially).
 ///   * Create 10 deliveries in-progress and 20 closed deliveries, leaving the rest open.
 /// Usage:
-/// - Call <see cref="Do(ICourier?, IOrder?, IDelivery?, IConfig?)"/> once to reset the DAL and populate data.
-/// - This class expects the DAL interfaces provided to be non-null and will throw if any are null.
+/// - Call <see cref="Do(IDal)"/> once to reset the DAL and populate data.
+/// - This class expects the DAL interface provided to be non-null and will throw if it is null.
 /// Threading:
 /// - This class modifies the DAL via its interfaces; it is not thread-safe and should be used from a single thread
 ///   in test harness scenarios.
@@ -24,9 +24,11 @@ namespace DalTest;
 
 public static class Initialization
 {
+    /// <summary>
+    /// Static reference to the DAL implementation, set by the 'Do' method.
+    /// </summary>
     private static IDal? s_dal;
 
-    ///random parameter
     /// <summary>
     /// Random number generator used to produce variable test data (IDs, choices, times).
     /// </summary>
@@ -94,7 +96,7 @@ public static class Initialization
     /// <remarks>
     /// Implementation details and guarantees:
     /// - Creates exactly 50 orders (unless DAL.Create throws for individual orders).
-    /// - Uses <see cref="s_dalIConfig"/>.<see cref="IConfig.Clock"/> as the time reference and backs each order's
+    /// - Uses <see cref="IConfig.Clock"/> as the time reference and backs each order's
     ///   Open/OrderTime into the past by 1..59 days for realistic history.
     /// - Some optional numeric fields (Weight, Volume, Fragile) are randomly omitted (null) to exercise null-handling.
     /// - Each created order is passed to the DAL via <see cref="IOrder.Create(Order)"/>.
@@ -113,7 +115,7 @@ public static class Initialization
                 string customerPhone = $"05{s_rand.Next(10000000, 89999999)}";
                 AddressData randomAddress = s_addresses[s_rand.Next(s_addresses.Length)];
                 OrderType type = (OrderType)s_rand.Next(Enum.GetValues(typeof(OrderType)).Length);
-                DateTime openTime = s_dal.Config!.Clock.AddDays(-s_rand.Next(1, 60));
+                DateTime openTime = s_dal!.Config.Clock.AddDays(-s_rand.Next(1, 60));
 
                 Order newOrder = new()
                 {
@@ -131,7 +133,7 @@ public static class Initialization
                     OrderTime = openTime
                 };
 
-                s_dal.Order!.Create(newOrder);
+                s_dal!.Order.Create(newOrder);
             }
             catch (Exception ex)
             {
@@ -159,8 +161,8 @@ public static class Initialization
     /// </remarks>
     private static void createDeliveries()
     {
-        var allOrders = s_dal.Order!.ReadAll().ToList(); /// Get all 50 open orders
-        var activeCouriers = s_dal.Courier!.ReadAll().Where(c => c.IsActive).ToList();
+        var allOrders = s_dal!.Order.ReadAll().ToList(); /// Get all 50 open orders
+        var activeCouriers = s_dal!.Courier.ReadAll().Where(c => c.IsActive).ToList();
 
         if (!activeCouriers.Any())
         {
@@ -183,8 +185,8 @@ public static class Initialization
             DateTime startTime = orderToAssign.OrderTime.AddHours(s_rand.Next(1, 4));
 
             /// Ensure StartTime is not in the future relative to the system clock
-            if (startTime > s_dal.Config!.Clock)
-                startTime = s_dal.Config.Clock.AddMinutes(-s_rand.Next(1, 30));
+            if (startTime > s_dal!.Config.Clock)
+                startTime = s_dal!.Config.Clock.AddMinutes(-s_rand.Next(1, 30));
 
 
             Delivery newDelivery = new()
@@ -200,7 +202,7 @@ public static class Initialization
             };
 
             /// Rule: Use Interface to create (10c, 4)
-            s_dal.Delivery!.Create(newDelivery);
+            s_dal!.Delivery.Create(newDelivery);
         }
 
         /// Create 20 "Closed" Deliveries
@@ -213,13 +215,13 @@ public static class Initialization
             Courier courier = activeCouriers[s_rand.Next(activeCouriers.Count)];
 
             DateTime startTime = orderToAssign.OrderTime.AddHours(s_rand.Next(1, 2));
-            if (startTime > s_dal.Config!.Clock)
-                startTime = s_dal.Config.Clock.AddHours(-s_rand.Next(2, 5));
+            if (startTime > s_dal!.Config.Clock)
+                startTime = s_dal!.Config.Clock.AddHours(-s_rand.Next(2, 5));
 
             /// Rule: EndTime must be after StartTime (10g, 10)
             DateTime endTime = startTime.AddHours(s_rand.Next(1, 5));
-            if (endTime > s_dal.Config!.Clock)
-                endTime = s_dal.Config.Clock.AddMinutes(-s_rand.Next(1, 30));
+            if (endTime > s_dal!.Config.Clock)
+                endTime = s_dal!.Config.Clock.AddMinutes(-s_rand.Next(1, 30));
 
             /// Rule: Random end type (General p. 21)
             EndOfDelivery endType = (EndOfDelivery)s_rand.Next(Enum.GetValues(typeof(EndOfDelivery)).Length);
@@ -236,7 +238,7 @@ public static class Initialization
                 EndTime = endTime        /// Closed status
             };
 
-            s_dal.Delivery!.Create(newDelivery);
+            s_dal!.Delivery.Create(newDelivery);
         }
 
         /// The remaining 20 orders (50 - 10 - 20) will stay "Open",
@@ -265,7 +267,7 @@ public static class Initialization
                 {
                     id = s_rand.Next(200000000, 400000000); /// Generate random T"Z
                 }
-                while (s_dal.Courier!.Read(id) != null);
+                while (s_dal!.Courier.Read(c => c.Id == id) != null);
 
                 string name = s_courierNames[s_rand.Next(s_courierNames.Length)];
                 string phone = $"05{s_rand.Next(10000000, 99999999)}";
@@ -277,7 +279,7 @@ public static class Initialization
 
                 double? maxDistance = s_rand.NextDouble() > 0.5 ? s_rand.Next(5, 30) : null;
 
-                DateTime startDate = s_dal.Config!.Clock.AddDays(-s_rand.Next(30, 1000));
+                DateTime startDate = s_dal!.Config.Clock.AddDays(-s_rand.Next(30, 1000));
 
                 Courier newCourier = new()
                 {
@@ -290,7 +292,7 @@ public static class Initialization
                     VehicleType = vehicle
                 };
 
-                s_dal.Courier.Create(newCourier);
+                s_dal!.Courier.Create(newCourier);
             }
             catch (Exception ex)
             {
@@ -302,15 +304,12 @@ public static class Initialization
     /// <summary>
     /// Main entry method that resets the DAL and populates it with sample data.
     /// </summary>
-    /// <param name="dalCourier">DAL courier implementation to use for creating courier records. Must not be null.</param>
-    /// <param name="dalOrder">DAL order implementation to use for creating order records. Must not be null.</param>
-    /// <param name="dalDelivery">DAL delivery implementation to use for creating delivery records. Must not be null.</param>
-    /// <param name="dalConfig">DAL configuration proxy used to read/set the system clock and reset configuration. Must not be null.</param>
-    /// <exception cref="NullReferenceException">Thrown when any provided DAL interface is null.</exception>
+    /// <param name="dal">The DAL implementation instance to use. Must not be null.</param>
+    /// <exception cref="NullReferenceException">Thrown when the provided <paramref name="dal"/> is null.</exception>
     /// <remarks>
     /// Steps performed:
-    /// 1. Validate and assign provided interfaces to internal static fields (throws if any are null).
-    /// 2. Reset configuration via <see cref="IConfig.Reset"/> and delete all existing deliveries, orders and couriers.
+    /// 1. Validate and assign the provided DAL instance (throws if null).
+    /// 2. Reset configuration via <see cref="IDal.ResetDB"/> (which should delete all existing data).
     /// 3. Create couriers, then orders, then deliveries in that order to ensure referential integrity.
     /// 4. Log progress and completion to the console.
     /// This method is intended for test/setup scenarios and mutates the DAL state irreversibly for the current process.
@@ -321,7 +320,7 @@ public static class Initialization
         s_dal = dal ?? throw new NullReferenceException("DAL object can not be null!");
         /// Reset database 
         Console.WriteLine("Resetting Configuration values and Deleting all data...");
-       s_dal.ResetDB();
+        s_dal.ResetDB();
 
 
         ///initialization
@@ -337,8 +336,5 @@ public static class Initialization
         Console.WriteLine("Initialization complete.");
     }
 
-    private static IDal NullReferenceException(string v)
-    {
-        throw new NotImplementedException();
-    }
+    
 }
