@@ -60,15 +60,6 @@ internal class ConfigImplementation : IConfig
     }
 
     /// <summary>
-    /// Gets or sets the administrator's password used by the test harness. Maps to <see cref="Config.AdminPassword"/>.
-    /// </summary>
-    public string AdminPassword
-    {
-        get => Config.AdminPassword;
-        set => Config.AdminPassword = value;
-    }
-
-    /// <summary>
     /// Gets or sets the company address string. Maps to <see cref="Config.CompanyAddress"/>.
     /// </summary>
     /// <remarks>

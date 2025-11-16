@@ -35,11 +35,6 @@ public interface IConfig
     int MaxRange { get; set; }
 
     /// <summary>
-    /// Administrator password used by test harness or admin flows.
-    /// </summary>
-    string AdminPassword { get; set; }
-
-    /// <summary>
     /// Administrator's ID (T.Z.) used for privileged operations.
     /// </summary>
     int AdminId { get; set; }

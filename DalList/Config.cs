@@ -79,17 +79,12 @@ internal class Config
     /// </remarks>
     public int MaxRange { get; set; } = 50;
 
-    // --- Static configuration defaults (shared) ---
 
     /// <summary>
     /// The admin's official ID (T.Z.). Shared static default.
     /// </summary>
     internal static int AdminId { get; set; } = 123456782;
 
-    /// <summary>
-    /// The admin password (in-memory default). Shared static default.
-    /// </summary>
-    internal static string AdminPassword { get; set; } = "admin123";
 
     /// <summary>The company's base address. Null indicates not set.</summary>
     internal static string? CompanyAddress { get; set; } = null;
@@ -144,7 +139,6 @@ internal class Config
 
         // Reset static defaults
         Config.AdminId = 123456782;
-        Config.AdminPassword = "admin123";
         Config.CompanyAddress = null;
         Config.Latitude = null;
         Config.Longitude = null;

@@ -101,6 +101,12 @@ static class XMLTools
         DateTime dt = root.ToDateTimeNullable(elemName) ?? throw new FormatException($"can't convert:  {xmlFileName}, {elemName}");
         return dt;
     }
+    public static string GetConfigStrVal(string xmlFileName, string elemName)
+    {
+        XElement root = XMLTools.LoadListFromXMLElement(xmlFileName);
+        string str = root.Element(elemName)?.Value ?? throw new FormatException($"can't convert:  {xmlFileName}, {elemName}");
+        return str;
+    }
     public static void SetConfigIntVal(string xmlFileName, string elemName, int elemVal)
     {
         XElement root = XMLTools.LoadListFromXMLElement(xmlFileName);
@@ -113,6 +119,14 @@ static class XMLTools
         root.Element(elemName)?.SetValue((elemVal).ToString());
         XMLTools.SaveListToXMLElement(root, xmlFileName);
     }
+    public static void SetConfigStrVal(string xmlFileName, string elemName, string elemVal)
+    {
+        XElement root = XMLTools.LoadListFromXMLElement(xmlFileName);
+        root.Element(elemName)?.SetValue((elemVal));
+        XMLTools.SaveListToXMLElement(root, xmlFileName);
+    }
+    
+
     #endregion
 
 
