@@ -7,7 +7,7 @@ public sealed class DalList : IDal
 {
     public ICourier Courier { get; }= new CourierImplementation();
 
-    public IOrder Order { get; } =new OrderImplementation();
+    public IOrder Order { get; } = new OrderImplementation();
 
     public IDelivery Delivery { get; } = new DeliveryImplementation();
 
