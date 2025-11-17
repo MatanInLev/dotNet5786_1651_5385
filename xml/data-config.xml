@@ -1,3 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <config>
+  <NextOrderId>50</NextOrderId>
+  <NextCourierId>0</NextCourierId>
+  <NextDeliveryId>26</NextDeliveryId>
+  <Clock>17/11/2025 19:53:14</Clock>
+  <MaxRange>0</MaxRange>
+  <AdminId>12345678</AdminId>
+  <CompanyAddress></CompanyAddress>
+  <Latitude>47.926577078603835</Latitude>
+  <Longitude>14.43706490465476</Longitude>
+  <MaxGeneralDistance>0</MaxGeneralDistance>
+  <AvgCarSpeed>60</AvgCarSpeed>
+  <AvgMotorcycleSpeed>70</AvgMotorcycleSpeed>
+  <AvgBicycleSpeed>20</AvgBicycleSpeed>
+  <AvgFootSpeed>5</AvgFootSpeed>
+  <MaxDeliveryTime>02:00:00</MaxDeliveryTime>
+  <RiskRange>00:15:00</RiskRange>
+  <InactivityRange>3.00:00:00</InactivityRange>
 </config>

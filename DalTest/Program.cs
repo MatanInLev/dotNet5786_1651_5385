@@ -34,7 +34,7 @@ public static class Program
     /// <summary>
     /// The static, singleton instance of the DAL implementation (DalList).
     /// </summary>
-    static readonly IDal s_dal = new DalListClass();
+    static readonly IDal s_dal = new DalXml();
 
     public static void Main(string[] args)
     {

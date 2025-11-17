@@ -119,7 +119,6 @@ internal class Config
     /// <summary>Inactivity range after which a courier is considered inactive (default: 3 days).</summary>
     internal static TimeSpan InactivityRange { get; set; } = TimeSpan.FromDays(3);
 
-    // --- Reset logic ---
 
     /// <summary>
     /// Resets all configuration properties and ID counters to their initial defaults.
@@ -138,17 +137,17 @@ internal class Config
         MaxRange = 50;
 
         // Reset static defaults
-        Config.AdminId = 123456782;
-        Config.CompanyAddress = null;
-        Config.Latitude = null;
-        Config.Longitude = null;
-        Config.MaxGeneralDistance = null;
-        Config.AvgCarSpeed = 60;
-        Config.AvgMotorcycleSpeed = 70;
-        Config.AvgBicycleSpeed = 20;
-        Config.AvgFootSpeed = 5;
-        Config.MaxDeliveryTime = TimeSpan.FromHours(2);
-        Config.RiskRange = TimeSpan.FromMinutes(15);
-        Config.InactivityRange = TimeSpan.FromDays(3);
+        AdminId = 123456782;
+        CompanyAddress = null;
+        Latitude = null;
+        Longitude = null;
+        MaxGeneralDistance = null;
+        AvgCarSpeed = 60;
+        AvgMotorcycleSpeed = 70;
+        AvgBicycleSpeed = 20;
+        AvgFootSpeed = 5;
+        MaxDeliveryTime = TimeSpan.FromHours(2);
+        RiskRange = TimeSpan.FromMinutes(15);
+        InactivityRange = TimeSpan.FromDays(3);
     }
 }

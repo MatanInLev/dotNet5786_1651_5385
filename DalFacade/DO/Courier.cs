@@ -18,7 +18,6 @@ namespace DO;
 /// <param name="Name">Courier’s full name. Required for display and matching.</param>
 /// <param name="PhoneNumber">Courier’s contact phone number. E.164 recommended format.</param>
 /// <param name="Email">Courier’s email address. Optional but recommended for notifications.</param>
-/// <param name="Password">Optional login password — intentionally omitted from this DO model (handled in auth/store-specific models).</param>
 /// <param name="Distance">Optional maximum or current travel distance/range in kilometers. Unit: km.</param>
 /// <param name="IsActive">Indicates whether the courier is active and available for deliveries.</param>
 /// <param name="Date">Timestamp when the record was read or generated. Returns current system time by design.</param>
