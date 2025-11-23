@@ -314,10 +314,10 @@ public static class Initialization
     /// 4. Log progress and completion to the console.
     /// This method is intended for test/setup scenarios and mutates the DAL state irreversibly for the current process.
     /// </remarks>
-    public static void Do(IDal dal)
+    public static void Do()
     {
         /// Assign DAL interfaces to static fields
-        s_dal = dal ?? throw new NullReferenceException("DAL object can not be null!");
+        s_dal = DalApi.Factory.Get;
         /// Reset database 
         Console.WriteLine("Resetting Configuration values and Deleting all data...");
         s_dal.ResetDB();

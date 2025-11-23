@@ -16,7 +16,6 @@
 using DalApi;
 using DO;
 using Dal;
-using DalListClass = Dal.DalList;
 
 namespace DalTest;
 
@@ -34,7 +33,7 @@ public static class Program
     /// <summary>
     /// The static, singleton instance of the DAL implementation (DalList).
     /// </summary>
-    static readonly IDal s_dal = new DalXml();
+    static readonly IDal s_dal = Factory.Get;
 
     public static void Main(string[] args)
     {
@@ -116,7 +115,7 @@ public static class Program
     {
         try
         {
-            Initialization.Do(s_dal);
+            Initialization.Do();
             Console.WriteLine("Data initialization successful.");
         }
         catch (Exception ex)
