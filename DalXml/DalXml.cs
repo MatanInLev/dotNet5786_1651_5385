@@ -1,8 +1,11 @@
 ﻿using DalApi;
+using System.Diagnostics;
 namespace Dal;
 
-public class DalXml : IDal
+internal sealed class DalXml : IDal
 {
+    public static IDal Instance { get; } = new DalXml();
+    private DalXml() { }
     public ICourier Courier { get; } =new CourierImplementation();
     public IOrder Order { get; } = new OrdersImplementation();
     public IDelivery Delivery { get; } = new DeliveryImplementation();
