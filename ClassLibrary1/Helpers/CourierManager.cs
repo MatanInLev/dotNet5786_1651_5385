@@ -161,5 +161,181 @@ internal static class CourierManager
         .OrderBy(c => c.Id);
         }
 
+    /// <summary>
+    /// Creates a new courier in the system.
+    /// </summary>
+    /// <param name="boCourier">The Business Object containing new courier details.</param>
+    internal static void Create(BO.Courier boCourier)
+    {
+        // 1. Logical Validation
+        if (boCourier.Id <= 0)
+            throw new BO.BlInvalidValueException("Courier ID must be a positive number.");
+        if (string.IsNullOrWhiteSpace(boCourier.Name))
+            throw new BO.BlInvalidValueException("Courier name cannot be empty.");
+        if (boCourier.MaxDistance.HasValue && boCourier.MaxDistance < 0)
+            throw new BO.BlInvalidValueException("Max distance cannot be negative.");
 
+        // 2. Check for duplicates in DAL
+        // Note: ID is manual for Couriers (T.Z), so we check if it exists.
+        DO.Courier? existing = s_dal.Courier.Read(boCourier.Id);
+        if (existing != null)
+        {
+            throw new BO.BlAlreadyExistsException($"Courier with ID {boCourier.Id} already exists.");
+        }
+
+        // 3. Map BO -> DO
+        DO.Courier doCourier = new DO.Courier
+        {
+            Id = boCourier.Id,
+            Name = boCourier.Name,
+            Email = boCourier.Email,
+            PhoneNumber = boCourier.Phone,
+            VehicleType = (DO.VehicleType)boCourier.Vehicle, // Enum conversion
+            IsActive = true, // Default to active upon creation
+            Distance = boCourier.MaxDistance
+            // Note: StartDate is effectively DateTime.Now via DO's default, or implied logic
+        };
+
+        // 4. Save to DAL
+        try
+        {
+            s_dal.Courier.Create(doCourier);
+        }
+        catch (DO.DalAlreadyExistsException ex)
+        {
+            throw new BO.BlAlreadyExistsException($"Courier with ID {boCourier.Id} already exists.", ex);
+        }
+    }
+
+    /// <summary>
+    /// Retrieves full details of a specific courier.
+    /// </summary>
+    /// <param name="courierId">The ID of the courier to retrieve.</param>
+    /// <returns>A populated BO.Courier object.</returns>
+    internal static BO.Courier Get(int courierId)
+    {
+        // 1. Fetch from DAL
+        DO.Courier? doCourier = s_dal.Courier.Read(courierId);
+        if (doCourier == null)
+        {
+            throw new BO.BlDoesNotExistException($"Courier with ID {courierId} does not exist.");
+        }
+
+        // 2. Calculate Derived Properties
+        //    Find if there is an active delivery (EndTime is null)
+        var allDeliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId);
+
+        //    Active Delivery:
+        DO.Delivery? activeDelivery = allDeliveries.FirstOrDefault(d => d.EndTime == null);
+        BO.OrderInProgress? orderInProgress = null;
+
+        if (activeDelivery != null)
+        {
+            // If there is an active delivery, we need to fetch the Order details to populate OrderInProgress
+            DO.Order? order = s_dal.Order.Read(activeDelivery.OrderId);
+            if (order != null)
+            {
+                orderInProgress = new BO.OrderInProgress
+                {
+                    OrderId = order.Id,
+                    DeliveryId = activeDelivery.Id,
+                    CustomerName = order.CustomerName,
+                    CustomerAddress = order.Address,
+                    // Calculate status and other details via OrderManager logic if needed
+                    // Status = OrderManager.CalculateOrderStatus(order.Id) 
+                };
+            }
+        }
+
+        // 3. Construct BO
+        return new BO.Courier
+        {
+            Id = doCourier.Id,
+            Name = doCourier.Name,
+            Email = doCourier.Email,
+            Phone = doCourier.PhoneNumber,
+            Vehicle = (BO.Vehicle)doCourier.VehicleType,
+            IsActive = doCourier.IsActive,
+            MaxDistance = doCourier.Distance,
+            // Calculated Field:
+            OrderInProgress = orderInProgress
+        };
+    }
+
+    /// <summary>
+    /// Updates an existing courier's details.
+    /// </summary>
+    internal static void Update(BO.Courier boCourier)
+    {
+        // 1. Validate Input
+        if (boCourier.Id <= 0)
+            throw new BO.BlInvalidValueException("Invalid ID");
+
+        // 2. Fetch existing to verify existence
+        DO.Courier? existingCourier = s_dal.Courier.Read(boCourier.Id);
+        if (existingCourier == null)
+            throw new BO.BlDoesNotExistException($"Courier {boCourier.Id} was not found.");
+
+        // 3. Business Rule: Cannot change some properties if currently delivering?
+        //    (Optional rule: If handling an order, maybe limit vehicle change?)
+        //    For now, we allow updates.
+
+        // 4. Map BO -> DO (Use record 'with' for immutability if strictly following record pattern, 
+        //    or create new if needed. Since DAL Update replaces the object, we create a new one based on existing).
+        DO.Courier updatedCourier = existingCourier with
+        {
+            Name = boCourier.Name,
+            Email = boCourier.Email,
+            PhoneNumber = boCourier.Phone,
+            VehicleType = (DO.VehicleType)boCourier.Vehicle,
+            IsActive = boCourier.IsActive,
+            Distance = boCourier.MaxDistance
+        };
+
+        // 5. Save to DAL
+        try
+        {
+            s_dal.Courier.Update(updatedCourier);
+        }
+        catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlDoesNotExistException($"Failed to update Courier {boCourier.Id}", ex);
+        }
+    }
+
+    /// <summary>
+    /// Deletes a courier from the system.
+    /// </summary>
+    internal static void Delete(int courierId)
+    {
+        // 1. Check Referential Integrity / Business Constraints [cite: 1657]
+                    //    "Courier can be deleted on condition that he is not currently handling an order 
+                    //     or never handled any order"
+
+        IEnumerable<DO.Delivery> deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId);
+
+        // Check if currently handling (Active delivery)
+        if (deliveries.Any(d => d.EndTime == null))
+        {
+            throw new BO.BlDeletionImpossibleException("Cannot delete courier: Currently handling an order.");
+        }
+
+        // Check if ever handled (History exists)
+        // Depending on strictness, you might soft-delete (set IsActive=false) or prevent deletion entirely.
+        // If the instruction implies "Never handled ANY order" to allow hard delete:
+        if (deliveries.Any())
+        {
+            throw new BO.BlDeletionImpossibleException("Cannot delete courier: History of deliveries exists. Consider setting to Inactive.");
+        }
+
+        // 2. Perform Delete
+        try
+        {
+            s_dal.Courier.Delete(courierId);
+        }
+        catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlDoesNotExistException($"Courier {courierId} does not exist.", ex);
+        }
+    }
 }

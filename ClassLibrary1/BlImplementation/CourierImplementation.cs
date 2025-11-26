@@ -9,17 +9,17 @@ internal class CourierImplementation : ICourier
 {
     public void Add(int userId, Courier courier)
     {
-        throw new NotImplementedException();
+        CourierManager.Create(courier);
     }
 
     public void Delete(int userId, int courierId)
     {
-        throw new NotImplementedException();
+        CourierManager.Delete(courierId);
     }
 
     public Courier Get(int userId, int courierId)
     {
-        throw new NotImplementedException();
+        return CourierManager.Get(courierId);
     }
 
     public IEnumerable<CourierInList> GetList(int userId, bool? isActive = null, Vehicle? vehicle = null)
@@ -34,6 +34,6 @@ internal class CourierImplementation : ICourier
 
     public void Update(int userId, Courier courier)
     {
-        throw new NotImplementedException();
+        CourierManager.Update(courier);
     }
 }

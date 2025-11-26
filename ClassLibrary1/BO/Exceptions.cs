@@ -60,3 +60,15 @@ public class BlTemporaryNotAvailableException : BlBaseException
         : base(message, innerException) { }
 }
 
+/// <summary>
+/// Exception thrown when an attempted deletion cannot be completed because doing so would
+/// violate business rules or data integrity constraints.
+/// </summary>
+[Serializable]
+public class BlDeletionImpossibleException : BlBaseException
+{
+    public BlDeletionImpossibleException(string message) : base(message) { }
+    public BlDeletionImpossibleException(string message, Exception innerException)
+        : base(message, innerException) { }
+}
+
