@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BlApi;
 
-public interface IBl  
+public interface IBl
 {
     IOrder Order { get; }
     ICourier Courier { get; }  

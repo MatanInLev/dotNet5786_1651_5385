@@ -1,4 +1,6 @@
-﻿namespace BlApi;
+﻿using BO;
+
+namespace BlApi;
 
 public interface IOrder
 {
@@ -10,4 +12,8 @@ public interface IOrder
     IEnumerable<BO.OrderInList> GetList(int  userId, BO.OrderStatus? filter, object? filterValue, BO.OrderType? sort);
     Dictionary<BO.OrderStatus, int> GetOrdersStatusCount(int userId);
     void CompleteOrderDelivery(int userId, int deliveryId, BO.DeliveryStatus status);
+    public void AssignOrder(int userId, int orderId, int courierId);
+    IEnumerable<ClosedDeliveryInList> GetClosedOrdersForCourier(int userId, int courierId, OrderType? typeFilter = null, string? sortProperty = null);
+    IEnumerable<OpenOrderInList> GetOpenOrdersForCourier(int userId, int courierId, OrderType? typeFilter = null, string? sortProperty = null);
+    
 }
