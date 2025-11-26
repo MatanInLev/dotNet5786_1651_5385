@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BlApi;
+﻿namespace BlApi;
 
 public interface IAdmin
 {
+    void ResetDB();
+    void InitializeDB();
+    DateTime GetClock();
+    void ForwardClock(BO.TimeUnit unit);
+    BO.Config GetConfig();
+    void SetConfig(BO.Config config);
+
 }

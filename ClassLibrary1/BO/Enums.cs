@@ -53,3 +53,12 @@ public enum ScheduleStatus
     Late,
     Risk
 }
+
+public enum TimeUnit
+{
+    Minutes,
+    Hours,
+    Days,
+    months,
+    years,
+}
