@@ -18,10 +18,10 @@ public enum Vehicle
 
 public enum OrderStatus
 {
-    None,
-    Confirmed,
-    Shipped,
+    Scheduled,
+    InTreatment,
     Delivered,
+    CustomerRefused,
     Canceled
 }
 
@@ -48,7 +48,6 @@ public enum DeliveryStatus
 
 public enum ScheduleStatus
 {
-    None,
     OnTime,
     Late,
     Risk

@@ -29,7 +29,7 @@ internal static class AdminManager //stage 4
     {
         var oldClock = s_dal.Config.Clock; //stage 4
         s_dal.Config.Clock = newClock; //stage 4
-        
+
         //Add calls here to any logic method that should be called periodically,
         //after each clock update
         //for example, Periodic students' updates:
@@ -37,9 +37,9 @@ internal static class AdminManager //stage 4
         // - (students become not active after 5 years etc.)
 
         //TO_DO: //stage 4
-        
+        CourierManager.UpdateCourierActivityStatus();
         //stage 4. to be removed in stage 7 and replaced as below
-        
+
         //...
 
         //TO_DO: //stage 7
@@ -184,7 +184,7 @@ internal static class AdminManager //stage 4
     public static void ThrowOnSimulatorIsRunning()
     {
         if (s_thread is not null)
-            throw new BO.BLTemporaryNotAvailableException("Cannot perform the operation since Simulator is running");
+            throw new BO.BlTemporaryNotAvailableException("Cannot perform the operation since Simulator is running");
     }
 
     [MethodImpl(MethodImplOptions.Synchronized)] //stage 7                                                 
