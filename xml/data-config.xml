@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <config>
-  <NextOrderId>100</NextOrderId>
+  <NextOrderId>150</NextOrderId>
   <NextCourierId>0</NextCourierId>
-  <NextDeliveryId>56</NextDeliveryId>
-  <Clock>15/10/2025 10:00:00</Clock>
+  <NextDeliveryId>86</NextDeliveryId>
+  <Clock>01/12/2035 20:19:28</Clock>
   <MaxRange>0</MaxRange>
   <AdminId>12345678</AdminId>
   <CompanyAddress></CompanyAddress>
