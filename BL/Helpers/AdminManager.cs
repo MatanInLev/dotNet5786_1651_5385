@@ -129,9 +129,6 @@ internal static class AdminManager //stage 4
             s_dal.Config.MaxDeliveryTime = configuration.MaxDeliveryTime;
             configChanged = true;
         }
-        //TO_DO: //stage 4
-        //add a condition+assignment for each configuration property
-        //...
 
         //Calling all the observers of configuration update
         if (configChanged) // stage 5

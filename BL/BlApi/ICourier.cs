@@ -1,6 +1,6 @@
 ﻿namespace BlApi;
 
-public interface ICourier
+public interface ICourier : IObservable
 {
     string Login(string username);
     IEnumerable<BO.CourierInList> GetList(int userId, bool? isActive = null, BO.Vehicle? vehicle = null);

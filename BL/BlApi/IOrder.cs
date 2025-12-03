@@ -2,7 +2,7 @@
 
 namespace BlApi;
 
-public interface IOrder
+public interface IOrder : IObservable
 {
     BO.Order Get(int userId, int orderId);
     void Update(int userId, BO.Order order);

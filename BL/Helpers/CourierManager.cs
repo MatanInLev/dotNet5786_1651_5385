@@ -6,6 +6,7 @@ namespace Helpers;
 internal static class CourierManager
 {
     private static IDal s_dal = Factory.Get;
+    internal static ObserverManager Observers = new(); //stage 5
 
     /// <summary>
     /// Periodic method to update couriers' activity status.
