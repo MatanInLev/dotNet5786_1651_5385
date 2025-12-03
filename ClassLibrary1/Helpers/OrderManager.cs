@@ -11,6 +11,8 @@ namespace Helpers;
 internal static class OrderManager
 {
     private static readonly IDal s_dal = DalApi.Factory.Get;
+    internal static ObserverManager Observers = new(); //stage 5
+
 
     #region CRUD Operations
 
