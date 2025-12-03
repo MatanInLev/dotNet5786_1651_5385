@@ -1,10 +1,5 @@
-﻿using BlApi;
-using BO;
+﻿using BO;
 using DalApi;
-using DO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Helpers;
 
@@ -62,6 +57,7 @@ internal static class OrderManager
         {
             throw new BO.BlInvalidValueException("Failed to create order", ex);
         }
+        Observers.NotifyListUpdated(); // observers notification
     }
 
     /// <summary>
@@ -148,6 +144,8 @@ internal static class OrderManager
         };
 
         s_dal.Order.Update(updated);
+        Observers.NotifyItemUpdated(boOrder.Id);
+        Observers.NotifyListUpdated();
     }
 
     /// <summary>
@@ -257,6 +255,8 @@ internal static class OrderManager
                 s_dal.Delivery.Update(canceledDelivery);
             }
         }
+        Observers.NotifyItemUpdated(orderId);
+        Observers.NotifyListUpdated();
     }
 
     /// <summary>
@@ -289,6 +289,8 @@ internal static class OrderManager
         };
 
         s_dal.Delivery.Create(newDelivery);
+        Observers.NotifyItemUpdated(orderId);
+        Observers.NotifyListUpdated();
     }
 
     /// <summary>
@@ -310,6 +312,8 @@ internal static class OrderManager
         };
 
         s_dal.Delivery.Update(updated);
+        Observers.NotifyItemUpdated(delivery.OrderId);
+        Observers.NotifyListUpdated();
     }
 
     internal static Dictionary<BO.OrderStatus, int> GetOrdersStatusCount()
