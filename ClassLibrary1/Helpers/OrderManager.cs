@@ -149,7 +149,7 @@ internal static class OrderManager
     }
 
     /// <summary>
-    /// Deletes an order. Instructions say this should throw an exception[cite: 661].
+    /// Deletes an order. Instructions say this should throw an exception.
     /// </summary>
     internal static void Delete(int orderId)
     {
@@ -170,8 +170,28 @@ internal static class OrderManager
             var deliveries = s_dal.Delivery.ReadAll(d => d.OrderId == o.Id);
             int deliveryCount = deliveries.Count();
 
-            // Get active delivery ID if exists
+            // Find the active delivery (if any) and the most recent delivery
             var activeDelivery = deliveries.FirstOrDefault(d => d.EndTime == null);
+            var lastDelivery = deliveries.OrderByDescending(d => d.StartTime).FirstOrDefault();
+
+            // Time Calculations
+            TimeSpan maxTime = s_dal.Config.MaxDeliveryTime;
+            DateTime maxDeadline = o.OrderTime.Add(maxTime);
+
+            // TimeLeft: 0 if closed, otherwise MaxDeadline - Current Simulated Time
+            bool isClosed = status == BO.OrderStatus.Delivered ||
+                            status == BO.OrderStatus.Canceled ||
+                            status == BO.OrderStatus.CustomerRefused;
+
+            TimeSpan timeLeft = isClosed ? TimeSpan.Zero : maxDeadline - AdminManager.Now;
+
+            // Optional: Clamp negative time to zero if preferred, or leave as negative to show lateness
+            if (timeLeft < TimeSpan.Zero) timeLeft = TimeSpan.Zero;
+
+            // TotalProcessingTime: 0 if still open, otherwise LastDelivery.EndTime - Order.OrderTime
+            TimeSpan totalProcessTime = (isClosed && lastDelivery?.EndTime != null)
+                ? (lastDelivery.EndTime.Value - o.OrderTime)
+                : TimeSpan.Zero;
 
             return new BO.OrderInList
             {
@@ -180,14 +200,16 @@ internal static class OrderManager
                 Type = (BO.OrderType)o.OrderType,
                 AmountOfDeliveries = deliveryCount,
                 ScheduleStatus = schedStatus,
-                DeliveryId = activeDelivery?.Id
-                // Distance calculation requires Company Config coords, implied here
+                DeliveryId = activeDelivery?.Id,
+
+                // --- Calculated Time Fields ---
+                TimeLeft = timeLeft,
+                TotalProcessingTime = totalProcessTime
             };
         })
         .Where(o => filterStatus == null || o.Status == filterStatus)
         .OrderBy(o => o.Id);
     }
-
     #endregion
 
     #region Business Processes
@@ -419,7 +441,7 @@ internal static class OrderManager
             {
                 DeliveryId = item.Delivery.Id,
                 OrderId = item.Order?.Id ?? 0,
-                OrderType = (BO.OrderType)(item.Order?.OrderType ?? DO.OrderType.Other),
+                OrderType = (BO.OrderType)(item.Order?.OrderType ?? DO.OrderType.Pizza),
                 CustomerAddress = item.Order?.Address ?? "Unknown",
                 Vehicle = (BO.Vehicle)item.Delivery.VehicleType,
 

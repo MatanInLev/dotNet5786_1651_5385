@@ -305,7 +305,7 @@ internal static class Program
                     case 4: // Forward Clock
                         // Simulating time passage
                         int amount = ReadInt("Enter amount to forward: ");
-                        BO.TimeUnit unit = ReadEnum<BO.TimeUnit>("Unit (0-Seconds, 1-Minutes, 2-Hours, 3-Days...): ");
+                        BO.TimeUnit unit = ReadEnum<BO.TimeUnit>("Unit (0-Minutes, 1-Hours, 2-Days 3-Months 4-Years): ");
 
                         // Loop to simulate stepping if needed, or just call logic
                         // Since IAdmin interface accepts unit, we loop 'amount' times

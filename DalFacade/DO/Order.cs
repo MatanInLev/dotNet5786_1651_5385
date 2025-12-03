@@ -59,9 +59,9 @@ public record Order
     public required int Id { get; init; } /// running ID number
 
     /// <summary>
-    /// Category/type of the order. Defaults to <see cref="OrderType.Other"/>.
+    /// Category/type of the order. Defaults to <see cref="OrderType.Pizza"/>.
     /// </summary>
-    public OrderType OrderType { get; init; } = OrderType.Other;
+    public OrderType OrderType { get; init; } = OrderType.Pizza;
 
     /// <summary>
     /// Optional description or notes about the order.

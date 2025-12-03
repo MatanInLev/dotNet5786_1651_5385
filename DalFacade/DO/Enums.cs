@@ -47,55 +47,26 @@ public enum VehicleType
 /// <summary>
 /// High-level categories for orders. Used to influence routing, packaging and handling rules.
 /// </summary>
-/// <remarks>
-/// These categories are intentionally coarse. Business logic may map them to internal handling rules
-/// (e.g., Food -> temperature-controlled handling, Electronics -> fragile/insurance).
-/// </remarks>
-/// <example>
-/// var type = OrderType.Food;
-/// if (type == OrderType.Food) { /* apply food handling rules */ }
-/// </example>
 public enum OrderType
 {
-    /// <summary>
-    /// Food deliveries (meals, restaurants).
-    /// </summary>
-    Food,
-
-    /// <summary>
-    /// Consumer electronics (phones, laptops, accessories).
-    /// </summary>
-    Electronics,
-
-    /// <summary>
-    /// Motor vehicles or vehicle-related items.
-    /// </summary>
-    Cars,
-
-    /// <summary>
-    /// Supermarket and grocery items.
-    /// </summary>
-    Groceries,
-
-    /// <summary>
-    /// Books and printed media.
-    /// </summary>
-    Books,
-
-    /// <summary>
-    /// Clothing and wearable items.
-    /// </summary>
-    Clothing,
-
-    /// <summary>
-    /// Furniture and large items requiring special handling.
-    /// </summary>
-    Furniture,
-
-    /// <summary>
-    /// Any other category not covered above.
-    /// </summary>
-    Other
+    /// <summary>Burgers and burger-style sandwiches.</summary>
+    Burger,
+    /// <summary>Pizzas and related oven-baked flatbreads.</summary>
+    Pizza,
+    /// <summary>Fresh salads and mixed greens.</summary>
+    Salad,
+    /// <summary>Sushi and Japanese-style raw or prepared seafood items.</summary>
+    Sushi,
+    /// <summary>Sandwiches, subs, and deli-style handhelds.</summary>
+    Sandwich,
+    /// <summary>Italian cuisine such as pasta, risotto, and similar dishes.</summary>
+    Italian,
+    /// <summary>Thai cuisine with characteristic flavors and spices.</summary>
+    Thai,
+    /// <summary>Indian cuisine including curries and regional specialties.</summary>
+    Indian,
+    /// <summary>French cuisine and related bistro-style dishes.</summary>
+    French
 }
 
 /// <summary>
