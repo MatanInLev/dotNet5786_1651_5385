@@ -213,7 +213,7 @@
     <PhoneNumber>0540931720</PhoneNumber>
     <Email>Shir.Israeli@company.com</Email>
     <Distance>23</Distance>
-    <IsActive>true</IsActive>
+    <IsActive>false</IsActive>
     <VehicleType>Motorcycle</VehicleType>
   </Courier>
   <Courier>
@@ -231,7 +231,7 @@
     <PhoneNumber>0597658487</PhoneNumber>
     <Email>Noa.Kirel@company.com</Email>
     <Distance>20</Distance>
-    <IsActive>true</IsActive>
+    <IsActive>false</IsActive>
     <VehicleType>Foot</VehicleType>
   </Courier>
   <Courier>
@@ -249,7 +249,7 @@
     <PhoneNumber>0527215879</PhoneNumber>
     <Email>Daniel.Levi@company.com</Email>
     <Distance>20</Distance>
-    <IsActive>true</IsActive>
+    <IsActive>false</IsActive>
     <VehicleType>Motorcycle</VehicleType>
   </Courier>
   <Courier>
@@ -294,7 +294,7 @@
     <PhoneNumber>0515895596</PhoneNumber>
     <Email>Yair.Kahana@company.com</Email>
     <Distance>25</Distance>
-    <IsActive>true</IsActive>
+    <IsActive>false</IsActive>
     <VehicleType>Bike</VehicleType>
   </Courier>
   <Courier>
@@ -348,7 +348,7 @@
     <PhoneNumber>0526872542</PhoneNumber>
     <Email>Daniel.Levi@company.com</Email>
     <Distance>7</Distance>
-    <IsActive>true</IsActive>
+    <IsActive>false</IsActive>
     <VehicleType>Motorcycle</VehicleType>
   </Courier>
   <Courier>

@@ -114,7 +114,7 @@ public enum TimeUnit
     /// <summary>Days.</summary>
     Days,
     /// <summary>Months.</summary>
-    months,
+    Months,
     /// <summary>Years.</summary>
-    years,
+    Years,
 }

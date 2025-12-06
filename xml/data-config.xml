@@ -3,12 +3,12 @@
   <NextOrderId>200</NextOrderId>
   <NextCourierId>0</NextCourierId>
   <NextDeliveryId>116</NextDeliveryId>
-  <Clock>30/11/2025 18:33:05</Clock>
+  <Clock>07/09/2030 03:53:05</Clock>
   <MaxRange>0</MaxRange>
   <AdminId>12345678</AdminId>
-  <CompanyAddress></CompanyAddress>
-  <Latitude>47.926577078603835</Latitude>
-  <Longitude>14.43706490465476</Longitude>
+  <CompanyAddress>Ha-Uman Street 15, Jerusalem</CompanyAddress>
+  <Latitude>31.749777591713368</Latitude>
+  <Longitude>35.20943668465893</Longitude>
   <MaxGeneralDistance>0</MaxGeneralDistance>
   <AvgCarSpeed>60</AvgCarSpeed>
   <AvgMotorcycleSpeed>70</AvgMotorcycleSpeed>
