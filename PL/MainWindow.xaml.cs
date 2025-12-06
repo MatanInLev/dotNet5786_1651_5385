@@ -195,7 +195,7 @@ namespace PL
         /// <summary>
         /// Opens the courier list window.
         /// </summary>
-        private void btnOpenList_Click(object sender, RoutedEventArgs e)
+        private void btnOpenCourierList_Click(object sender, RoutedEventArgs e)
         {
             // Replace 'Courier.CourierListWindow' with the correct namespace/path to your list window
             new Courier.CourierListWindow().Show();

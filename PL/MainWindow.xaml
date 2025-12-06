@@ -15,6 +15,7 @@
 
         <StackPanel Grid.Column="0" Margin="20" VerticalAlignment="Center">
 
+            <!--Config Update-->
             <Label Content="Configuration Parameters:" FontWeight="Bold" Margin="0,0,0,10"/>
 
             <StackPanel Orientation="Horizontal" Margin="0,3">
@@ -37,15 +38,17 @@
                 <TextBox Width="80" VerticalContentAlignment="Center" ToolTip="Format: hh:mm:ss" Text="{Binding Configuration.InactivityTime, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
 
-            <Button Content="Update Configuration" Margin="0,15,0,30" Padding="5" HorizontalAlignment="Left" Width="150"/>
-
+            <Button Content="Update Configuration" Click="btnUpdateConfig_Click" Margin="0,15,0,30" Padding="5" HorizontalAlignment="Left" Width="150"/>
+            
+            <!--Database Actions-->
             <Label Content="Database Actions:" FontWeight="Bold"/>
-            <Button Content="Initialize DB" Margin="0,5" Padding="5"/>
-            <Button Content="Reset DB" Margin="0,5" Padding="5"/>
+            <Button Content="Initialize DB" Click="btnInitDB_Click" Margin="0,5" Padding="5"/>
+            <Button Content="Reset DB" Click="btnResetDB_Click" Margin="0,5" Padding="5"/>
 
-            <Button Content="Open List Window" Margin="0,30,0,0" Padding="10" FontWeight="Bold" Background="#DDDDDD"/>
+            <Button Content="Couriers List" Click="btnOpenCourierList_Click" Margin="0,30,0,0" Padding="10" FontWeight="Bold" Background="#DDDDDD"/>
         </StackPanel>
 
+        <!--Clock Panel-->
         <StackPanel Grid.Column="1" Margin="20" HorizontalAlignment="Center" VerticalAlignment="Center">
 
             <Label Content="{Binding CurrentTime}"

@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <config>
-  <NextOrderId>200</NextOrderId>
+  <NextOrderId>250</NextOrderId>
   <NextCourierId>0</NextCourierId>
-  <NextDeliveryId>116</NextDeliveryId>
-  <Clock>07/09/2030 03:53:05</Clock>
+  <NextDeliveryId>146</NextDeliveryId>
+  <Clock>06/12/2025 23:36:11</Clock>
   <MaxRange>0</MaxRange>
   <AdminId>12345678</AdminId>
-  <CompanyAddress>Ha-Uman Street 15, Jerusalem</CompanyAddress>
-  <Latitude>31.749777591713368</Latitude>
-  <Longitude>35.20943668465893</Longitude>
+  <CompanyAddress></CompanyAddress>
+  <Latitude>47.926577078603835</Latitude>
+  <Longitude>14.43706490465476</Longitude>
   <MaxGeneralDistance>0</MaxGeneralDistance>
   <AvgCarSpeed>60</AvgCarSpeed>
   <AvgMotorcycleSpeed>70</AvgMotorcycleSpeed>
