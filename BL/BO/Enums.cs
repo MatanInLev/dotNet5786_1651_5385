@@ -1,5 +1,11 @@
 ﻿namespace BO;
 
+public enum UserRole
+{
+    None,
+    Admin,
+    Courier
+}
 /// <summary>
 /// Enumeration of courier operational status.
 /// </summary>
