@@ -22,7 +22,14 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Content="Label" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"/>
-                <ComboBox  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1"/>
+                <ComboBox
+                    ItemsSource="{Binding Source={StaticResource ActiveFilterCollectionKey}}"
+                    SelectedValue="{Binding Filter, Mode=TwoWay}"
+                    SelectionChanged="FilterComboBox_SelectionChanged"
+                    Grid.Column="1"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch" />
+
             </Grid>
             <DataGrid Grid.Row="1" ItemsSource="{Binding Path=CourierList}"/>
             <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100"/>

@@ -6,6 +6,12 @@ public enum UserRole
     Admin,
     Courier
 }
+public enum ActiveFilter
+{
+    All,
+    Active,
+    Inactive
+}
 /// <summary>
 /// Enumeration of courier operational status.
 /// </summary>

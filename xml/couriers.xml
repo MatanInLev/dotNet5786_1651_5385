@@ -1,2 +1,183 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ArrayOfCourier xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+<ArrayOfCourier xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Courier>
+    <Id>315250735</Id>
+    <Name>Yair Kahana</Name>
+    <PhoneNumber>0519833643</PhoneNumber>
+    <Email>Yair.Kahana@company.com</Email>
+    <Distance xsi:nil="true" />
+    <IsActive>false</IsActive>
+    <VehicleType>Bike</VehicleType>
+  </Courier>
+  <Courier>
+    <Id>204683885</Id>
+    <Name>Shir Israeli</Name>
+    <PhoneNumber>0596367430</PhoneNumber>
+    <Email>Shir.Israeli@company.com</Email>
+    <Distance xsi:nil="true" />
+    <IsActive>false</IsActive>
+    <VehicleType>Motorcycle</VehicleType>
+  </Courier>
+  <Courier>
+    <Id>241845567</Id>
+    <Name>Itay Levi</Name>
+    <PhoneNumber>0584896572</PhoneNumber>
+    <Email>Itay.Levi@company.com</Email>
+    <Distance>13</Distance>
+    <IsActive>true</IsActive>
+    <VehicleType>Foot</VehicleType>
+  </Courier>
+  <Courier>
+    <Id>323445125</Id>
+    <Name>Itay Levi</Name>
+    <PhoneNumber>0531777513</PhoneNumber>
+    <Email>Itay.Levi@company.com</Email>
+    <Distance>28</Distance>
+    <IsActive>true</IsActive>
+    <VehicleType>Bike</VehicleType>
+  </Courier>
+  <Courier>
+    <Id>250018729</Id>
+    <Name>Daniel Levi</Name>
+    <PhoneNumber>0521302967</PhoneNumber>
+    <Email>Daniel.Levi@company.com</Email>
+    <Distance xsi:nil="true" />
+    <IsActive>false</IsActive>
+    <VehicleType>Bike</VehicleType>
+  </Courier>
+  <Courier>
+    <Id>288978937</Id>
+    <Name>Yair Kahana</Name>
+    <PhoneNumber>0581074168</PhoneNumber>
+    <Email>Yair.Kahana@company.com</Email>
+    <Distance xsi:nil="true" />
+    <IsActive>true</IsActive>
+    <VehicleType>Car</VehicleType>
+  </Courier>
+  <Courier>
+    <Id>237985146</Id>
+    <Name>Itay Levi</Name>
+    <PhoneNumber>0561128538</PhoneNumber>
+    <Email>Itay.Levi@company.com</Email>
+    <Distance>15</Distance>
+    <IsActive>true</IsActive>
+    <VehicleType>Bike</VehicleType>
+  </Courier>
+  <Courier>
+    <Id>361806882</Id>
+    <Name>Shir Israeli</Name>
+    <PhoneNumber>0595092272</PhoneNumber>
+    <Email>Shir.Israeli@company.com</Email>
+    <Distance>26</Distance>
+    <IsActive>false</IsActive>
+    <VehicleType>Bike</VehicleType>
+  </Courier>
+  <Courier>
+    <Id>361154918</Id>
+    <Name>Ben-El Tavori</Name>
+    <PhoneNumber>0567839137</PhoneNumber>
+    <Email>Ben-El.Tavori@company.com</Email>
+    <Distance xsi:nil="true" />
+    <IsActive>false</IsActive>
+    <VehicleType>Bike</VehicleType>
+  </Courier>
+  <Courier>
+    <Id>351998749</Id>
+    <Name>Itay Levi</Name>
+    <PhoneNumber>0530357820</PhoneNumber>
+    <Email>Itay.Levi@company.com</Email>
+    <Distance xsi:nil="true" />
+    <IsActive>false</IsActive>
+    <VehicleType>Car</VehicleType>
+  </Courier>
+  <Courier>
+    <Id>373983856</Id>
+    <Name>Eliran Golan</Name>
+    <PhoneNumber>0514790080</PhoneNumber>
+    <Email>Eliran.Golan@company.com</Email>
+    <Distance>28</Distance>
+    <IsActive>false</IsActive>
+    <VehicleType>Foot</VehicleType>
+  </Courier>
+  <Courier>
+    <Id>223806086</Id>
+    <Name>Ben-El Tavori</Name>
+    <PhoneNumber>0587935857</PhoneNumber>
+    <Email>Ben-El.Tavori@company.com</Email>
+    <Distance>28</Distance>
+    <IsActive>false</IsActive>
+    <VehicleType>Foot</VehicleType>
+  </Courier>
+  <Courier>
+    <Id>343236459</Id>
+    <Name>Ariela Levin</Name>
+    <PhoneNumber>0581545917</PhoneNumber>
+    <Email>Ariela.Levin@company.com</Email>
+    <Distance>9</Distance>
+    <IsActive>true</IsActive>
+    <VehicleType>Bike</VehicleType>
+  </Courier>
+  <Courier>
+    <Id>383586177</Id>
+    <Name>Ben-El Tavori</Name>
+    <PhoneNumber>0559169749</PhoneNumber>
+    <Email>Ben-El.Tavori@company.com</Email>
+    <Distance>27</Distance>
+    <IsActive>false</IsActive>
+    <VehicleType>Bike</VehicleType>
+  </Courier>
+  <Courier>
+    <Id>323503217</Id>
+    <Name>Ariela Levin</Name>
+    <PhoneNumber>0599828168</PhoneNumber>
+    <Email>Ariela.Levin@company.com</Email>
+    <Distance xsi:nil="true" />
+    <IsActive>false</IsActive>
+    <VehicleType>Foot</VehicleType>
+  </Courier>
+  <Courier>
+    <Id>333330526</Id>
+    <Name>Ariela Levin</Name>
+    <PhoneNumber>0563983688</PhoneNumber>
+    <Email>Ariela.Levin@company.com</Email>
+    <Distance>28</Distance>
+    <IsActive>false</IsActive>
+    <VehicleType>Car</VehicleType>
+  </Courier>
+  <Courier>
+    <Id>262402939</Id>
+    <Name>Noa Kirel</Name>
+    <PhoneNumber>0595865475</PhoneNumber>
+    <Email>Noa.Kirel@company.com</Email>
+    <Distance xsi:nil="true" />
+    <IsActive>false</IsActive>
+    <VehicleType>Car</VehicleType>
+  </Courier>
+  <Courier>
+    <Id>253802658</Id>
+    <Name>Daniel Levi</Name>
+    <PhoneNumber>0534397130</PhoneNumber>
+    <Email>Daniel.Levi@company.com</Email>
+    <Distance xsi:nil="true" />
+    <IsActive>true</IsActive>
+    <VehicleType>Motorcycle</VehicleType>
+  </Courier>
+  <Courier>
+    <Id>330961211</Id>
+    <Name>Daniel Levi</Name>
+    <PhoneNumber>0576101711</PhoneNumber>
+    <Email>Daniel.Levi@company.com</Email>
+    <Distance xsi:nil="true" />
+    <IsActive>true</IsActive>
+    <VehicleType>Bike</VehicleType>
+  </Courier>
+  <Courier>
+    <Id>396456427</Id>
+    <Name>Yair Kahana</Name>
+    <PhoneNumber>0527541669</PhoneNumber>
+    <Email>Yair.Kahana@company.com</Email>
+    <Distance>14</Distance>
+    <IsActive>false</IsActive>
+    <VehicleType>Motorcycle</VehicleType>
+  </Courier>
+</ArrayOfCourier>
