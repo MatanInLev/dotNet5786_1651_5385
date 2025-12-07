@@ -1,5 +1,5 @@
-﻿
-using DalApi;
+﻿using DalApi;
+using System.Linq;
 
 namespace Helpers;
 
@@ -110,23 +110,21 @@ internal static class CourierManager
     }
 
     /// <summary>
-    /// Returns a list of couriers, filtered by status and vehicle type.
+    /// Returns a list of couriers, filtered by status and sorted by vehicle type priority (vehicle parameter no longer filters).
     /// </summary>
     /// <param name="userId">ID of the requester (Admin/Courier).</param>
     /// <param name="isActive">Filter by active status (null = all).</param>
-    /// <param name="vehicle">Filter by vehicle type (null = all).</param>
+    /// <param name="vehicle">If provided, couriers with this vehicle type are ordered first (null = no vehicle-priority).</param>
     /// <returns>List of BO.CourierInList</returns>
     internal static IEnumerable<BO.CourierInList> GetCouriersList(int userId, bool? isActive = null, BO.Vehicle? vehicle = null)
     {
-        // 1. Retrieve all couriers from the DAL with initial filtering at the DAL level
+        // 1. Retrieve couriers from the DAL with filtering only on IsActive
         var doCouriers = s_dal.Courier.ReadAll(c =>
-            (isActive == null || c.IsActive == isActive) &&
-            (vehicle == null || (BO.Vehicle)c.VehicleType == vehicle)
+            (isActive == null || c.IsActive == isActive)
         );
 
         // 2. Convert (Project) from DO.Courier to BO.CourierInList
-        // and calculate statistical data for each courier
-        return doCouriers.Select(c =>
+        var projected = doCouriers.Select(c =>
         {
             // Retrieve all deliveries for the current courier to calculate statistics
             var courierDeliveries = s_dal.Delivery.ReadAll(d => d.CourierId == c.Id);
@@ -158,9 +156,16 @@ internal static class CourierManager
                 OrdersProvidedOnTime = onTime,
                 OrdersProvidedLate = late
             };
-        })
-        .OrderBy(c => c.Id);
-        }
+        });
+
+        // 3. Sort results: if a vehicle type was provided, put matching vehicle couriers first,
+        //    then fallback to Id ordering. Vehicle parameter is now used for ordering, not filtering.
+        var ordered = projected
+            .OrderByDescending(c => vehicle.HasValue && c.Vehicle == vehicle.Value)
+            .ThenBy(c => c.Id);
+
+        return ordered;
+    }
 
     /// <summary>
     /// Creates a new courier in the system.

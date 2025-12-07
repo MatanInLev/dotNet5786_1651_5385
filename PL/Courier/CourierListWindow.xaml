@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Courier"
         mc:Ignorable="d"
-        Title="CourierListWindow" Height="640" Width="800">
+        Title="CourierListWindow" Height="640" Width="800"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
     <Grid>
         <!--External Grid-->
         <Grid>
@@ -23,7 +24,7 @@
                 <Label Content="Label" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"/>
                 <ComboBox  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1"/>
             </Grid>
-            <DataGrid Grid.Row="1"/>
+            <DataGrid Grid.Row="1" ItemsSource="{Binding Path=CourierList}"/>
             <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100"/>
         </Grid>
         
