@@ -31,7 +31,7 @@ public partial class CourierListWindow : Window
 
     // Using a DependencyProperty as the backing store for CourierInLists.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty CourierInListsProperty =
-        DependencyProperty.Register(nameof(CourierInLists), typeof(IEnumerable<BO.CourierInList>), typeof(CourierListWindow), new PropertyMetadata(0));
+        DependencyProperty.Register(nameof(CourierList), typeof(IEnumerable<BO.CourierInList>), typeof(CourierListWindow), new PropertyMetadata(0));
 
 
     public CourierListWindow()
