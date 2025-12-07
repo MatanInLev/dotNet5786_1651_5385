@@ -76,34 +76,24 @@ internal static class CourierManager
     /// Helper method for user login (Identify only, without password).
     /// Checks if the input ID belongs to the Admin or an existing Courier.
     /// </summary>
-    /// <param name="userIdInput">The user ID as a string (input from UI).</param>
+    /// <param name="userId">The user ID as an integer (input from UI).</param>
     /// <returns>BO.UserRole (Admin or Courier).</returns>
-    /// <exception cref="BO.BlInvalidValueException">Thrown if input is not a valid number.</exception>
     /// <exception cref="BO.BlDoesNotExistException">Thrown if the user ID does not exist.</exception>
-    internal static string Login(string userIdInput)
+    internal static BO.UserRole Login(int userId)
     {
-        if (!int.TryParse(userIdInput, out int userId))
-        {
-            throw new BO.BlInvalidValueException("User ID must be a number.");
-        }
-
-        int adminId = s_dal.Config.AdminId; 
+        int adminId = s_dal.Config.AdminId;
 
         if (userId == adminId)
-        {
-            return "Admin";
-        }
+            return BO.UserRole.Admin;
 
         DO.Courier? courier = s_dal.Courier.Read(userId);
 
         if (courier != null)
         {
             if (!courier.IsActive)
-            {
                 throw new BO.BlDoesNotExistException("Courier is no longer active.");
-            }
 
-            return "Courier";
+            return BO.UserRole.Courier;
         }
 
         throw new BO.BlDoesNotExistException($"User with ID {userId} does not exist in the system.");

@@ -1,4 +1,5 @@
 ﻿namespace BlImplementation;
+
 using BlApi;
 using BO;
 using Helpers;
@@ -26,7 +27,7 @@ internal class CourierImplementation : ICourier
         return CourierManager.GetCouriersList(userId, isActive, vehicle);
     }
 
-    public string Login(string userId)
+    public BO.UserRole Login(int userId)
     {
         return CourierManager.Login(userId);
     }
@@ -38,12 +39,12 @@ internal class CourierImplementation : ICourier
 
     #region Stage 5
     public void AddObserver(Action listObserver) =>
-    CourierManager.Observers.AddListObserver(listObserver); //stage 5
+        CourierManager.Observers.AddListObserver(listObserver); //stage 5
     public void AddObserver(int id, Action observer) =>
-    CourierManager.Observers.AddObserver(id, observer); //stage 5
+        CourierManager.Observers.AddObserver(id, observer); //stage 5
     public void RemoveObserver(Action listObserver) =>
-    CourierManager.Observers.RemoveListObserver(listObserver); //stage 5
+        CourierManager.Observers.RemoveListObserver(listObserver); //stage 5
     public void RemoveObserver(int id, Action observer) =>
-    CourierManager.Observers.RemoveObserver(id, observer); //stage 5
+        CourierManager.Observers.RemoveObserver(id, observer); //stage 5
     #endregion Stage 5
 }
