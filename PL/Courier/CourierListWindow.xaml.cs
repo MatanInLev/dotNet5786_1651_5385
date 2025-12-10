@@ -45,9 +45,7 @@ namespace PL.Courier
 
             // initial load
             QueryCourierList();
-
-            // OPTIONAL – only if you already implemented observers in BL
-            // (s_bl.Courier as BlApi.IObservable)?.AddObserver(QueryCourierList);
+            (s_bl.Courier as BlApi.IObservable)?.AddObserver(QueryCourierList);
         }
 
         /// <summary>
@@ -61,7 +59,7 @@ namespace PL.Courier
             {
                 BO.ActiveFilter.All => null,
                 BO.ActiveFilter.Active => true,
-                BO.ActiveFilter.Inactive => false,
+                BO.ActiveFilter.NotActive => false,
                 _ => null
             };
 
@@ -81,12 +79,12 @@ namespace PL.Courier
         }
 
         // OPTIONAL – only אם עשית observers
-        /*
+
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
             (s_bl.Courier as BlApi.IObservable)?.RemoveObserver(QueryCourierList);
         }
-        */
+
     }
 }

@@ -10,7 +10,7 @@ public enum ActiveFilter
 {
     All,
     Active,
-    Inactive
+    NotActive
 }
 /// <summary>
 /// Enumeration of courier operational status.
