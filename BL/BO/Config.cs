@@ -5,6 +5,7 @@
 /// </summary>
 public class Config
 {
+    public int AdminId { get; set; } 
     /// <summary>
     /// Maximum allowed delivery range (km).
     /// </summary>

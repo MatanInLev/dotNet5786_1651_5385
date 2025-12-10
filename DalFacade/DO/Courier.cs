@@ -81,11 +81,10 @@ public record Courier
     public bool IsActive { get; set; } = true;
 
     /// <summary>
-    /// Timestamp representing when the record was accessed or created.
-    /// This property retrieves the current system time on each access.
-    /// Prefer using UTC externally (<see cref="DateTime.UtcNow"/>).
+    /// Timestamp representing when the record was created or last initialized.
+    /// Persisted value (not computed), defaulting to current system time.
     /// </summary>
-    public DateTime Date => DateTime.Now;
+    public DateTime Date { get; set; } = DateTime.Now;
 
     /// <summary>
     /// Primary vehicle type used by the courier.

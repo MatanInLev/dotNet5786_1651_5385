@@ -61,6 +61,7 @@ internal static class CourierManager
                 try
                 {
                     s_dal.Courier.Update(updatedCourier);
+                    Observers.NotifyListUpdated(); // notify PL that list changed
                 }
                 catch (Exception)
                 {
@@ -188,14 +189,16 @@ internal static class CourierManager
             PhoneNumber = boCourier.Phone,
             VehicleType = (DO.VehicleType)boCourier.Vehicle, // Enum conversion
             IsActive = true, // Default to active upon creation
-            Distance = boCourier.MaxDistance
-            // Note: StartDate is effectively DateTime.Now via DO's default, or implied logic
+            Distance = boCourier.MaxDistance,
+            Date = AdminManager.Now // set persistent join/start date
+            // Note: StartDate is effectively AdminManager.Now by design
         };
 
         // 4. Save to DAL
         try
         {
             s_dal.Courier.Create(doCourier);
+            Observers.NotifyListUpdated(); // notify PL to refresh lists after create
         }
         catch (DO.DalAlreadyExistsException ex)
         {
@@ -273,7 +276,7 @@ internal static class CourierManager
             throw new BO.BlDoesNotExistException($"Courier {boCourier.Id} was not found.");
 
         // 3. Business Rule: Cannot change some properties if currently delivering?
-        //    (Optional rule: If handling an order, maybe limit vehicle change?)
+        //    (Optional rule: If handling an order, maybe limit vehicle change? )
         //    For now, we allow updates.
 
         // 4. Map BO -> DO (Use record 'with' for immutability if strictly following record pattern, 
@@ -292,6 +295,7 @@ internal static class CourierManager
         try
         {
             s_dal.Courier.Update(updatedCourier);
+            Observers.NotifyListUpdated(); // notify PL to refresh lists after update
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -328,6 +332,7 @@ internal static class CourierManager
         try
         {
             s_dal.Courier.Delete(courierId);
+            Observers.NotifyListUpdated(); // notify PL to refresh lists after delete
         }
         catch (DO.DalDoesNotExistException ex)
         {

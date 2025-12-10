@@ -31,8 +31,8 @@
                     VerticalAlignment="Stretch" />
 
             </Grid>
-            <DataGrid Grid.Row="1" ItemsSource="{Binding Path=CourierList}"/>
-            <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100"/>
+            <DataGrid Grid.Row="1" ItemsSource="{Binding Path=CourierList}" SelectedItem="{Binding SelectedCourier}" MouseDoubleClick="courierList_MouseDoubleClick"/>
+            <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100" Click="addCourierButton_Click"/>
         </Grid>
         
     </Grid>

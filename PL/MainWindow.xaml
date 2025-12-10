@@ -51,7 +51,7 @@
         <!--Clock Panel-->
         <StackPanel Grid.Column="1" Margin="20" HorizontalAlignment="Center" VerticalAlignment="Center">
 
-            <Label Content="{Binding CurrentTime, StringFormat='{}{0:dd/MM/yyyy HH:mm:ss}'}"                   
+            <Label Content="{Binding CurrentTime, Converter={StaticResource DateTimeFormatConverterKey}}"              
                    FontWeight="Bold" 
                    FontSize="20"
                    HorizontalAlignment="Center" 

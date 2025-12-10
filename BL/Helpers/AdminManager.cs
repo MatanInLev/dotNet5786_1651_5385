@@ -67,6 +67,7 @@ internal static class AdminManager //stage 4
         RiskRange = s_dal.Config.RiskRange,
         InactivityTime = s_dal.Config.InactivityRange,
         MaxDeliveryTime = s_dal.Config.MaxDeliveryTime,
+        AdminId = s_dal.Config.AdminId
     };
 
     /// <summary>

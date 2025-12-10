@@ -4,9 +4,92 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Courier"
+        xmlns:bo="clr-namespace:BO;assembly=BL"
         mc:Ignorable="d"
-        Title="CourierWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="Courier Management" Height="550" Width="450"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="20">
+
+        <Grid x:Name="mainGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Content="Courier Details" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+
+            <Separator Grid.Row="1" Margin="0,5"/>
+
+            <Grid Grid.Row="2" Margin="0,10,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="ID (T&quot;Z):" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,5,10,5"/>
+                <TextBox Text="{Binding CurrentCourier.Id, Mode=TwoWay, NotifyOnValidationError=true,
+                ValidatesOnExceptions=true}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalContentAlignment="Center" Margin="0,5,0,5" IsReadOnly="False"/>
+
+                <Label Grid.Row="1" Grid.Column="0" Content="Full Name:" VerticalAlignment="Center" Margin="0,5,10,5"/>
+                <TextBox Text="{Binding CurrentCourier.Name, Mode=TwoWay, NotifyOnValidationError=true,
+                ValidatesOnExceptions=true}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalContentAlignment="Center" Margin="0,5,0,5"/>
+
+                <Label Grid.Row="2" Grid.Column="0" Content="Phone:" VerticalAlignment="Center" Margin="0,5,10,5"/>
+                <TextBox Text="{Binding CurrentCourier.Phone, Mode=TwoWay, NotifyOnValidationError=true,
+                ValidatesOnExceptions=true}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalContentAlignment="Center" Margin="0,5,0,5"/>
+
+                <Label Grid.Row="3" Grid.Column="0" Content="Email:" VerticalAlignment="Center" Margin="0,5,10,5"/>
+                <TextBox Text="{Binding CurrentCourier.Email, Mode=TwoWay, NotifyOnValidationError=true,
+                ValidatesOnExceptions=true}" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalContentAlignment="Center" Margin="0,5,0,5"/>
+
+                <Label Grid.Row="4" Grid.Column="0" Content="Is Active:" VerticalAlignment="Center" Margin="0,5,10,5"/>
+                <CheckBox Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Margin="0,5,0,5" Content="(Manager Only)"/>
+
+                <Label Grid.Row="5" Grid.Column="0" Content="Max Distance (km):" VerticalAlignment="Center" Margin="0,5,10,5"/>
+                <TextBox Text="{Binding CurrentCourier.MaxDistance, Mode=TwoWay, NotifyOnValidationError=true,
+                ValidatesOnExceptions=true}" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalContentAlignment="Center" Margin="0,5,0,5"/>
+
+                <Label Grid.Row="6" Grid.Column="0" Content="Vehicle Type:" VerticalAlignment="Center" Margin="0,5,10,5"/>
+                <ComboBox Grid.Row="6" Grid.Column="1" 
+                  HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,5,0,5"
+                  ItemsSource="{Binding VehicleOptions}"
+                  SelectedItem="{Binding CurrentCourier.Vehicle, Mode=TwoWay, NotifyOnValidationError=true,
+                  ValidatesOnExceptions=true}"/>
+
+                <Label Grid.Row="7" Grid.Column="0" Content="Start Date:" VerticalAlignment="Center" Margin="0,5,10,5"/>
+                <DatePicker Grid.Row="7" Grid.Column="1" 
+                            SelectedDate="{Binding CurrentCourier.StartWorkDate, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"
+                            HorizontalAlignment="Left" VerticalAlignment="Center" 
+                            Margin="0,5,0,5"/>
+
+                <Label Grid.Row="8" Grid.Column="0" Content="Delivered On Time:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,15,10,5"/>
+                <Label Grid.Row="8" Grid.Column="1" Content="{Binding CurrentCourier.OrdersProvidedOnTime}" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,15,0,5" HorizontalAlignment="Left"/>
+
+                <Label Grid.Row="9" Grid.Column="0" Content="Delivered Late:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,5,10,5"/>
+                <Label Grid.Row="9" Grid.Column="1" Content="{Binding CurrentCourier.OrdersProvidedLate}" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,5,0,5" HorizontalAlignment="Left"/>
+
+            </Grid>
+
+            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
+                <Button Content="{Binding ButtonText}" Click="btnAction_Click" Width="100" Height="30" Margin="10,0"/>
+            </StackPanel>
+
+        </Grid>
     </Grid>
 </Window>

@@ -17,6 +17,7 @@ namespace PL.Courier
         // For now 0 is fine as long as BL accepts it.
         private readonly int _userId = 0;
 
+        public BO.CourierInList? SelectedCourier { get; set; }
         /// <summary>
         /// The list bound to the DataGrid
         /// </summary>
@@ -86,5 +87,16 @@ namespace PL.Courier
             (s_bl.Courier as BlApi.IObservable)?.RemoveObserver(QueryCourierList);
         }
 
+        private void courierList_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (SelectedCourier != null)
+            {
+                new CourierWindow(SelectedCourier.Id).Show();
+            }
+        }
+        private void addCourierButton_Click(object sender, RoutedEventArgs e)
+        {
+            new CourierWindow().Show();
+        }
     }
 }
