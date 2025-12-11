@@ -1,4 +1,5 @@
-﻿using DO;
+﻿using System;
+using DO;
 
 namespace BO;
 /// <summary>
@@ -43,8 +44,9 @@ public class Courier
 
     /// <summary>
     /// The date the courier started working.
+    /// Defaults to today for newly constructed instances to avoid DateTime.MinValue.
     /// </summary>
-    public DateTime StartWorkDate { get; init; }
+    public DateTime StartWorkDate { get; init; } = DateTime.Today;
 
     /// <summary>
     /// Count of orders the courier delivered on time.

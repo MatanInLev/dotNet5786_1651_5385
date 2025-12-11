@@ -89,10 +89,29 @@ namespace PL.Courier
 
         private void courierList_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (SelectedCourier != null)
+            // CRITICAL FIX: Tell the DataGrid "I have handled this click, stop processing it."
+            // This prevents the DataGrid from trying to edit/select the row while the window is opening.
+            e.Handled = true;
+
+            // 1. Get the clicked item safely
+            var frameworkElement = e.OriginalSource as FrameworkElement;
+            var selectedItem = frameworkElement?.DataContext as BO.CourierInList;
+
+            if (selectedItem == null) return;
+
+            // 2. Open the window
+            // We keep the Dispatcher to be safe, but 'e.Handled = true' usually fixes the main crash.
+            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.ApplicationIdle, new Action(() =>
             {
-                new CourierWindow(SelectedCourier.Id).Show();
-            }
+                try
+                {
+                    new CourierWindow(selectedItem.Id).Show();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error opening window: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }));
         }
         private void addCourierButton_Click(object sender, RoutedEventArgs e)
         {
