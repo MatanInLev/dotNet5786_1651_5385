@@ -151,7 +151,7 @@ static class XMLTools
     public static double GetConfigIDoubleVal(string xmlFileName, string elemName)
     {
         XElement root = XMLTools.LoadListFromXMLElement(xmlFileName);
-        double num = root.ToIntNullable(elemName) ?? throw new FormatException($"can't convert:  {xmlFileName}, {elemName}");
+        double num = root.ToDoubleNullable(elemName) ?? throw new FormatException($"can't convert:  {xmlFileName}, {elemName}");
         return num;
     }
     public static void SetConfigDoubleVal(string xmlFileName, string elemName, double elemVal)

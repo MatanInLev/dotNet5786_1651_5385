@@ -105,7 +105,7 @@ public static class Initialization
     /// </remarks>
     private static void createOrders()
     {
-        const int orderCount = 300;
+        const int orderCount = 100;
 
         for (int i = 0; i < orderCount; i++)
         {
@@ -173,7 +173,7 @@ public static class Initialization
         // Adjusted: fewer in-progress deliveries so not all active couriers are busy
         // With 20 active couriers, ~10 in-progress means ~50% are actively delivering
         int deliveriesInProgress = 10;  // ~50% of active couriers will have active deliveries
-        int deliveriesClosed = 200;     // Increase closed to compensate, leaving ~90 open
+        int deliveriesClosed = 60;     // Increase closed to compensate, leaving ~90 open
 
         // Create In-Progress Deliveries (ONLY for ACTIVE couriers)
         // Use a HashSet to track which couriers already have active deliveries

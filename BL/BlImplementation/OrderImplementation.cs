@@ -33,7 +33,7 @@ internal class OrderImplementation : IOrder
 
     public IEnumerable<OrderInList> GetList(int userId, OrderStatus? filter, object? filterValue, OrderType? sort)
     {
-        return OrderManager.GetList(filter);
+        return OrderManager.GetList(filter, sort);
     }
 
     public Dictionary<OrderStatus, int> GetOrdersStatusCount(int userId)
