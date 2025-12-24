@@ -19,15 +19,38 @@ static class XMLTools
     {
         string xmlFilePath = s_xmlDir + xmlFileName;
 
-        try
+        // Retry logic to handle file locks
+        int maxRetries = 3;
+        int delayMs = 100;
+
+        for (int attempt = 0; attempt < maxRetries; attempt++)
         {
-            using FileStream file = new(xmlFilePath, FileMode.Create, FileAccess.Write, FileShare.None);
-            new XmlSerializer(typeof(List<T>)).Serialize(file, list);
+            try
+            {
+                // Force garbage collection to release any file handles
+                if (attempt > 0)
+                {
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    Thread.Sleep(delayMs * attempt);
+                }
+
+                using FileStream file = new(xmlFilePath, FileMode.Create, FileAccess.Write, FileShare.None);
+                new XmlSerializer(typeof(List<T>)).Serialize(file, list);
+                return; // Success
+            }
+            catch (IOException ex) when (attempt < maxRetries - 1)
+            {
+                // File is locked, retry
+                continue;
+            }
+            catch (Exception ex)
+            {
+                throw new DalXMLFileLoadCreateException($"fail to create xml file: {s_xmlDir + xmlFilePath}, {ex.Message}");
+            }
         }
-        catch (Exception ex)
-        {
-            throw new DalXMLFileLoadCreateException($"fail to create xml file: {s_xmlDir + xmlFilePath}, {ex.Message}");
-        }
+
+        throw new DalXMLFileLoadCreateException($"fail to create xml file: {xmlFilePath}, The process cannot access the file because it is being used by another process.");
     }
     public static List<T> LoadListFromXMLSerializer<T>(string xmlFileName) where T : class
     {

@@ -105,7 +105,7 @@ public static class Initialization
     /// </remarks>
     private static void createOrders()
     {
-        const int orderCount = 50;
+        const int orderCount = 300;
 
         for (int i = 0; i < orderCount; i++)
         {
@@ -161,7 +161,7 @@ public static class Initialization
     /// </remarks>
     private static void createDeliveries()
     {
-        var allOrders = s_dal!.Order.ReadAll().ToList(); /// Get all 50 open orders
+        var allOrders = s_dal!.Order.ReadAll().ToList(); /// Get all orders
         var activeCouriers = s_dal!.Courier.ReadAll().Where(c => c.IsActive).ToList();
 
         if (!activeCouriers.Any())
@@ -170,9 +170,15 @@ public static class Initialization
             return;
         }
 
-        int deliveriesInProgress = 10;
-        int deliveriesClosed = 20;
+        // Adjusted: fewer in-progress deliveries so not all active couriers are busy
+        // With 20 active couriers, ~10 in-progress means ~50% are actively delivering
+        int deliveriesInProgress = 10;  // ~50% of active couriers will have active deliveries
+        int deliveriesClosed = 200;     // Increase closed to compensate, leaving ~90 open
 
+        // Create In-Progress Deliveries (ONLY for ACTIVE couriers)
+        // Use a HashSet to track which couriers already have active deliveries
+        HashSet<int> couriersWithActiveDeliveries = new HashSet<int>();
+        
         for (int i = 0; i < deliveriesInProgress && allOrders.Any(); i++)
         {
             /// Get random order and remove it from the available list
@@ -180,7 +186,20 @@ public static class Initialization
             Order orderToAssign = allOrders[orderIndex];
             allOrders.RemoveAt(orderIndex); /// Ensure we don't assign it again
 
-            Courier courier = activeCouriers[s_rand.Next(activeCouriers.Count)];
+            // Pick a random active courier (preferably one without an active delivery already)
+            Courier courier;
+            int maxAttempts = 50; // Prevent infinite loop
+            int attempts = 0;
+            
+            do
+            {
+                courier = activeCouriers[s_rand.Next(activeCouriers.Count)];
+                attempts++;
+            } 
+            while (couriersWithActiveDeliveries.Contains(courier.Id) && attempts < maxAttempts);
+            
+            // Mark this courier as having an active delivery
+            couriersWithActiveDeliveries.Add(courier.Id);
 
             DateTime startTime = orderToAssign.OrderTime.AddHours(s_rand.Next(1, 4));
 
@@ -205,14 +224,18 @@ public static class Initialization
             s_dal!.Delivery.Create(newDelivery);
         }
 
-        /// Create 20 "Closed" Deliveries
+        // Create Closed Deliveries (can use ANY courier, active or inactive)
+        // Get ALL couriers (including inactive) for historical deliveries
+        var allCouriersForHistory = s_dal!.Courier.ReadAll().ToList();
+        
         for (int i = 0; i < deliveriesClosed && allOrders.Any(); i++)
         {
             int orderIndex = s_rand.Next(allOrders.Count);
             Order orderToAssign = allOrders[orderIndex];
             allOrders.RemoveAt(orderIndex);
 
-            Courier courier = activeCouriers[s_rand.Next(activeCouriers.Count)];
+            // Closed deliveries can be from any courier (even now-inactive ones who were active in the past)
+            Courier courier = allCouriersForHistory[s_rand.Next(allCouriersForHistory.Count)];
 
             DateTime startTime = orderToAssign.OrderTime.AddHours(s_rand.Next(1, 2));
             if (startTime > s_dal!.Config.Clock)
@@ -223,8 +246,18 @@ public static class Initialization
             if (endTime > s_dal!.Config.Clock)
                 endTime = s_dal!.Config.Clock.AddMinutes(-s_rand.Next(1, 30));
 
-            /// Rule: Random end type (General p. 21)
-            EndOfDelivery endType = (EndOfDelivery)s_rand.Next(Enum.GetValues(typeof(EndOfDelivery)).Length);
+            /// Rule: 80% successful delivery (Delivered), 20% failed (other end types)
+            EndOfDelivery endType;
+            if (s_rand.NextDouble() < 0.8) // 80% chance
+            {
+                endType = EndOfDelivery.Delivered; // Successfully delivered
+            }
+            else // 20% chance of failure
+            {
+                // Randomly pick one of the failure types (Canceled, Failed, Refused, NotThere)
+                var failureTypes = new[] { EndOfDelivery.Canceled, EndOfDelivery.Failed, EndOfDelivery.Refused, EndOfDelivery.NotThere };
+                endType = failureTypes[s_rand.Next(failureTypes.Length)];
+            }
 
             Delivery newDelivery = new()
             {
@@ -241,8 +274,7 @@ public static class Initialization
             s_dal!.Delivery.Create(newDelivery);
         }
 
-        /// The remaining 20 orders (50 - 10 - 20) will stay "Open",
-        /// which fulfills all data requirements.
+        /// The remaining orders will stay "Open"
     }
 
     /// <summary>

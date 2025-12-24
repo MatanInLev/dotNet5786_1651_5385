@@ -54,6 +54,19 @@ internal static class CourierManager
             // 6. Check if the time passed exceeds the allowed inactivity limit
             if (timeSinceActivity > inactivityLimit)
             {
+                // Before deactivating, cancel any active deliveries in progress
+                var activeDeliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courier.Id && d.EndTime == null);
+                foreach (var activeDelivery in activeDeliveries)
+                {
+                    // Close the delivery as Failed due to courier inactivity
+                    var closedDelivery = activeDelivery with
+                    {
+                        EndTime = systemClock,
+                        EndOfDelivery = DO.EndOfDelivery.Failed
+                    };
+                    s_dal.Delivery.Update(closedDelivery);
+                }
+
                 // Create a new DO.Courier record with IsActive set to false (Immutable update)
                 DO.Courier updatedCourier = courier with { IsActive = false };
 
@@ -125,14 +138,17 @@ internal static class CourierManager
 
             // Calculate deliveries OnTime / Late (basic logic for demonstration)
             // Assuming MaxSupplyTime is global from configuration
+            // Only count successfully delivered orders (EndOfDelivery == Delivered)
             TimeSpan maxSupply = s_dal.Config.MaxDeliveryTime;
 
             int onTime = courierDeliveries.Count(d =>
                 d.EndTime != null &&
+                d.EndOfDelivery == DO.EndOfDelivery.Delivered &&
                 d.EndTime <= d.StartTime.Add(maxSupply));
 
             int late = courierDeliveries.Count(d =>
                 d.EndTime != null &&
+                d.EndOfDelivery == DO.EndOfDelivery.Delivered &&
                 d.EndTime > d.StartTime.Add(maxSupply));
 
             return new BO.CourierInList
@@ -246,6 +262,20 @@ internal static class CourierManager
             }
         }
 
+        // Calculate on-time and late deliveries
+        // Only count successfully delivered orders (EndOfDelivery == Delivered)
+        TimeSpan maxSupply = s_dal.Config.MaxDeliveryTime;
+
+        int onTime = allDeliveries.Count(d =>
+            d.EndTime != null &&
+            d.EndOfDelivery == DO.EndOfDelivery.Delivered &&
+            d.EndTime <= d.StartTime.Add(maxSupply));
+
+        int late = allDeliveries.Count(d =>
+            d.EndTime != null &&
+            d.EndOfDelivery == DO.EndOfDelivery.Delivered &&
+            d.EndTime > d.StartTime.Add(maxSupply));
+
         // 3. Construct BO
         return new BO.Courier
         {
@@ -256,8 +286,11 @@ internal static class CourierManager
             Vehicle = (BO.Vehicle)doCourier.VehicleType,
             IsActive = doCourier.IsActive,
             MaxDistance = doCourier.Distance,
-            // Calculated Field:
-            OrderInProgress = orderInProgress
+            StartWorkDate = doCourier.Date,
+            // Calculated Fields:
+            OrderInProgress = orderInProgress,
+            OrdersProvidedOnTime = onTime,
+            OrdersProvidedLate = late
         };
     }
 
