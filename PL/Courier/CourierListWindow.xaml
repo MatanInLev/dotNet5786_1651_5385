@@ -11,7 +11,7 @@
         <!--External Grid-->
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="40*"/>
+                <RowDefinition Height="50*"/>
                 <RowDefinition Height="500*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
@@ -21,7 +21,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Label Content="Label" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"/>
+                <Label Content="Couriers" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0"/>
                 <ComboBox
                     ItemsSource="{Binding Source={StaticResource ActiveFilterCollectionKey}}"
                     SelectedValue="{Binding Filter, Mode=TwoWay}"

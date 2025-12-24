@@ -197,8 +197,15 @@ namespace PL
         /// </summary>
         private void btnOpenCourierList_Click(object sender, RoutedEventArgs e)
         {
-            // Replace 'Courier.CourierListWindow' with the correct namespace/path to your list window
             new Courier.CourierListWindow().Show();
+        }
+
+        /// <summary>
+        /// Opens the order list window.
+        /// </summary>
+        private void btnOpenOrderList_Click(object sender, RoutedEventArgs e)
+        {
+            new Order.OrderListWindow().Show();
         }
 
         #endregion

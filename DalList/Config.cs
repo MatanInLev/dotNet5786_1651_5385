@@ -138,9 +138,9 @@ internal class Config
 
         // Reset static defaults
         AdminId = 123456782;
-        CompanyAddress = null;
-        Latitude = null;
-        Longitude = null;
+        CompanyAddress = "Machon Lev";
+        Latitude = 31.765847796216843;
+        Longitude = 35.19104519946595;
         MaxGeneralDistance = null;
         AvgCarSpeed = 60;
         AvgMotorcycleSpeed = 70;

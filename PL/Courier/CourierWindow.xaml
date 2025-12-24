@@ -59,7 +59,10 @@
                 ValidatesOnExceptions=true}" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Stretch" TextWrapping="Wrap" VerticalContentAlignment="Center" Margin="0,5,0,5"/>
 
                 <Label Grid.Row="4" Grid.Column="0" Content="Is Active:" VerticalAlignment="Center" Margin="0,5,10,5"/>
-                <CheckBox Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Margin="0,5,0,5" Content="(Manager Only)"/>
+                <CheckBox Grid.Row="4" Grid.Column="1" 
+                          IsChecked="{Binding CurrentCourier.IsActive, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
+                          VerticalAlignment="Center" Margin="0,5,0,5" 
+                          Content="(Manager Only)"/>
 
                 <Label Grid.Row="5" Grid.Column="0" Content="Max Distance (km):" VerticalAlignment="Center" Margin="0,5,10,5"/>
                 <TextBox Text="{Binding CurrentCourier.MaxDistance, Mode=TwoWay, NotifyOnValidationError=true,

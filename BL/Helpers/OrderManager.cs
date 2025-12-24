@@ -159,9 +159,10 @@ internal static class OrderManager
     /// <summary>
     /// Gets a list of orders, optionally filtered.
     /// </summary>
-    internal static IEnumerable<BO.OrderInList> GetList(BO.OrderStatus? filterStatus = null)
+    internal static IEnumerable<BO.OrderInList> GetList(BO.OrderStatus? filterStatus = null, BO.OrderType? filterType = null)
     {
         var allOrders = s_dal.Order.ReadAll();
+        var config = s_dal.Config;
 
         return allOrders.Select(o =>
         {
@@ -193,6 +194,11 @@ internal static class OrderManager
                 ? (lastDelivery.EndTime.Value - o.OrderTime)
                 : TimeSpan.Zero;
 
+            // Calculate distance from company to order location
+            double distance = Tools.CalculateAerialDistance(
+                config.Latitude ?? 0.0, config.Longitude ?? 0.0,
+                o.Latitude, o.Longitude);
+
             return new BO.OrderInList
             {
                 Id = o.Id,
@@ -204,10 +210,12 @@ internal static class OrderManager
 
                 // --- Calculated Time Fields ---
                 TimeLeft = timeLeft,
-                TotalProcessingTime = totalProcessTime
+                TotalProcessingTime = totalProcessTime,
+                Distance = distance
             };
         })
-        .Where(o => filterStatus == null || o.Status == filterStatus)
+        .Where(o => (filterStatus == null || o.Status == filterStatus) && 
+                    (filterType == null || o.Type == filterType))
         .OrderBy(o => o.Id);
     }
     #endregion

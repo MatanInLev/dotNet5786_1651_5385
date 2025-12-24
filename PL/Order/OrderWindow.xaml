@@ -1,0 +1,218 @@
+﻿<Window x:Class="PL.Order.OrderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PL.Order"
+        xmlns:bo="clr-namespace:BO;assembly=BL"
+        mc:Ignorable="d"
+        Title="Order Management" Height="700" Width="550"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <!-- Enum collections for ComboBox bindings -->
+        <ObjectDataProvider x:Key="OrderTypeCollection" MethodName="GetValues" ObjectType="{x:Type bo:OrderType}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="bo:OrderType"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Content="Order Details" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+
+        <Separator Grid.Row="1" Margin="0,5"/>
+
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Margin="0,10,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Order ID -->
+                <Label Grid.Row="0" Grid.Column="0" Content="Order ID:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,5,10,5"/>
+                <TextBox Grid.Row="0" Grid.Column="1" 
+                         Text="{Binding CurrentOrder.Id, Mode=TwoWay}" 
+                         IsReadOnly="True"
+                         Background="LightGray"
+                         HorizontalAlignment="Stretch" 
+                         VerticalContentAlignment="Center" 
+                         Margin="0,5,0,5"/>
+
+                <!-- Order Type -->
+                <Label Grid.Row="1" Grid.Column="0" Content="Order Type:" VerticalAlignment="Center" Margin="0,5,10,5"/>
+                <ComboBox Grid.Row="1" Grid.Column="1" 
+                          ItemsSource="{Binding Source={StaticResource OrderTypeCollection}}"
+                          SelectedItem="{Binding CurrentOrder.Type, Mode=TwoWay}"
+                          HorizontalAlignment="Stretch" 
+                          VerticalAlignment="Center" 
+                          Margin="0,5,0,5"/>
+
+                <!-- Description -->
+                <Label Grid.Row="2" Grid.Column="0" Content="Description:" VerticalAlignment="Top" Margin="0,5,10,5"/>
+                <TextBox Grid.Row="2" Grid.Column="1" 
+                         Text="{Binding CurrentOrder.Description, Mode=TwoWay}" 
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         Height="60"
+                         HorizontalAlignment="Stretch" 
+                         VerticalScrollBarVisibility="Auto"
+                         Margin="0,5,0,5"/>
+
+                <!-- Customer Name -->
+                <Label Grid.Row="3" Grid.Column="0" Content="Customer Name:" VerticalAlignment="Center" Margin="0,5,10,5"/>
+                <TextBox Grid.Row="3" Grid.Column="1" 
+                         Text="{Binding CurrentOrder.CustomerName, Mode=TwoWay}" 
+                         HorizontalAlignment="Stretch" 
+                         VerticalContentAlignment="Center" 
+                         Margin="0,5,0,5"/>
+
+                <!-- Customer Phone -->
+                <Label Grid.Row="4" Grid.Column="0" Content="Customer Phone:" VerticalAlignment="Center" Margin="0,5,10,5"/>
+                <TextBox Grid.Row="4" Grid.Column="1" 
+                         Text="{Binding CurrentOrder.CustomerPhone, Mode=TwoWay}" 
+                         HorizontalAlignment="Stretch" 
+                         VerticalContentAlignment="Center" 
+                         Margin="0,5,0,5"/>
+
+                <!-- Customer Address -->
+                <Label Grid.Row="5" Grid.Column="0" Content="Delivery Address:" VerticalAlignment="Top" Margin="0,5,10,5"/>
+                <TextBox Grid.Row="5" Grid.Column="1" 
+                         Text="{Binding CurrentOrder.CustomerAddress, Mode=TwoWay}" 
+                         TextWrapping="Wrap"
+                         Height="50"
+                         HorizontalAlignment="Stretch" 
+                         VerticalScrollBarVisibility="Auto"
+                         Margin="0,5,0,5"/>
+
+                <!-- Distance -->
+                <Label Grid.Row="6" Grid.Column="0" Content="Distance (km):" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,15,10,5"/>
+                <Label Grid.Row="6" Grid.Column="1" 
+                       Content="{Binding CurrentOrder.Distance, StringFormat=N2}" 
+                       FontWeight="SemiBold" 
+                       VerticalAlignment="Center" 
+                       Margin="0,15,0,5" 
+                       HorizontalAlignment="Left"/>
+
+                <!-- Order Date -->
+                <Label Grid.Row="7" Grid.Column="0" Content="Order Date:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,5,10,5"/>
+                <Label Grid.Row="7" Grid.Column="1" 
+                       Content="{Binding CurrentOrder.OrderDate, StringFormat='dd/MM/yyyy HH:mm'}" 
+                       FontWeight="SemiBold" 
+                       VerticalAlignment="Center" 
+                       Margin="0,5,0,5" 
+                       HorizontalAlignment="Left"/>
+
+                <!-- Expected Delivery -->
+                <Label Grid.Row="8" Grid.Column="0" Content="Expected Delivery:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,5,10,5"/>
+                <Label Grid.Row="8" Grid.Column="1" 
+                       Content="{Binding CurrentOrder.ExpectedDelivery, StringFormat='dd/MM/yyyy HH:mm'}" 
+                       FontWeight="SemiBold" 
+                       VerticalAlignment="Center" 
+                       Margin="0,5,0,5" 
+                       HorizontalAlignment="Left"/>
+
+                <!-- Max Delivery -->
+                <Label Grid.Row="9" Grid.Column="0" Content="Max Delivery Time:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,5,10,5"/>
+                <Label Grid.Row="9" Grid.Column="1" 
+                       Content="{Binding CurrentOrder.MaxDelivery, StringFormat='dd/MM/yyyy HH:mm'}" 
+                       FontWeight="SemiBold" 
+                       VerticalAlignment="Center" 
+                       Margin="0,5,0,5" 
+                       HorizontalAlignment="Left"/>
+
+                <!-- Order Status -->
+                <Label Grid.Row="10" Grid.Column="0" Content="Order Status:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,5,10,5"/>
+                <Label Grid.Row="10" Grid.Column="1" 
+                       Content="{Binding CurrentOrder.Status}" 
+                       FontWeight="SemiBold" 
+                       VerticalAlignment="Center" 
+                       Margin="0,5,0,5" 
+                       HorizontalAlignment="Left"/>
+
+                <!-- Schedule Status -->
+                <Label Grid.Row="11" Grid.Column="0" Content="Schedule Status:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,5,10,5"/>
+                <Label Grid.Row="11" Grid.Column="1" 
+                       Content="{Binding CurrentOrder.ScheduleStatus}" 
+                       FontWeight="SemiBold" 
+                       VerticalAlignment="Center" 
+                       Margin="0,5,0,5" 
+                       HorizontalAlignment="Left"/>
+
+                <!-- Time Left -->
+                <Label Grid.Row="12" Grid.Column="0" Content="Time Left:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,5,10,5"/>
+                <Label Grid.Row="12" Grid.Column="1" 
+                       Content="{Binding CurrentOrder.TimeLeft, StringFormat=hh\\:mm\\:ss}" 
+                       FontWeight="SemiBold" 
+                       VerticalAlignment="Center" 
+                       Margin="0,5,0,5" 
+                       HorizontalAlignment="Left"/>
+
+                <!-- Delivery History -->
+                <Label Grid.Row="13" Grid.Column="0" Content="Delivery History:" FontWeight="SemiBold" VerticalAlignment="Top" Margin="0,15,10,5"/>
+                <DataGrid Grid.Row="13" Grid.Column="1" 
+                          ItemsSource="{Binding CurrentOrder.DeliveryList}"
+                          IsReadOnly="True"
+                          AutoGenerateColumns="False"
+                          Height="150"
+                          Margin="0,15,0,5"
+                          HorizontalAlignment="Stretch">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Courier" Binding="{Binding CourierName}" Width="*"/>
+                        <DataGridTextColumn Header="Start" Binding="{Binding StartTime, StringFormat='dd/MM HH:mm'}" Width="100"/>
+                        <DataGridTextColumn Header="End" Binding="{Binding EndTime, StringFormat='dd/MM HH:mm'}" Width="100"/>
+                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+            </Grid>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+            <Button Content="{Binding ButtonText}" 
+                    Click="btnAction_Click" 
+                    Width="100" 
+                    Height="35" 
+                    Margin="10,0"
+                    FontSize="14"/>
+            <Button Content="{Binding DeleteButtonText}" 
+                    Click="btnDelete_Click" 
+                    Foreground="{Binding DeleteButtonForeground}" 
+                    BorderThickness="2" 
+                    BorderBrush="Black"  
+                    FontWeight="Bold" 
+                    Margin="10,0" 
+                    Width="100" 
+                    Height="35" 
+                    FontSize="14"
+                    Background="{Binding DeleteButtonBackground}"/>
+        </StackPanel>
+
+    </Grid>
+</Window>

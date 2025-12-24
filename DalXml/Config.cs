@@ -104,8 +104,8 @@ namespace Dal
             MaxRange = 0;
             AdminId = 12345678;
             CompanyAddress = "";
-            Latitude = 47.926577078603835;
-            Longitude = 14.43706490465476;
+            Latitude = 31.765847796216843;
+            Longitude = 35.19104519946595;
             MaxGeneralDistance = 0;
             AvgCarSpeed = 60;
             AvgMotorcycleSpeed = 70;
