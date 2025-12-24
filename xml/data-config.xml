@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <config>
-  <NextOrderId>2800</NextOrderId>
+  <NextOrderId>3100</NextOrderId>
   <NextCourierId>0</NextCourierId>
-  <NextDeliveryId>1480</NextDeliveryId>
-  <Clock>24/12/2025 17:12:56</Clock>
+  <NextDeliveryId>1690</NextDeliveryId>
+  <Clock>24/12/2025 18:23:23</Clock>
   <MaxRange>0</MaxRange>
   <AdminId>12345678</AdminId>
   <CompanyAddress></CompanyAddress>
-  <Latitude>47.926577078603835</Latitude>
-  <Longitude>14.43706490465476</Longitude>
+  <Latitude>47,926577078603835</Latitude>
+  <Longitude>14,43706490465476</Longitude>
   <MaxGeneralDistance>0</MaxGeneralDistance>
   <AvgCarSpeed>60</AvgCarSpeed>
   <AvgMotorcycleSpeed>70</AvgMotorcycleSpeed>

@@ -26,7 +26,7 @@ internal class ConfigImplementation : IConfig
     public string? CompanyAddress
     {
         get => Config.CompanyAddress;
-        set => Config.CompanyAddress = value;
+        set => Config.CompanyAddress = value ?? throw new ArgumentNullException(nameof(value), "CompanyAddress cannot be null.");
     }
 
     public double? Latitude => Config.Latitude;
