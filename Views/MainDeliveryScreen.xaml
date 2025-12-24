@@ -1,0 +1,235 @@
+<Window x:Class="Views.MainDeliveryScreen"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Main Delivery Screen"
+        Width="500" Height="620"
+        Background="#FFFFFF"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+  <Window.Resources>
+    <!-- Base grayscale button style -->
+    <Style x:Key="GrayscaleButton" TargetType="Button">
+      <Setter Property="Background" Value="#BFBFBF"/>
+      <Setter Property="Foreground" Value="#000000"/>
+      <Setter Property="BorderBrush" Value="#000000"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="Padding" Value="14,6"/>
+      <Setter Property="HorizontalAlignment" Value="Center"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="border"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="8"
+                    SnapsToDevicePixels="True">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                Margin="{TemplateBinding Padding}"
+                                RecognizesAccessKey="True"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="border" Property="Background" Value="#D9D9D9"/>
+              </Trigger>
+              <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="border" Property="Background" Value="#808080"/>
+              </Trigger>
+              <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter TargetName="border" Property="BorderBrush" Value="#000000"/>
+              </Trigger>
+              <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="border" Property="Background" Value="#F2F2F2"/>
+                <Setter Property="Foreground" Value="#808080"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <!-- Darker grayscale button style -->
+    <Style x:Key="GrayscaleButtonDark" TargetType="Button" BasedOn="{StaticResource GrayscaleButton}">
+      <Setter Property="Background" Value="#808080"/>
+      <Setter Property="Foreground" Value="#000000"/>
+      <Setter Property="Padding" Value="14,6"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="border"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="8"
+                    SnapsToDevicePixels="True">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="border" Property="Background" Value="#404040"/>
+              </Trigger>
+              <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="border" Property="Background" Value="#000000"/>
+              </Trigger>
+              <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter TargetName="border" Property="BorderBrush" Value="#000000"/>
+              </Trigger>
+              <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="border" Property="Background" Value="#F2F2F2"/>
+                <Setter Property="Foreground" Value="#808080"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <!-- Darkest button (for completed) -->
+    <Style x:Key="GrayscaleButtonDarkest" TargetType="Button" BasedOn="{StaticResource GrayscaleButton}">
+      <Setter Property="Background" Value="#404040"/>
+      <Setter Property="Foreground" Value="#FFFFFF"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="Button">
+            <Border x:Name="border"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="8"
+                    SnapsToDevicePixels="True">
+              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="border" Property="Background" Value="#000000"/>
+              </Trigger>
+              <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="border" Property="Background" Value="#000000"/>
+              </Trigger>
+              <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter TargetName="border" Property="BorderBrush" Value="#000000"/>
+              </Trigger>
+              <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="border" Property="Background" Value="#F2F2F2"/>
+                <Setter Property="Foreground" Value="#808080"/>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+  </Window.Resources>
+
+  <Grid>
+    <Border Width="480"
+            Height="600"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Background="#FFFFFF"
+            BorderBrush="#000000"
+            BorderThickness="2"
+            CornerRadius="20"
+            Padding="20"
+            Foreground="#000000">
+      <StackPanel Orientation="Vertical" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <!-- Header -->
+        <TextBlock Text="Main Delivery Screen"
+                   FontSize="22"
+                   FontWeight="Bold"
+                   Foreground="#000000"
+                   HorizontalAlignment="Center"
+                   Margin="0,4,0,12"/>
+
+        <!-- Block 1 -->
+        <Border CornerRadius="12"
+                Background="#F2F2F2"
+                BorderBrush="#000000"
+                BorderThickness="1"
+                Padding="14"
+                Margin="0,12,0,0"
+                Foreground="#000000">
+          <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="Delivery Details"
+                       FontSize="16"
+                       FontWeight="Bold"
+                       Foreground="#000000"
+                       HorizontalAlignment="Center"
+                       Margin="0,2"/>
+            <TextBlock Text="View and Update"
+                       FontSize="13"
+                       Foreground="#000000"
+                       HorizontalAlignment="Center"
+                       Margin="0,4,0,12"/>
+            <Button Content="Update"
+                    Style="{StaticResource GrayscaleButton}"
+                    Width="140"
+                    HorizontalAlignment="Center"/>
+          </StackPanel>
+        </Border>
+
+        <!-- Block 2 -->
+        <Border CornerRadius="12"
+                Background="#F2F2F2"
+                BorderBrush="#000000"
+                BorderThickness="1"
+                Padding="14"
+                Margin="0,16,0,0"
+                Foreground="#000000">
+          <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+            <TextBlock Text="Order Being Processed"
+                       FontSize="15"
+                       FontWeight="Bold"
+                       Foreground="#000000"
+                       Margin="0,2,0,6"/>
+            <TextBlock Text="(If available) Read only"
+                       FontSize="12"
+                       Foreground="#000000"
+                       Margin="0,0,0,12"/>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,8">
+              <Button Content="Finish Handling"
+                      Style="{StaticResource GrayscaleButton}"
+                      Width="200"
+                      Height="40"
+                      Margin="4,0"/>
+              <Button Content="Handling Details"
+                      Style="{StaticResource GrayscaleButtonDark}"
+                      Width="200"
+                      Height="40"
+                      Margin="4,0"/>
+            </StackPanel>
+
+            <Button Content="Mark as Delivery Completed"
+                    Style="{StaticResource GrayscaleButtonDarkest}"
+                    Width="260"
+                    HorizontalAlignment="Center"
+                    Margin="0,4,0,0"/>
+          </StackPanel>
+        </Border>
+
+        <!-- Footer spacer -->
+        <StackPanel Orientation="Vertical" Margin="0,18,0,0">
+          <Grid Margin="0,8,0,0">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0"
+                    Content="Delivery History"
+                    Style="{StaticResource GrayscaleButton}"
+                    Height="44"
+                    HorizontalAlignment="Stretch"
+                    Margin="4,0,6,0"/>
+            <Button Grid.Column="1"
+                    Content="Select Order"
+                    Style="{StaticResource GrayscaleButton}"
+                    Height="44"
+                    HorizontalAlignment="Stretch"
+                    Margin="6,0,4,0"/>
+          </Grid>
+        </StackPanel>
+      </StackPanel>
+    </Border>
+  </Grid>
+</Window>
