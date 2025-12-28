@@ -51,7 +51,7 @@ public partial class CourierMainWindow : Window
             new CourierWindow().Show();
             return;
         }
-        new CourierWindow(CurrentCourier.Id).Show();
+        new CourierWindow(CurrentCourier.Id).Show(); 
     }
 
     private void BtnSelectOrder_Click(object sender, RoutedEventArgs e)
