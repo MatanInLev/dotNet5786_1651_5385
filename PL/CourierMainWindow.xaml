@@ -1,0 +1,277 @@
+﻿<Window x:Class="PL.Courier.CourierMainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Courier - Main Screen"
+        Width="900"
+        Height="620"
+        WindowStartupLocation="CenterScreen"
+        Background="White"
+        ResizeMode="CanResize">
+    <Grid Margin="12">
+        <Border CornerRadius="14"
+                BorderBrush="Black"
+                BorderThickness="2"
+                Background="White"
+                Padding="16">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <!-- Header -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Courier details -->
+                    <RowDefinition Height="*"/>
+                    <!-- Current order area -->
+                    <RowDefinition Height="Auto"/>
+                    <!-- Bottom buttons -->
+                </Grid.RowDefinitions>
+
+                <!-- HEADER -->
+                <TextBlock Grid.Row="0"
+                           Text="Courier screen - main"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           Foreground="Black"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,12"/>
+
+                <!-- COURIER DETAILS -->
+                <GroupBox Grid.Row="1"
+                          Header="Courier details"
+                          Margin="0,0,0,12">
+                    <Grid Margin="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Row 0 -->
+                        <TextBlock Grid.Row="0" Grid.Column="0"
+                                   Text="Id:"
+                                   Margin="0,0,6,4"
+                                   FontWeight="Bold"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1"
+                                   Text="{Binding CurrentCourier.Id}"
+                                   Margin="0,0,16,4"/>
+
+                        <TextBlock Grid.Row="0" Grid.Column="2"
+                                   Text="Name:"
+                                   Margin="0,0,6,4"
+                                   FontWeight="Bold"/>
+                        <TextBlock Grid.Row="0" Grid.Column="3"
+                                   Text="{Binding CurrentCourier.Name}"
+                                   Margin="0,0,0,4"/>
+
+                        <!-- Row 1 -->
+                        <TextBlock Grid.Row="1" Grid.Column="0"
+                                   Text="Phone:"
+                                   Margin="0,0,6,4"
+                                   FontWeight="Bold"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1"
+                                   Text="{Binding CurrentCourier.Phone}"
+                                   Margin="0,0,16,4"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="2"
+                                   Text="Email:"
+                                   Margin="0,0,6,4"
+                                   FontWeight="Bold"/>
+                        <TextBlock Grid.Row="1" Grid.Column="3"
+                                   Text="{Binding CurrentCourier.Email}"
+                                   Margin="0,0,0,4"/>
+
+                        <!-- Row 2 -->
+                        <TextBlock Grid.Row="2" Grid.Column="0"
+                                   Text="Vehicle:"
+                                   Margin="0,0,6,4"
+                                   FontWeight="Bold"/>
+                        <TextBlock Grid.Row="2" Grid.Column="1"
+                                   Text="{Binding CurrentCourier.Vehicle}"
+                                   Margin="0,0,16,4"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="2"
+                                   Text="Max distance (km):"
+                                   Margin="0,0,6,4"
+                                   FontWeight="Bold"/>
+                        <TextBlock Grid.Row="2" Grid.Column="3"
+                                   Text="{Binding CurrentCourier.MaxDistance}"
+                                   Margin="0,0,0,4"/>
+
+                        <!-- Row 3 -->
+                        <TextBlock Grid.Row="3" Grid.Column="0"
+                                   Text="Start working date:"
+                                   Margin="0,0,6,0"
+                                   FontWeight="Bold"/>
+                        <TextBlock Grid.Row="3" Grid.Column="1"
+                                   Text="{Binding CurrentCourier.StartWorkDate}"
+                                   Margin="0,0,16,0"/>
+
+                        <TextBlock Grid.Row="3" Grid.Column="2"
+                                   Text="Deliveries on time / late:"
+                                   Margin="0,0,6,0"
+                                   FontWeight="Bold"/>
+                        <TextBlock Grid.Row="3" Grid.Column="3"
+                                   Text="{Binding CurrentCourier.OrdersProvidedOnTime, StringFormat={}{0} on time}"/>
+                    </Grid>
+                </GroupBox>
+
+                <!-- CURRENT ORDER HANDLING -->
+                <GroupBox Grid.Row="2"
+                          Header="Current order in handling (only if exists)"
+                          Margin="0,0,0,12">
+                    <Grid Margin="8">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <!-- details -->
+                            <RowDefinition Height="Auto"/>
+                            <!-- buttons -->
+                            <RowDefinition Height="*"/>
+                            <!-- message when no order -->
+                        </Grid.RowDefinitions>
+
+                        <!-- Order details panel (visible only if there is an order) -->
+                        <Grid Grid.Row="0"
+                              DataContext="{Binding CurrentCourier.OrderInProgress}">
+                            <Grid.Style>
+                                <Style TargetType="Grid">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Grid.Style>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Row 0 -->
+                            <TextBlock Grid.Row="0" Grid.Column="0"
+                                       Text="Order Id:"
+                                       Margin="0,0,6,4"
+                                       FontWeight="Bold"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1"
+                                       Text="{Binding OrderId}"
+                                       Margin="0,0,16,4"/>
+
+                            <TextBlock Grid.Row="0" Grid.Column="2"
+                                       Text="Delivery Id:"
+                                       Margin="0,0,6,4"
+                                       FontWeight="Bold"/>
+                            <TextBlock Grid.Row="0" Grid.Column="3"
+                                       Text="{Binding DeliveryId}"
+                                       Margin="0,0,0,4"/>
+
+                            <!-- Row 1 -->
+                            <TextBlock Grid.Row="1" Grid.Column="0"
+                                       Text="Type:"
+                                       Margin="0,0,6,4"
+                                       FontWeight="Bold"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1"
+                                       Text="{Binding OrderType}"
+                                       Margin="0,0,16,4"/>
+
+                            <TextBlock Grid.Row="1" Grid.Column="2"
+                                       Text="Status:"
+                                       Margin="0,0,6,4"
+                                       FontWeight="Bold"/>
+                            <TextBlock Grid.Row="1" Grid.Column="3"
+                                       Text="{Binding Status}"
+                                       Margin="0,0,0,4"/>
+
+                            <!-- Row 2 -->
+                            <TextBlock Grid.Row="2" Grid.Column="0"
+                                       Text="Schedule status:"
+                                       Margin="0,0,6,0"
+                                       FontWeight="Bold"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1"
+                                       Text="{Binding ScheduleStatus}"
+                                       Margin="0,0,16,0"/>
+
+                            <TextBlock Grid.Row="2" Grid.Column="2"
+                                       Text="Time left:"
+                                       Margin="0,0,6,0"
+                                       FontWeight="Bold"/>
+                            <TextBlock Grid.Row="2" Grid.Column="3"
+                                       Text="{Binding TimeLeft}"
+                                       Margin="0,0,0,0"/>
+                        </Grid>
+
+                        <!-- Buttons for handling current order -->
+                        <StackPanel Grid.Row="1"
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    Margin="0,12,0,8">
+                            <Button Content="Finish handling"
+                                    Width="160"
+                                    Margin="8,0"
+                                    Click="BtnFinishHandling_Click"/>
+                            <Button Content="Handling details"
+                                    Width="160"
+                                    Margin="8,0"
+                                    Click="BtnHandlingDetails_Click"/>
+                            <Button Content="Mark delivery as completed"
+                                    Width="220"
+                                    Margin="8,0"
+                                    Click="BtnMarkCompleted_Click"/>
+                        </StackPanel>
+
+                        <!-- Message when there is no current order -->
+                        <TextBlock Grid.Row="2"
+                                   Text="There is no order currently being handled by this courier."
+                                   Foreground="Gray"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CurrentCourier.OrderInProgress}" 
+                                                     Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
+                </GroupBox>
+
+                <!-- BOTTOM BUTTONS : HISTORY + ORDER SELECTION -->
+                <StackPanel Grid.Row="3"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Margin="0,8,0,0">
+                    <Button Content="Delivery history"
+                            Width="200"
+                            Height="40"
+                            Margin="10,0"
+                            Click="BtnHistory_Click"/>
+                    <Button Content="Order selection"
+                            Width="200"
+                            Height="40"
+                            Margin="10,0"
+                            Click="BtnOrderSelection_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

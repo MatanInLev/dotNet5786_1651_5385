@@ -1,4 +1,4 @@
-﻿<Window x:Class="PL.Courier.CourierMainWindow"
+﻿<Window x:Class="PL.Courier.CourierListWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Courier Main" Width="900" Height="620"

@@ -14,6 +14,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="CourierMainWindow.xaml.cs" />
+    <Compile Remove="Courier\CourierWindow.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="CourierMainWindow.xaml" />
+    <Page Remove="Courier\CourierWindow.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\BL\BL.csproj" />
   </ItemGroup>
 
