@@ -1,81 +1,56 @@
-﻿<Window x:Class="PL.Courier.CourierListWindow"
+﻿<Window x:Class="PL.Courier.CourierMainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Courier Main" Width="900" Height="620"
-        Background="#FFFFFF"
+        Title="Courier - Main Screen"
+        Width="900"
+        Height="620"
         WindowStartupLocation="CenterScreen"
+        Background="White"
         ResizeMode="CanResize">
-  <Grid Margin="12">
-    <Border CornerRadius="14" BorderBrush="#000000" BorderThickness="2" Background="#FFFFFF" Padding="16">
-      <StackPanel Orientation="Vertical" FlowDirection="RightToLeft">
-        <!-- Header -->
-       <TextBlock Text="Messenger screen - main" FontSize="22" FontWeight="Bold" Foreground="#000000" HorizontalAlignment="Center" Margin="0,4,0,12"/>
+    <Grid Margin="12">
+        <Border CornerRadius="14"
+                BorderBrush="Black"
+                BorderThickness="2"
+                Background="White"
+                Padding="16">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-        <Grid>
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="3*" />
-          </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0"
+                           Text="Courier screen - main"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           Foreground="Black"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,12"/>
 
-          <!-- Left: courier info and actions -->
-          <StackPanel Grid.Column="0" Margin="8" VerticalAlignment="Top">
-          <TextBlock Text="Courier details" FontSize="16" FontWeight="Bold" Foreground="#000000" Margin="0,0,0,8" HorizontalAlignment="Right"/>
+                <GroupBox Grid.Row="1" Header="Courier details" Margin="0,0,0,12">
+                    <Grid Margin="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Id:" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding CurrentCourier.Id}" Grid.Column="1"/>
+                    </Grid>
+                </GroupBox>
 
-            <StackPanel Orientation="Vertical" Margin="0,0,0,8">
-              <TextBlock Text='Id:' Foreground="#000000" HorizontalAlignment="Right"/>
-              <TextBlock Text="{Binding CurrentCourier.Id, TargetNullValue='-'}" Foreground="#000000" HorizontalAlignment="Right"/>
+                <GroupBox Grid.Row="2" Header="Current order in handling (only if exists)" Margin="0,0,0,12">
+                    <StackPanel Margin="8">
+                        <TextBlock Text="Order details go here"/>
+                    </StackPanel>
+                </GroupBox>
 
-              <TextBlock Text="name:" Foreground="#000000" Margin="0,8,0,0" HorizontalAlignment="Right"/>
-              <TextBlock Text="{Binding CurrentCourier.Name, TargetNullValue='-'}" Foreground="#000000" HorizontalAlignment="Right"/>
-
-              <TextBlock Text="phone:" Foreground="#000000" Margin="0,8,0,0" HorizontalAlignment="Right"/>
-              <TextBlock Text="{Binding CurrentCourier.Phone, TargetNullValue='-'}" Foreground="#000000" HorizontalAlignment="Right"/>
-
-              <TextBlock Text="Email:" Foreground="#000000" Margin="0,8,0,0" HorizontalAlignment="Right"/>
-              <TextBlock Text="{Binding CurrentCourier.Email, TargetNullValue='-'}" Foreground="#000000" HorizontalAlignment="Right"/>
-
-              <TextBlock Text="active:" Foreground="#000000" Margin="0,8,0,0" HorizontalAlignment="Right"/>
-              <TextBlock Text="{Binding CurrentCourier.IsActive, TargetNullValue='-'}" Foreground="#000000" HorizontalAlignment="Right"/>
-            </StackPanel>
-
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,12,0,6">
-              <Button Content="Update" Width="120" Height="36" Click="BtnUpdateCourier_Click" Background="#BFBFBF" Foreground="#000000" BorderBrush="#000000" BorderThickness="1"/>
-              <Button Content="Order selection" Width="140" Height="36" Click="BtnSelectOrder_Click" Margin="8,0,0,0" Background="#BFBFBF" Foreground="#000000" BorderBrush="#000000" BorderThickness="1"/>
-            </StackPanel>
-
-            <Button Content="Delivery history" Width="280" Height="40" Click="BtnHistory_Click" Margin="0,12,0,0" Background="#D9D9D9" Foreground="#000000" BorderBrush="#000000" BorderThickness="1"/>
-          </StackPanel>
-
-          <!-- Right: current order in progress -->
-          <StackPanel Grid.Column="1" Margin="8" VerticalAlignment="Top">
-          <TextBlock Text="Order details are being processed" FontSize="16" FontWeight="Bold" Foreground="#000000" Margin="0,0,0,8" HorizontalAlignment="Right"/>
-
-            <Border Background="#F2F2F2" BorderBrush="#000000" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,0,0,8">
-              <StackPanel>
-                <TextBlock Text="{Binding CurrentOrderInProgress.OrderId, StringFormat=מספר הזמנה: {0}}" Foreground="#000000" HorizontalAlignment="Right"/>
-                <TextBlock Text="{Binding CurrentOrderInProgress.Description, TargetNullValue='-'}" Foreground="#000000" TextWrapping="Wrap" Margin="0,6,0,0" HorizontalAlignment="Right"/>
-                <TextBlock Text="{Binding CurrentOrderInProgress.Address, TargetNullValue='-'}" Foreground="#000000" Margin="0,6,0,0" HorizontalAlignment="Right"/>
-
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,12,0,0">
-                  <Button Content="Finish treatment" Width="140" Height="38" Click="BtnFinishHandling_Click" Background="#BFBFBF" Foreground="#000000" BorderBrush="#000000" BorderThickness="1"/>
-                  <Button Content="Treatment details" Width="140" Height="38" Click="BtnHandlingDetails_Click" Margin="8,0,0,0" Background="#808080" Foreground="#FFFFFF" BorderBrush="#000000" BorderThickness="1"/>
+                <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,8,0,0">
+                    <Button Content="Delivery history" Width="200" Height="40" Margin="10,0" Click="BtnHistory_Click"/>
+                    <Button Content="Order selection" Width="200" Height="40" Margin="10,0" Click="BtnOrderSelection_Click"/>
                 </StackPanel>
-
-                <Button Content="Mark as completed delivery" Width="240" Height="36" Click="BtnMarkCompleted_Click" Margin="0,12,0,0" Background="#808080" Foreground="#FFFFFF" BorderBrush="#000000" BorderThickness="1" HorizontalAlignment="Center"/>
-              </StackPanel>
-            </Border>
-
-                        <TextBlock Text="There is no booking currently being processed" Foreground="#404040" HorizontalAlignment="Center"/>
-          </StackPanel>
-        </Grid>
-
-        <!-- Footer quick actions -->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,18,0,0">
-          <Button Content="Delivery history" Width="180" Height="44" Click="BtnHistory_Click" Background="#D9D9D9" Foreground="#000000" BorderBrush="#000000" BorderThickness="1"/>
-                    <Button Content="Order selection" Width="180" Height="44" Click="BtnSelectOrder_Click" Margin="12,0,0,0" Background="#D9D9D9" Foreground="#000000" BorderBrush="#000000" BorderThickness="1"/>
-        </StackPanel>
-
-      </StackPanel>
-    </Border> 
-  </Grid>
+            </Grid>
+        </Border>
+    </Grid>
 </Window>
