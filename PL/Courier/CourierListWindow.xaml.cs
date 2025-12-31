@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using PL.Courier;
 
 namespace PL.Courier
 {
-
     /// <summary>
     /// Interaction logic for CourierListWindow.xaml
     /// </summary>
@@ -19,6 +17,7 @@ namespace PL.Courier
         private readonly int _userId = 0;
 
         public BO.CourierInList? SelectedCourier { get; set; }
+
         /// <summary>
         /// The list bound to the DataGrid
         /// </summary>
@@ -65,7 +64,6 @@ namespace PL.Courier
                 _ => null
             };
 
-
             // This matches your ICourier:
             // IEnumerable<BO.CourierInList> GetList(int userId, bool? isActive = null, BO.Vehicle? vehicle = null);
             CourierList = s_bl.Courier.GetList(_userId, isActive);
@@ -81,7 +79,6 @@ namespace PL.Courier
         }
 
         // OPTIONAL – only אם עשית observers
-
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
@@ -90,33 +87,35 @@ namespace PL.Courier
 
         private void courierList_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            // CRITICAL FIX: Tell the DataGrid "I have handled this click, stop processing it."
-            // This prevents the DataGrid from trying to edit/select the row while the window is opening.
             e.Handled = true;
 
             // 1. Get the clicked item safely
             var frameworkElement = e.OriginalSource as FrameworkElement;
             var selectedItem = frameworkElement?.DataContext as BO.CourierInList;
 
-            if (selectedItem == null) return;
+            if (selectedItem == null)
+                return;
 
-            // 2. Open the window
-            // We keep the Dispatcher to be safe, but 'e.Handled = true' usually fixes the main crash.
-            Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.ApplicationIdle, new Action(() =>
+            // 2. Open the courier main screen for this courier
+            try
             {
-                try
-                {
-                    new CourierWindow(selectedItem.Id).Show();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error opening window: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }));
+                var win = new CourierMainWindow(_userId, selectedItem.Id);
+                win.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error opening courier window: {ex.Message}",
+                                "Error",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Error);
+            }
         }
+
         private void addCourierButton_Click(object sender, RoutedEventArgs e)
         {
-            new CourierWindow().Show();
+            // Open CourierWindow in Add mode
+            var win = new CourierWindow();
+            win.Show();
         }
     }
 }
