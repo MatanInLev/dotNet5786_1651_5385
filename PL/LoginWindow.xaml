@@ -1,0 +1,108 @@
+<Window x:Class="PL.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Login" 
+        Height="450" 
+        Width="640"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="#F5F5F5">
+
+    <Grid Margin="60,40">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Grid.Row="1" 
+                   Text="ID" 
+                   FontSize="18" 
+                   FontWeight="Normal" 
+                   Foreground="#666666"
+                   Margin="0,0,0,10"
+                   HorizontalAlignment="Left"/>
+
+        <!-- ID Input Box -->
+        <Border Grid.Row="2" 
+                Background="White" 
+                CornerRadius="25" 
+                Margin="0,0,0,10"
+                Height="60">
+            <TextBox x:Name="IdTextBox"
+                     FontSize="18"
+                     VerticalContentAlignment="Center"
+                     Padding="25,0"
+                     BorderThickness="0"
+                     Background="Transparent"
+                     Foreground="#333333"
+                     GotFocus="IdTextBox_GotFocus"
+                     LostFocus="IdTextBox_LostFocus"
+                     KeyDown="IdTextBox_KeyDown">
+                <TextBox.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="25"/>
+                    </Style>
+                </TextBox.Resources>
+            </TextBox>
+        </Border>
+
+        <!-- Info Text -->
+        <TextBlock Grid.Row="3" 
+                   Text="Enter your ID to access the system." 
+                   FontSize="14" 
+                   Foreground="#888888"
+                   Margin="0,0,0,30"
+                   TextWrapping="Wrap"/>
+
+        <!-- Connect Button -->
+        <Button Grid.Row="4" 
+                Background="#FF5722" 
+                BorderThickness="0"
+                Height="70"
+                Click="ConnectButton_Click"
+                Cursor="Hand">
+            <Button.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}"
+                                        CornerRadius="35"
+                                        BorderThickness="0">
+                                    <Border.Effect>
+                                        <DropShadowEffect Color="#FF5722" 
+                                                          BlurRadius="20" 
+                                                          ShadowDepth="0" 
+                                                          Opacity="0.4"/>
+                                    </Border.Effect>
+                                    <ContentPresenter HorizontalAlignment="Center" 
+                                                      VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#FF6E40"/>
+                                    </Trigger>
+                                    <Trigger Property="IsPressed" Value="True">
+                                        <Setter Property="Background" Value="#E64A19"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Button.Resources>
+            <TextBlock Text="Connect" 
+                       FontSize="22" 
+                       FontWeight="SemiBold" 
+                       Foreground="White"/>
+        </Button>
+    </Grid>
+</Window>

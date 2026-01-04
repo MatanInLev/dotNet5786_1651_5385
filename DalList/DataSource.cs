@@ -21,31 +21,46 @@ namespace Dal;
 ///   affects all consumers immediately.
 /// - No invariants, transactional guarantees or referential integrity checks are enforced here.
 ///   Business logic and validation must be implemented in the BL or caller code.
-/// - For thread-safe access in multi-threaded scenarios, callers must provide synchronization (locks, concurrent
-///   collections, etc.). This implementation is not thread-safe.
+/// - Thread-safe access is provided through lock objects. All DAL operations should use the appropriate lock
+///   when accessing these lists.
 /// </remarks>
 /// <example>
 /// Typical test harness usage:
 /// <code>
 /// // initialize (usually done once per test run)
-/// DataSource.Couriers.Clear();
-/// DataSource.Orders.Clear();
-/// DataSource.Deliveries.Clear();
+/// lock (DataSource.CouriersLock) { DataSource.Couriers.Clear(); }
+/// lock (DataSource.OrdersLock) { DataSource.Orders.Clear(); }
+/// lock (DataSource.DeliveriesLock) { DataSource.Deliveries.Clear(); }
 ///
 /// // DAL implementation will add entries:
 /// var dalOrder = new OrderImplementation();
 /// dalOrder.Create(new DO.Order { /* fields except Id */ });
-/// var allOrders = DataSource.Orders; // Read-only view not provided here; copy if needed.
 /// </code>
 /// </example>
 internal static class DataSource
 {
+    /// <summary>
+    /// Lock object for thread-safe access to the Couriers list.
+    /// </summary>
+    internal static readonly object CouriersLock = new object();
+
+    /// <summary>
+    /// Lock object for thread-safe access to the Orders list.
+    /// </summary>
+    internal static readonly object OrdersLock = new object();
+
+    /// <summary>
+    /// Lock object for thread-safe access to the Deliveries list.
+    /// </summary>
+    internal static readonly object DeliveriesLock = new object();
+
     /// <summary>
     /// In-memory list that stores <see cref="DO.Courier"/> instances.
     /// </summary>
     /// <remarks>
     /// Use <see cref="List{T}"/> operations or DAL wrappers (e.g., <c>CourierImplementation</c>) to mutate.
     /// Callers should not replace this field (do not assign a new list) because DAL code expects this exact reference.
+    /// Always acquire CouriersLock before accessing this list.
     /// </remarks>
     internal static List<DO.Courier> Couriers = new();
 
@@ -55,6 +70,7 @@ internal static class DataSource
     /// <remarks>
     /// The list is used as the single source-of-truth for orders within the process. DAL methods typically
     /// return shallow copies of this list to avoid exposing the internal collection reference.
+    /// Always acquire OrdersLock before accessing this list.
     /// </remarks>
     internal static List<DO.Order> Orders = new();
 
@@ -64,6 +80,7 @@ internal static class DataSource
     /// <remarks>
     /// Deliveries created by DAL implementations are appended to this list. Consumers that iterate this list
     /// should treat it as volatile: other code may mutate it concurrently unless external synchronization is used.
+    /// Always acquire DeliveriesLock before accessing this list.
     /// </remarks>
     internal static List<DO.Delivery> Deliveries = new();
 }

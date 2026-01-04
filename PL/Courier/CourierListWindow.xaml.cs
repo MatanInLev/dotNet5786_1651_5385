@@ -110,7 +110,6 @@ namespace PL.Courier
                                 MessageBoxImage.Error);
             }
         }
-
         private void addCourierButton_Click(object sender, RoutedEventArgs e)
         {
             // Open CourierWindow in Add mode

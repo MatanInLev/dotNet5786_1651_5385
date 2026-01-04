@@ -5,213 +5,364 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Order"
         xmlns:bo="clr-namespace:BO;assembly=BL"
+        xmlns:pl="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="Order Management" Height="700" Width="550"
+        Title="Order Details" Height="750" Width="600"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Background="#F5F7FA"
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
+        <!-- Converters -->
+        <pl:OrderCanBeUpdatedOrIsNewConverter x:Key="OrderCanBeUpdatedOrIsNewConverter"/>
+        
         <!-- Enum collections for ComboBox bindings -->
         <ObjectDataProvider x:Key="OrderTypeCollection" MethodName="GetValues" ObjectType="{x:Type bo:OrderType}">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="bo:OrderType"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+
+        <!-- Modern Button Template -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                BorderThickness="0"
+                                Padding="12,8">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" Value="0.8"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+
+        <!-- Card Style -->
+        <Style x:Key="CardPanel" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#000000" BlurRadius="12" ShadowDepth="3" Opacity="0.1"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Modern TextBox Style -->
+        <Style x:Key="ModernTextBox" TargetType="TextBox">
+            <Setter Property="Background" Value="#F5F7FA"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Modern ComboBox Style -->
+        <Style x:Key="ModernComboBox" TargetType="ComboBox">
+            <Setter Property="Background" Value="#F5F7FA"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+
+        <!-- Modern DataGrid Style -->
+        <Style x:Key="ModernDataGrid" TargetType="DataGrid">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="AlternatingRowBackground" Value="#F9FAFB"/>
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="CanUserDeleteRows" Value="False"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
     </Window.Resources>
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" Content="Order Details" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+        <!-- Header -->
+        <TextBlock Grid.Row="0" 
+                   Text="Order Details" 
+                   FontSize="28" 
+                   FontWeight="Bold" 
+                   Foreground="#2C3E50"
+                   Margin="0,0,0,15"/>
 
-        <Separator Grid.Row="1" Margin="0,5"/>
+        <!-- Main Content -->
+        <Border Grid.Row="1" Style="{StaticResource CardPanel}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Margin="0,10,0,10">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+                    <!-- Order ID -->
+                    <TextBlock Grid.Row="0" Grid.Column="0" 
+                               Text="Order ID:" 
+                               FontWeight="SemiBold" 
+                               FontSize="12"
+                               Foreground="#555"
+                               VerticalAlignment="Center" 
+                               Margin="0,6,15,6"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" 
+                             Text="{Binding CurrentOrder.Id, Mode=TwoWay}" 
+                             IsReadOnly="True"
+                             Style="{StaticResource ModernTextBox}"
+                             Background="#E8EAED"
+                             Margin="0,6"/>
 
-                <!-- Order ID -->
-                <Label Grid.Row="0" Grid.Column="0" Content="Order ID:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,5,10,5"/>
-                <TextBox Grid.Row="0" Grid.Column="1" 
-                         Text="{Binding CurrentOrder.Id, Mode=TwoWay}" 
-                         IsReadOnly="True"
-                         Background="LightGray"
-                         HorizontalAlignment="Stretch" 
-                         VerticalContentAlignment="Center" 
-                         Margin="0,5,0,5"/>
+                    <!-- Order Type -->
+                    <TextBlock Grid.Row="1" Grid.Column="0" 
+                               Text="Order Type:" 
+                               FontSize="12"
+                               Foreground="#555"
+                               VerticalAlignment="Center" 
+                               Margin="0,6,15,6"/>
+                    <ComboBox Grid.Row="1" Grid.Column="1" 
+                              ItemsSource="{Binding Source={StaticResource OrderTypeCollection}}"
+                              SelectedItem="{Binding CurrentOrder.Type, Mode=TwoWay}"
+                              Style="{StaticResource ModernComboBox}"
+                              Margin="0,6"/>
 
-                <!-- Order Type -->
-                <Label Grid.Row="1" Grid.Column="0" Content="Order Type:" VerticalAlignment="Center" Margin="0,5,10,5"/>
-                <ComboBox Grid.Row="1" Grid.Column="1" 
-                          ItemsSource="{Binding Source={StaticResource OrderTypeCollection}}"
-                          SelectedItem="{Binding CurrentOrder.Type, Mode=TwoWay}"
-                          HorizontalAlignment="Stretch" 
-                          VerticalAlignment="Center" 
-                          Margin="0,5,0,5"/>
+                    <!-- Description -->
+                    <TextBlock Grid.Row="2" Grid.Column="0" 
+                               Text="Description:" 
+                               FontSize="12"
+                               Foreground="#555"
+                               VerticalAlignment="Top" 
+                               Margin="0,6,15,6"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" 
+                             Text="{Binding CurrentOrder.Description, Mode=TwoWay}" 
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             Height="60"
+                             Style="{StaticResource ModernTextBox}"
+                             VerticalScrollBarVisibility="Auto"
+                             Margin="0,6"/>
 
-                <!-- Description -->
-                <Label Grid.Row="2" Grid.Column="0" Content="Description:" VerticalAlignment="Top" Margin="0,5,10,5"/>
-                <TextBox Grid.Row="2" Grid.Column="1" 
-                         Text="{Binding CurrentOrder.Description, Mode=TwoWay}" 
-                         TextWrapping="Wrap"
-                         AcceptsReturn="True"
-                         Height="60"
-                         HorizontalAlignment="Stretch" 
-                         VerticalScrollBarVisibility="Auto"
-                         Margin="0,5,0,5"/>
+                    <!-- Customer Name -->
+                    <TextBlock Grid.Row="3" Grid.Column="0" 
+                               Text="Customer Name:" 
+                               FontSize="12"
+                               Foreground="#555"
+                               VerticalAlignment="Center" 
+                               Margin="0,6,15,6"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" 
+                             Text="{Binding CurrentOrder.CustomerName, Mode=TwoWay}" 
+                             Style="{StaticResource ModernTextBox}"
+                             Margin="0,6"/>
 
-                <!-- Customer Name -->
-                <Label Grid.Row="3" Grid.Column="0" Content="Customer Name:" VerticalAlignment="Center" Margin="0,5,10,5"/>
-                <TextBox Grid.Row="3" Grid.Column="1" 
-                         Text="{Binding CurrentOrder.CustomerName, Mode=TwoWay}" 
-                         HorizontalAlignment="Stretch" 
-                         VerticalContentAlignment="Center" 
-                         Margin="0,5,0,5"/>
+                    <!-- Customer Phone -->
+                    <TextBlock Grid.Row="4" Grid.Column="0" 
+                               Text="Customer Phone:" 
+                               FontSize="12"
+                               Foreground="#555"
+                               VerticalAlignment="Center" 
+                               Margin="0,6,15,6"/>
+                    <TextBox Grid.Row="4" Grid.Column="1" 
+                             Text="{Binding CurrentOrder.CustomerPhone, Mode=TwoWay}" 
+                             Style="{StaticResource ModernTextBox}"
+                             Margin="0,6"/>
 
-                <!-- Customer Phone -->
-                <Label Grid.Row="4" Grid.Column="0" Content="Customer Phone:" VerticalAlignment="Center" Margin="0,5,10,5"/>
-                <TextBox Grid.Row="4" Grid.Column="1" 
-                         Text="{Binding CurrentOrder.CustomerPhone, Mode=TwoWay}" 
-                         HorizontalAlignment="Stretch" 
-                         VerticalContentAlignment="Center" 
-                         Margin="0,5,0,5"/>
+                    <!-- Customer Address -->
+                    <TextBlock Grid.Row="5" Grid.Column="0" 
+                               Text="Delivery Address:" 
+                               FontSize="12"
+                               Foreground="#555"
+                               VerticalAlignment="Top" 
+                               Margin="0,6,15,6"/>
+                    <TextBox Grid.Row="5" Grid.Column="1" 
+                             Text="{Binding CurrentOrder.CustomerAddress, Mode=TwoWay}" 
+                             TextWrapping="Wrap"
+                             Height="50"
+                             Style="{StaticResource ModernTextBox}"
+                             VerticalScrollBarVisibility="Auto"
+                             Margin="0,6"/>
 
-                <!-- Customer Address -->
-                <Label Grid.Row="5" Grid.Column="0" Content="Delivery Address:" VerticalAlignment="Top" Margin="0,5,10,5"/>
-                <TextBox Grid.Row="5" Grid.Column="1" 
-                         Text="{Binding CurrentOrder.CustomerAddress, Mode=TwoWay}" 
-                         TextWrapping="Wrap"
-                         Height="50"
-                         HorizontalAlignment="Stretch" 
-                         VerticalScrollBarVisibility="Auto"
-                         Margin="0,5,0,5"/>
+                    <!-- Separator -->
+                    <Separator Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,15,0,10"/>
 
-                <!-- Distance -->
-                <Label Grid.Row="6" Grid.Column="0" Content="Distance (km):" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,15,10,5"/>
-                <Label Grid.Row="6" Grid.Column="1" 
-                       Content="{Binding CurrentOrder.Distance, StringFormat=N2}" 
-                       FontWeight="SemiBold" 
-                       VerticalAlignment="Center" 
-                       Margin="0,15,0,5" 
-                       HorizontalAlignment="Left"/>
+                    <!-- Distance -->
+                    <TextBlock Grid.Row="7" Grid.Column="0" 
+                               Text="Distance (km):" 
+                               FontWeight="SemiBold" 
+                               FontSize="12"
+                               Foreground="#555"
+                               VerticalAlignment="Center" 
+                               Margin="0,6,15,6"/>
+                    <TextBlock Grid.Row="7" Grid.Column="1" 
+                               Text="{Binding CurrentOrder.Distance, StringFormat=N2}" 
+                               FontSize="12"
+                               VerticalAlignment="Center" 
+                               Margin="0,6"/>
 
-                <!-- Order Date -->
-                <Label Grid.Row="7" Grid.Column="0" Content="Order Date:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,5,10,5"/>
-                <Label Grid.Row="7" Grid.Column="1" 
-                       Content="{Binding CurrentOrder.OrderDate, StringFormat='dd/MM/yyyy HH:mm'}" 
-                       FontWeight="SemiBold" 
-                       VerticalAlignment="Center" 
-                       Margin="0,5,0,5" 
-                       HorizontalAlignment="Left"/>
+                    <!-- Order Date -->
+                    <TextBlock Grid.Row="8" Grid.Column="0" 
+                               Text="Order Date:" 
+                               FontWeight="SemiBold" 
+                               FontSize="12"
+                               Foreground="#555"
+                               VerticalAlignment="Center" 
+                               Margin="0,6,15,6"/>
+                    <TextBlock Grid.Row="8" Grid.Column="1" 
+                               Text="{Binding CurrentOrder.OrderDate, StringFormat='dd/MM/yyyy HH:mm'}" 
+                               FontSize="12"
+                               VerticalAlignment="Center" 
+                               Margin="0,6"/>
 
-                <!-- Expected Delivery -->
-                <Label Grid.Row="8" Grid.Column="0" Content="Expected Delivery:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,5,10,5"/>
-                <Label Grid.Row="8" Grid.Column="1" 
-                       Content="{Binding CurrentOrder.ExpectedDelivery, StringFormat='dd/MM/yyyy HH:mm'}" 
-                       FontWeight="SemiBold" 
-                       VerticalAlignment="Center" 
-                       Margin="0,5,0,5" 
-                       HorizontalAlignment="Left"/>
+                    <!-- Expected Delivery -->
+                    <TextBlock Grid.Row="9" Grid.Column="0" 
+                               Text="Expected Delivery:" 
+                               FontWeight="SemiBold" 
+                               FontSize="12"
+                               Foreground="#555"
+                               VerticalAlignment="Center" 
+                               Margin="0,6,15,6"/>
+                    <TextBlock Grid.Row="9" Grid.Column="1" 
+                               Text="{Binding CurrentOrder.ExpectedDelivery, StringFormat='dd/MM/yyyy HH:mm'}" 
+                               FontSize="12"
+                               VerticalAlignment="Center" 
+                               Margin="0,6"/>
 
-                <!-- Max Delivery -->
-                <Label Grid.Row="9" Grid.Column="0" Content="Max Delivery Time:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,5,10,5"/>
-                <Label Grid.Row="9" Grid.Column="1" 
-                       Content="{Binding CurrentOrder.MaxDelivery, StringFormat='dd/MM/yyyy HH:mm'}" 
-                       FontWeight="SemiBold" 
-                       VerticalAlignment="Center" 
-                       Margin="0,5,0,5" 
-                       HorizontalAlignment="Left"/>
+                    <!-- Order Status -->
+                    <TextBlock Grid.Row="10" Grid.Column="0" 
+                               Text="Order Status:" 
+                               FontWeight="SemiBold" 
+                               FontSize="12"
+                               Foreground="#555"
+                               VerticalAlignment="Center" 
+                               Margin="0,6,15,6"/>
+                    <TextBlock Grid.Row="10" Grid.Column="1" 
+                               Text="{Binding CurrentOrder.Status}" 
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center" 
+                               Margin="0,6"/>
 
-                <!-- Order Status -->
-                <Label Grid.Row="10" Grid.Column="0" Content="Order Status:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,5,10,5"/>
-                <Label Grid.Row="10" Grid.Column="1" 
-                       Content="{Binding CurrentOrder.Status}" 
-                       FontWeight="SemiBold" 
-                       VerticalAlignment="Center" 
-                       Margin="0,5,0,5" 
-                       HorizontalAlignment="Left"/>
+                    <!-- Schedule Status -->
+                    <TextBlock Grid.Row="11" Grid.Column="0" 
+                               Text="Schedule Status:" 
+                               FontWeight="SemiBold" 
+                               FontSize="12"
+                               Foreground="#555"
+                               VerticalAlignment="Center" 
+                               Margin="0,6,15,6"/>
+                    <TextBlock Grid.Row="11" Grid.Column="1" 
+                               Text="{Binding CurrentOrder.ScheduleStatus}" 
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center" 
+                               Margin="0,6"/>
 
-                <!-- Schedule Status -->
-                <Label Grid.Row="11" Grid.Column="0" Content="Schedule Status:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,5,10,5"/>
-                <Label Grid.Row="11" Grid.Column="1" 
-                       Content="{Binding CurrentOrder.ScheduleStatus}" 
-                       FontWeight="SemiBold" 
-                       VerticalAlignment="Center" 
-                       Margin="0,5,0,5" 
-                       HorizontalAlignment="Left"/>
+                    <!-- Time Left -->
+                    <TextBlock Grid.Row="12" Grid.Column="0" 
+                               Text="Time Left:" 
+                               FontWeight="SemiBold" 
+                               FontSize="12"
+                               Foreground="#555"
+                               VerticalAlignment="Center" 
+                               Margin="0,6,15,6"/>
+                    <TextBlock Grid.Row="12" Grid.Column="1" 
+                               Text="{Binding CurrentOrder.TimeLeft, StringFormat=hh\\:mm\\:ss}" 
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center" 
+                               Margin="0,6"/>
 
-                <!-- Time Left -->
-                <Label Grid.Row="12" Grid.Column="0" Content="Time Left:" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,5,10,5"/>
-                <Label Grid.Row="12" Grid.Column="1" 
-                       Content="{Binding CurrentOrder.TimeLeft, StringFormat=hh\\:mm\\:ss}" 
-                       FontWeight="SemiBold" 
-                       VerticalAlignment="Center" 
-                       Margin="0,5,0,5" 
-                       HorizontalAlignment="Left"/>
+                    <!-- Delivery History -->
+                    <TextBlock Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="2"
+                               Text="Delivery History" 
+                               FontWeight="Bold" 
+                               FontSize="14"
+                               Foreground="#3498DB"
+                               Margin="0,20,0,10"/>
 
-                <!-- Delivery History -->
-                <Label Grid.Row="13" Grid.Column="0" Content="Delivery History:" FontWeight="SemiBold" VerticalAlignment="Top" Margin="0,15,10,5"/>
-                <DataGrid Grid.Row="13" Grid.Column="1" 
-                          ItemsSource="{Binding CurrentOrder.DeliveryList}"
-                          IsReadOnly="True"
-                          AutoGenerateColumns="False"
-                          Height="150"
-                          Margin="0,15,0,5"
-                          HorizontalAlignment="Stretch">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Courier" Binding="{Binding CourierName}" Width="*"/>
-                        <DataGridTextColumn Header="Start" Binding="{Binding StartTime, StringFormat='dd/MM HH:mm'}" Width="100"/>
-                        <DataGridTextColumn Header="End" Binding="{Binding EndTime, StringFormat='dd/MM HH:mm'}" Width="100"/>
-                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
-                    </DataGrid.Columns>
-                </DataGrid>
+                    <DataGrid Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="2"
+                              ItemsSource="{Binding CurrentOrder.DeliveryList}"
+                              IsReadOnly="True"
+                              Style="{StaticResource ModernDataGrid}"
+                              AutoGenerateColumns="False"
+                              Height="150"
+                              Margin="0,0,0,10">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Courier" Binding="{Binding CourierName}" Width="*"/>
+                            <DataGridTextColumn Header="Start" Binding="{Binding StartDeliveryDate, StringFormat='dd/MM HH:mm'}" Width="110"/>
+                            <DataGridTextColumn Header="End" Binding="{Binding EndDeliveryDate, StringFormat='dd/MM HH:mm'}" Width="110"/>
+                            <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
 
-            </Grid>
-        </ScrollViewer>
+                </Grid>
+            </ScrollViewer>
+        </Border>
 
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+        <!-- Action Buttons -->
+        <StackPanel Grid.Row="2" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Center" 
+                    Margin="0,15,0,0">
             <Button Content="{Binding ButtonText}" 
                     Click="btnAction_Click" 
-                    Width="100" 
-                    Height="35" 
-                    Margin="10,0"
-                    FontSize="14"/>
+                    Style="{StaticResource ModernButton}"
+                    Background="#8E44AD"
+                    Width="130" 
+                    Height="40" 
+                    Margin="5,0">
+                <Button.IsEnabled>
+                    <MultiBinding Converter="{StaticResource OrderCanBeUpdatedOrIsNewConverter}">
+                        <Binding Path="CurrentOrder.Id"/>
+                        <Binding Path="CurrentOrder.Status"/>
+                    </MultiBinding>
+                </Button.IsEnabled>
+            </Button>
             <Button Content="{Binding DeleteButtonText}" 
                     Click="btnDelete_Click" 
-                    Foreground="{Binding DeleteButtonForeground}" 
-                    BorderThickness="2" 
-                    BorderBrush="Black"  
-                    FontWeight="Bold" 
-                    Margin="10,0" 
-                    Width="100" 
-                    Height="35" 
-                    FontSize="14"
-                    Background="{Binding DeleteButtonBackground}"/>
+                    Style="{StaticResource ModernButton}"
+                    Background="{Binding DeleteButtonBackground}"
+                    Foreground="White"
+                    Width="130" 
+                    Height="40" 
+                    Margin="5,0"/>
         </StackPanel>
 
     </Grid>

@@ -115,7 +115,7 @@ public static class Initialization
                 string customerPhone = $"05{s_rand.Next(10000000, 89999999)}";
                 AddressData randomAddress = s_addresses[s_rand.Next(s_addresses.Length)];
                 OrderType type = (OrderType)s_rand.Next(Enum.GetValues(typeof(OrderType)).Length);
-                DateTime openTime = s_dal!.Config.Clock.AddDays(-s_rand.Next(1, 60));
+                DateTime openTime = s_dal!.Config.Clock.AddHours(-s_rand.Next(0, 3)).AddMinutes(-s_rand.Next(0,60));
 
                 Order newOrder = new()
                 {
@@ -201,8 +201,8 @@ public static class Initialization
             // Mark this courier as having an active delivery
             couriersWithActiveDeliveries.Add(courier.Id);
 
-            DateTime startTime = orderToAssign.OrderTime.AddHours(s_rand.Next(1, 4));
-
+            DateTime startTime = orderToAssign.OrderTime.AddMinutes(s_rand.Next(0, 60))
+                                             .AddHours(s_rand.Next(0, 2));
             /// Ensure StartTime is not in the future relative to the system clock
             if (startTime > s_dal!.Config.Clock)
                 startTime = s_dal!.Config.Clock.AddMinutes(-s_rand.Next(1, 30));

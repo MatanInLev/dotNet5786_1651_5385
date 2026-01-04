@@ -175,50 +175,60 @@ internal static class CourierManager
     }
 
     /// <summary>
-    /// Creates a new courier in the system.
+    /// Creates a new courier in the system (Registration).
     /// </summary>
     /// <param name="boCourier">The Business Object containing new courier details.</param>
     internal static void Create(BO.Courier boCourier)
     {
-        // 1. Logical Validation
-        if (boCourier.Id <= 0)
-            throw new BO.BlInvalidValueException("Courier ID must be a positive number.");
-        if (string.IsNullOrWhiteSpace(boCourier.Name))
-            throw new BO.BlInvalidValueException("Courier name cannot be empty.");
-        if (boCourier.MaxDistance.HasValue && boCourier.MaxDistance < 0)
-            throw new BO.BlInvalidValueException("Max distance cannot be negative.");
+        Logger.LogInfo($"Creating new courier: {boCourier.Name} (ID: {boCourier.Id})");
 
-        // 2. Check for duplicates in DAL
-        // Note: ID is manual for Couriers (T.Z), so we check if it exists.
-        DO.Courier? existing = s_dal.Courier.Read(boCourier.Id);
-        if (existing != null)
-        {
-            throw new BO.BlAlreadyExistsException($"Courier with ID {boCourier.Id} already exists.");
-        }
-
-        // 3. Map BO -> DO
-        DO.Courier doCourier = new DO.Courier
-        {
-            Id = boCourier.Id,
-            Name = boCourier.Name,
-            Email = boCourier.Email,
-            PhoneNumber = boCourier.Phone,
-            VehicleType = (DO.VehicleType)boCourier.Vehicle, // Enum conversion
-            IsActive = true, // Default to active upon creation
-            Distance = boCourier.MaxDistance,
-            Date = AdminManager.Now // set persistent join/start date
-            // Note: StartDate is effectively AdminManager.Now by design
-        };
-
-        // 4. Save to DAL
         try
         {
-            s_dal.Courier.Create(doCourier);
-            Observers.NotifyListUpdated(); // notify PL to refresh lists after create
+            // 1. Validate using ValidationHelper
+            ValidationHelper.ValidateCourier(boCourier);
+
+            // 2. Check for duplicates in DAL
+            DO.Courier? existing = s_dal.Courier.Read(boCourier.Id);
+            if (existing != null)
+            {
+                Logger.LogWarning($"Courier with ID {boCourier.Id} already exists");
+                throw new BO.BlAlreadyExistsException($"Courier with ID {boCourier.Id} already exists.");
+            }
+
+            // 3. Map BO -> DO
+            DO.Courier doCourier = new DO.Courier
+            {
+                Id = boCourier.Id,
+                Name = boCourier.Name,
+                Email = boCourier.Email,
+                PhoneNumber = boCourier.Phone,
+                VehicleType = (DO.VehicleType)boCourier.Vehicle,
+                IsActive = true, // Default to active upon creation
+                Distance = boCourier.MaxDistance,
+                Date = AdminManager.Now
+            };
+
+            // 4. Save to DAL
+            try
+            {
+                s_dal.Courier.Create(doCourier);
+                Logger.LogInfo($"Successfully created courier {boCourier.Id}");
+                Observers.NotifyListUpdated();
+            }
+            catch (DO.DalAlreadyExistsException ex)
+            {
+                Logger.LogError(ex, $"Courier {boCourier.Id} already exists in database");
+                throw new BO.BlAlreadyExistsException($"Courier with ID {boCourier.Id} already exists.", ex);
+            }
         }
-        catch (DO.DalAlreadyExistsException ex)
+        catch (BO.BlBaseException)
         {
-            throw new BO.BlAlreadyExistsException($"Courier with ID {boCourier.Id} already exists.", ex);
+            throw; // Re-throw BL exceptions
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, $"Unexpected error creating courier {boCourier.Id}");
+            throw new BO.BlInvalidValueException($"An unexpected error occurred while creating courier {boCourier.Id}", ex);
         }
     }
 
@@ -299,40 +309,73 @@ internal static class CourierManager
     /// </summary>
     internal static void Update(BO.Courier boCourier)
     {
-        // 1. Validate Input
-        if (boCourier.Id <= 0)
-            throw new BO.BlInvalidValueException("Invalid ID");
+        Logger.LogInfo($"Updating courier {boCourier.Id}");
 
-        // 2. Fetch existing to verify existence
-        DO.Courier? existingCourier = s_dal.Courier.Read(boCourier.Id);
-        if (existingCourier == null)
-            throw new BO.BlDoesNotExistException($"Courier {boCourier.Id} was not found.");
-
-        // 3. Business Rule: Cannot change some properties if currently delivering?
-        //    (Optional rule: If handling an order, maybe limit vehicle change? )
-        //    For now, we allow updates.
-
-        // 4. Map BO -> DO (Use record 'with' for immutability if strictly following record pattern, 
-        //    or create new if needed. Since DAL Update replaces the object, we create a new one based on existing).
-        DO.Courier updatedCourier = existingCourier with
-        {
-            Name = boCourier.Name,
-            Email = boCourier.Email,
-            PhoneNumber = boCourier.Phone,
-            VehicleType = (DO.VehicleType)boCourier.Vehicle,
-            IsActive = boCourier.IsActive,
-            Distance = boCourier.MaxDistance
-        };
-
-        // 5. Save to DAL
         try
         {
+            // 1. Validate using ValidationHelper
+            ValidationHelper.ValidateCourier(boCourier);
+
+            // 2. Fetch existing to verify existence
+            DO.Courier? existingCourier = s_dal.Courier.Read(boCourier.Id);
+            if (existingCourier == null)
+            {
+                Logger.LogWarning($"Courier {boCourier.Id} not found for update");
+                throw new BO.BlDoesNotExistException($"Courier {boCourier.Id} was not found.");
+            }
+
+            // 3. Check if courier is being deactivated (was active, now inactive)
+            bool isBeingDeactivated = existingCourier.IsActive && !boCourier.IsActive;
+
+            // 4. If being deactivated, cancel any active deliveries
+            if (isBeingDeactivated)
+            {
+                Logger.LogInfo($"Courier {boCourier.Id} is being deactivated, canceling active deliveries");
+                var activeDeliveries = s_dal.Delivery.ReadAll(d => d.CourierId == boCourier.Id && d.EndTime == null);
+                foreach (var activeDelivery in activeDeliveries)
+                {
+                    // Close the delivery as Canceled due to courier deactivation
+                    var closedDelivery = activeDelivery with
+                    {
+                        EndTime = AdminManager.Now,
+                        EndOfDelivery = DO.EndOfDelivery.Canceled
+                    };
+                    s_dal.Delivery.Update(closedDelivery);
+                    
+                    // Notify order observers about the cancellation
+                    OrderManager.Observers.NotifyItemUpdated(activeDelivery.OrderId);
+                }
+                
+                // Notify order list to refresh
+                OrderManager.Observers.NotifyListUpdated();
+            }
+
+            // 5. Map BO -> DO
+            DO.Courier updatedCourier = existingCourier with
+            {
+                Name = boCourier.Name,
+                Email = boCourier.Email,
+                PhoneNumber = boCourier.Phone,
+                VehicleType = (DO.VehicleType)boCourier.Vehicle,
+                IsActive = boCourier.IsActive,
+                Distance = boCourier.MaxDistance
+            };
+
+            // 6. Update in DAL
             s_dal.Courier.Update(updatedCourier);
-            Observers.NotifyListUpdated(); // notify PL to refresh lists after update
+            Logger.LogInfo($"Successfully updated courier {boCourier.Id}");
+
+            Observers.NotifyItemUpdated(boCourier.Id);
+            Observers.NotifyListUpdated();
         }
-        catch (DO.DalDoesNotExistException ex)
+        catch (BO.BlBaseException)
         {
-            throw new BO.BlDoesNotExistException($"Failed to update Courier {boCourier.Id}", ex);
+            throw; // Re-throw BL exceptions
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, $"Unexpected error updating courier {boCourier.Id}");
+            throw new BO.BlInvalidValueException($"An unexpected error occurred while updating courier {boCourier.Id}", ex);
         }
     }
 
