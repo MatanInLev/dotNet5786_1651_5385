@@ -7,9 +7,11 @@
         xmlns:bo="clr-namespace:BO;assembly=BL"
         xmlns:pl="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="Order Management" Height="750" Width="1100"
+        Title="Order Management" 
+        Height="750" 
+        Width="1200"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        Background="#F5F7FA"
+        Background="#F0F2F5"
         WindowStartupLocation="CenterScreen">
     
     <Window.Resources>
@@ -35,18 +37,30 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
-                                CornerRadius="8"
+                                CornerRadius="10"
                                 BorderThickness="0"
-                                Padding="12,8">
+                                Padding="16,10">
                             <ContentPresenter HorizontalAlignment="Center" 
                                               VerticalAlignment="Center"/>
+                            <Border.Effect>
+                                <DropShadowEffect Color="#000000" BlurRadius="8" ShadowDepth="2" Opacity="0.15"/>
+                            </Border.Effect>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Opacity" Value="0.9"/>
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#000000" BlurRadius="12" ShadowDepth="3" Opacity="0.25"/>
+                                    </Setter.Value>
+                                </Setter>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Opacity" Value="0.8"/>
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.98" ScaleY="0.98"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -54,29 +68,111 @@
             </Setter>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
 
         <!-- Small Button Style -->
-        <Style x:Key="SmallButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
-            <Setter Property="FontSize" Value="11"/>
+        <Style x:Key="SmallButton" TargetType="Button">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
-                                CornerRadius="6"
+                                CornerRadius="8"
                                 BorderThickness="0"
-                                Padding="8,5">
+                                Padding="12,6">
                             <ContentPresenter HorizontalAlignment="Center" 
                                               VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Opacity" Value="0.9"/>
+                                <Setter Property="Opacity" Value="0.85"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Opacity" Value="0.8"/>
+                                <Setter Property="Opacity" Value="0.7"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+
+        <!-- Card Style -->
+        <Style x:Key="CardPanel" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="24"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#000000" BlurRadius="20" ShadowDepth="4" Opacity="0.08"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Modern ComboBox Style -->
+        <Style x:Key="ModernComboBox" TargetType="ComboBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <Border x:Name="border"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="8">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ContentPresenter Grid.Column="0"
+                                                      Content="{TemplateBinding SelectionBoxItem}"
+                                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                      Margin="{TemplateBinding Padding}"
+                                                      VerticalAlignment="Center"
+                                                      HorizontalAlignment="Left"
+                                                      IsHitTestVisible="False"/>
+                                    <ToggleButton Grid.Column="1"
+                                                  IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                  Focusable="False"
+                                                  Background="Transparent"
+                                                  BorderThickness="0"
+                                                  Width="30">
+                                        <Path Data="M 0 0 L 4 4 L 8 0 Z" Fill="#666" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </ToggleButton>
+                                </Grid>
+                            </Border>
+                            <Popup IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   Placement="Bottom"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   PopupAnimation="Slide">
+                                <Border Background="White"
+                                        BorderBrush="#E0E0E0"
+                                        BorderThickness="1"
+                                        CornerRadius="8"
+                                        Margin="0,4,0,0">
+                                    <Border.Effect>
+                                        <DropShadowEffect Color="#000000" BlurRadius="16" ShadowDepth="2" Opacity="0.12"/>
+                                    </Border.Effect>
+                                    <ScrollViewer MaxHeight="200" Margin="0,4">
+                                        <ItemsPresenter/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#FF5722"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -84,42 +180,75 @@
             </Setter>
         </Style>
 
-        <!-- Card Style -->
-        <Style x:Key="CardPanel" TargetType="Border">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="CornerRadius" Value="12"/>
-            <Setter Property="Padding" Value="18"/>
-            <Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect Color="#000000" BlurRadius="12" ShadowDepth="3" Opacity="0.1"/>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!-- Modern ComboBox Style -->
-        <Style x:Key="ModernComboBox" TargetType="ComboBox">
-            <Setter Property="Background" Value="#F5F7FA"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="10,8"/>
-            <Setter Property="FontSize" Value="12"/>
-        </Style>
-
         <!-- Modern DataGrid Style -->
         <Style x:Key="ModernDataGrid" TargetType="DataGrid">
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
-            <Setter Property="AlternatingRowBackground" Value="#F9FAFB"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+            <Setter Property="AlternatingRowBackground" Value="#FAFBFC"/>
             <Setter Property="RowBackground" Value="White"/>
             <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
             <Setter Property="CanUserAddRows" Value="False"/>
             <Setter Property="CanUserDeleteRows" Value="False"/>
             <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="RowHeight" Value="48"/>
+        </Style>
+
+        <!-- DataGrid Column Header Style -->
+        <Style x:Key="ModernColumnHeader" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#F8F9FA"/>
+            <Setter Property="Foreground" Value="#495057"/>
+            <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="16,12"/>
+            <Setter Property="BorderThickness" Value="0,0,0,2"/>
+            <Setter Property="BorderBrush" Value="#E9ECEF"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+
+        <!-- DataGrid Cell Style -->
+        <Style x:Key="ModernCell" TargetType="DataGridCell">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="16,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridCell">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#FFE5E0"/>
+                    <Setter Property="Foreground" Value="#D84315"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- DataGrid Row Style -->
+        <Style x:Key="ModernRow" TargetType="DataGridRow">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FFF3F0"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#FFE5E0"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
     </Window.Resources>
     
-    <Grid Margin="20">
+    <Grid Margin="24">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -127,36 +256,68 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Header -->
-        <TextBlock Grid.Row="0" 
-                   Text="Order Management" 
-                   FontSize="28" 
-                   FontWeight="Bold" 
-                   Foreground="#2C3E50"
-                   Margin="0,0,0,15"/>
+        <!-- Header with Gradient -->
+        <Border Grid.Row="0" 
+                CornerRadius="12"
+                Margin="0,0,0,20">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#FF5722" Offset="0"/>
+                    <GradientStop Color="#FF6E40" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <Grid Margin="24,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <Ellipse Grid.Column="0" 
+                         Width="48" 
+                         Height="48" 
+                         Fill="White" 
+                         Opacity="0.2"
+                         Margin="0,0,16,0"/>
+                
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock Text="Order Management" 
+                               FontSize="24" 
+                               FontWeight="Bold" 
+                               Foreground="White"/>
+                    <TextBlock Text="Manage and track all orders in the system" 
+                               FontSize="13" 
+                               Foreground="White"
+                               Opacity="0.9"
+                               Margin="0,4,0,0"/>
+                </StackPanel>
+            </Grid>
+        </Border>
 
         <!-- Filter Panel -->
-        <Border Grid.Row="1" Style="{StaticResource CardPanel}" Margin="0,0,0,15">
+        <Border Grid.Row="1" Style="{StaticResource CardPanel}" Margin="0,0,0,20">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="180"/>
-                    <ColumnDefinition Width="15"/>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="20"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="180"/>
+                    <ColumnDefinition Width="200"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 
-                <TextBlock Grid.Column="0" 
-                           Text="Order Type:" 
-                           VerticalAlignment="Center"
-                           FontSize="13"
-                           FontWeight="SemiBold"
-                           Foreground="#555"
-                           Margin="0,0,10,0"/>
+                <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,16,0">
+                    <TextBlock Text="Order Type" 
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Foreground="#2C3E50"/>
+                    <TextBlock Text="Filter by type" 
+                               FontSize="11"
+                               Foreground="#95A5A6"
+                               Margin="0,2,0,0"/>
+                </StackPanel>
 
-                <ComboBox Grid.Column="1" 
+                <ComboBox Grid.Column="1"
                           ItemsSource="{Binding Source={StaticResource OrderTypeCollection}}"
                           SelectedItem="{Binding SelectedOrderType, Mode=TwoWay}"
                           SelectionChanged="FilterComboBox_SelectionChanged"
@@ -169,15 +330,18 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
 
-                <TextBlock Grid.Column="3" 
-                           Text="Order Status:" 
-                           VerticalAlignment="Center"
-                           FontSize="13"
-                           FontWeight="SemiBold"
-                           Foreground="#555"
-                           Margin="0,0,10,0"/>
+                <StackPanel Grid.Column="3" VerticalAlignment="Center" Margin="0,0,16,0">
+                    <TextBlock Text="Order Status" 
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Foreground="#2C3E50"/>
+                    <TextBlock Text="Filter by status" 
+                               FontSize="11"
+                               Foreground="#95A5A6"
+                               Margin="0,2,0,0"/>
+                </StackPanel>
 
-                <ComboBox Grid.Column="4" 
+                <ComboBox Grid.Column="4"
                           ItemsSource="{Binding Source={StaticResource OrderStatusCollection}}"
                           SelectedItem="{Binding SelectedOrderStatus, Mode=TwoWay}"
                           SelectionChanged="FilterComboBox_SelectionChanged"
@@ -195,8 +359,8 @@
                         Click="ClearFilters_Click"
                         Style="{StaticResource ModernButton}"
                         Background="#95A5A6"
-                        Width="130"
-                        Height="35"/>
+                        Width="140"
+                        Height="42"/>
             </Grid>
         </Border>
 
@@ -207,17 +371,20 @@
                       MouseDoubleClick="OrderList_MouseDoubleClick" 
                       IsReadOnly="True"
                       Style="{StaticResource ModernDataGrid}"
+                      ColumnHeaderStyle="{StaticResource ModernColumnHeader}"
+                      CellStyle="{StaticResource ModernCell}"
+                      RowStyle="{StaticResource ModernRow}"
                       AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Order ID" Binding="{Binding Id}" Width="80"/>
-                    <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="100"/>
-                    <DataGridTextColumn Header="Distance (km)" Binding="{Binding Distance, StringFormat=N2}" Width="110"/>
-                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120"/>
-                    <DataGridTextColumn Header="Schedule" Binding="{Binding ScheduleStatus}" Width="100"/>
-                    <DataGridTextColumn Header="Time Left" Binding="{Binding TimeLeft, StringFormat=hh\\:mm\\:ss}" Width="100"/>
-                    <DataGridTextColumn Header="Processing Time" Binding="{Binding TotalProcessingTime, StringFormat=hh\\:mm\\:ss}" Width="130"/>
-                    <DataGridTextColumn Header="Deliveries" Binding="{Binding AmountOfDeliveries}" Width="90"/>
-                    <DataGridTemplateColumn Header="Actions" Width="90">
+                    <DataGridTextColumn Header="Order ID" Binding="{Binding Id}" Width="90"/>
+                    <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="110"/>
+                    <DataGridTextColumn Header="Distance (km)" Binding="{Binding Distance, StringFormat=N2}" Width="120"/>
+                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="130"/>
+                    <DataGridTextColumn Header="Schedule" Binding="{Binding ScheduleStatus}" Width="110"/>
+                    <DataGridTextColumn Header="Time Left" Binding="{Binding TimeLeft, StringFormat=hh\\:mm\\:ss}" Width="110"/>
+                    <DataGridTextColumn Header="Processing Time" Binding="{Binding TotalProcessingTime, StringFormat=hh\\:mm\\:ss}" Width="140"/>
+                    <DataGridTextColumn Header="Deliveries" Binding="{Binding AmountOfDeliveries}" Width="100"/>
+                    <DataGridTemplateColumn Header="Actions" Width="*" MinWidth="100">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="Cancel" 
@@ -226,7 +393,7 @@
                                         Visibility="{Binding Status, Converter={StaticResource OrderStatusToCancelVisibilityConverter}}"
                                         Style="{StaticResource SmallButton}"
                                         Background="#E74C3C"
-                                        Width="75"
+                                        Width="80"
                                         Height="28"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -237,13 +404,19 @@
 
         <!-- Add Order Button -->
         <Button Grid.Row="3" 
-                Content="Add Order" 
+                Content="➕  Add New Order" 
                 Click="AddOrder_Click"
                 Style="{StaticResource ModernButton}"
-                Background="#8E44AD"
                 HorizontalAlignment="Center"
-                Width="180"
-                Height="45"
-                Margin="0,15,0,0"/>
+                Width="220"
+                Height="50"
+                Margin="0,20,0,0">
+            <Button.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#FF5722" Offset="0"/>
+                    <GradientStop Color="#FF6E40" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Background>
+        </Button>
     </Grid>
 </Window>

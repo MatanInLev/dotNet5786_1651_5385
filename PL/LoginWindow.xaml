@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Login" 
-        Height="450" 
-        Width="640"
+        Height="400" 
+        Width="550"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         Background="#F5F5F5">
 
-    <Grid Margin="60,40">
+    <Grid Margin="50,30">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
@@ -24,22 +24,22 @@
         <!-- Title -->
         <TextBlock Grid.Row="1" 
                    Text="ID" 
-                   FontSize="18" 
+                   FontSize="16" 
                    FontWeight="Normal" 
                    Foreground="#666666"
-                   Margin="0,0,0,10"
+                   Margin="0,0,0,8"
                    HorizontalAlignment="Left"/>
 
         <!-- ID Input Box -->
         <Border Grid.Row="2" 
                 Background="White" 
                 CornerRadius="25" 
-                Margin="0,0,0,10"
-                Height="60">
+                Margin="0,0,0,8"
+                Height="55">
             <TextBox x:Name="IdTextBox"
-                     FontSize="18"
+                     FontSize="16"
                      VerticalContentAlignment="Center"
-                     Padding="25,0"
+                     Padding="20,0"
                      BorderThickness="0"
                      Background="Transparent"
                      Foreground="#333333"
@@ -57,16 +57,16 @@
         <!-- Info Text -->
         <TextBlock Grid.Row="3" 
                    Text="Enter your ID to access the system." 
-                   FontSize="14" 
+                   FontSize="13" 
                    Foreground="#888888"
-                   Margin="0,0,0,30"
+                   Margin="0,0,0,25"
                    TextWrapping="Wrap"/>
 
         <!-- Connect Button -->
         <Button Grid.Row="4" 
                 Background="#FF5722" 
                 BorderThickness="0"
-                Height="70"
+                Height="60"
                 Click="ConnectButton_Click"
                 Cursor="Hand">
             <Button.Resources>
@@ -75,11 +75,11 @@
                         <Setter.Value>
                             <ControlTemplate TargetType="Button">
                                 <Border Background="{TemplateBinding Background}"
-                                        CornerRadius="35"
+                                        CornerRadius="30"
                                         BorderThickness="0">
                                     <Border.Effect>
                                         <DropShadowEffect Color="#FF5722" 
-                                                          BlurRadius="20" 
+                                                          BlurRadius="18" 
                                                           ShadowDepth="0" 
                                                           Opacity="0.4"/>
                                     </Border.Effect>
@@ -100,7 +100,7 @@
                 </Style>
             </Button.Resources>
             <TextBlock Text="Connect" 
-                       FontSize="22" 
+                       FontSize="20" 
                        FontWeight="SemiBold" 
                        Foreground="White"/>
         </Button>
