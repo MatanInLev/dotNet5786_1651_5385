@@ -67,6 +67,16 @@ namespace PL.Courier
         // Property to populate the ComboBox with Enum values
         public IEnumerable<BO.Vehicle> VehicleOptions { get; } = Enum.GetValues(typeof(BO.Vehicle)).Cast<BO.Vehicle>();
 
+        // New DP: control whether the ID TextBox is read-only (existing courier)
+        public bool IsIdReadOnly
+        {
+            get => (bool)GetValue(IsIdReadOnlyProperty);
+            set => SetValue(IsIdReadOnlyProperty, value);
+        }
+
+        public static readonly DependencyProperty IsIdReadOnlyProperty =
+            DependencyProperty.Register(nameof(IsIdReadOnly), typeof(bool), typeof(CourierWindow), new PropertyMetadata(false));
+
         #endregion
 
         public CourierWindow(int courierId = 0)
@@ -80,6 +90,9 @@ namespace PL.Courier
             InitializeComponent();
             Closed += Window_Closed;
             Loaded += Window_Loaded;
+
+            // If editing existing courier, make ID readonly in UI
+            IsIdReadOnly = courierId != 0;
 
             if (courierId != 0)
             {
@@ -99,6 +112,9 @@ namespace PL.Courier
                     StartWorkDate = s_bl.Admin.GetClock()
                 };
             }
+
+            // Update UI element states based on CurrentCourier
+            UpdateUIState();
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
@@ -108,9 +124,20 @@ namespace PL.Courier
                 if (CurrentCourier == null) return;
                 if (CurrentCourier.Id == 0)
                 {
+                    // New courier -> Cancel
                     Close();
                     return;
                 }
+
+                // Confirm with the user before attempting deletion
+                var result = MessageBox.Show($"Are you sure you want to delete courier {CurrentCourier.Id}?",
+                                             "Confirm Delete",
+                                             MessageBoxButton.YesNo,
+                                             MessageBoxImage.Question);
+
+                if (result != MessageBoxResult.Yes)
+                    return;
+
                 int adminId = s_bl.Admin.GetConfig().AdminId;
                 s_bl.Courier.Delete(adminId, CurrentCourier.Id);
                 MessageBox.Show("Courier deleted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -135,6 +162,14 @@ namespace PL.Courier
             try
             {
                 if (CurrentCourier == null) return;
+
+                // Local validation before calling BL to give faster feedback
+                var validationError = ValidateBeforeSave(CurrentCourier, ButtonText == "Add");
+                if (validationError != null)
+                {
+                    MessageBox.Show(validationError, "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
 
                 int adminId = s_bl.Admin.GetConfig().AdminId;
 
@@ -182,6 +217,8 @@ namespace PL.Courier
                     s_bl.Courier.Update(adminId, CurrentCourier);
                     MessageBox.Show("Courier updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
+                // Refresh UI state after operation
+                UpdateUIState();
                 Close();
             }
             catch (BlDoesNotExistException ex)
@@ -217,6 +254,7 @@ namespace PL.Courier
                 {
                     int adminId = s_bl.Admin.GetConfig().AdminId; 
                     CurrentCourier = s_bl.Courier.Get(adminId, CurrentCourier!.Id);
+                    UpdateUIState();
                 }
                 catch (Exception)
                 {
@@ -282,6 +320,55 @@ namespace PL.Courier
         ~CourierWindow()
         {
             Dispose();
+        }
+
+        /// <summary>
+        /// Validate input locally before sending to BL.
+        /// BL still performs full validation and will throw if invalid.
+        /// Returns null if OK or an error message to show to user.
+        /// </summary>
+        private string? ValidateBeforeSave(BO.Courier c, bool isAdd)
+        {
+            if (isAdd)
+            {
+                if (c.Id <= 0)
+                    return "ID (T\"Z) must be a positive integer for new courier.";
+            }
+
+            if (string.IsNullOrWhiteSpace(c.Name))
+                return "Full name is required.";
+
+            if (string.IsNullOrWhiteSpace(c.Phone))
+                return "Phone is required.";
+
+            // Simple phone format: 10 digits starting with '0'
+            var phone = c.Phone.Trim();
+            if (phone.Length != 10 || phone[0] != '0' || !phone.All(char.IsDigit))
+                return "Phone must be 10 digits and start with '0'.";
+
+            if (c.MaxDistance.HasValue && c.MaxDistance < 0)
+                return "Max distance cannot be negative.";
+
+            return null;
+        }
+
+        /// <summary>
+        /// Update UI enabled/readonly states based on CurrentCourier values.
+        /// </summary>
+        private void UpdateUIState()
+        {
+            // If controls not yet loaded, nothing to do
+            if (!IsLoaded) return;
+
+            // Delete enabled only for existing courier (Id != 0)
+            if (btnDelete != null)
+                btnDelete.IsEnabled = (CurrentCourier != null && CurrentCourier.Id != 0);
+
+            // Vehicle selection disabled if courier currently has an order in progress
+            if (cmbVehicle != null)
+                cmbVehicle.IsEnabled = !(CurrentCourier?.OrderInProgress != null);
+
+            // ID TextBox read-only already bound to IsIdReadOnly property
         }
     }
 }

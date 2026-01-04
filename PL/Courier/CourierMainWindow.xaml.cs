@@ -1,81 +1,82 @@
+using System.Linq;
 using System.Windows;
 
-namespace PL.Courier;
-public partial class CourierMainWindow : Window
+namespace PL.Courier
 {
-    private static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-
-    public BO.Courier? CurrentCourier
+    public partial class CourierMainWindow : Window
     {
-        get => (BO.Courier?)GetValue(CurrentCourierProperty);
-        set => SetValue(CurrentCourierProperty, value);
-    }
+        private static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
 
-    public static readonly DependencyProperty CurrentCourierProperty =
-        DependencyProperty.Register(nameof(CurrentCourier), typeof(BO.Courier), typeof(CourierMainWindow), new PropertyMetadata(null));
+        private int _userId = 0;
+        private int _courierId = 0;
 
-    public BO.OrderInProgress? CurrentOrderInProgress
-    {
-        get => (BO.OrderInProgress?)GetValue(CurrentOrderInProgressProperty);
-        set => SetValue(CurrentOrderInProgressProperty, value);
-    }
-
-    public static readonly DependencyProperty CurrentOrderInProgressProperty =
-        DependencyProperty.Register(nameof(CurrentOrderInProgress), typeof(BO.OrderInProgress), typeof(CourierMainWindow), new PropertyMetadata(null));
-
-    public CourierMainWindow(int courierId = 0)
-    {
-        InitializeComponent();
-        DataContext = this;
-
-        if (courierId != 0)
+        public BO.Courier? CurrentCourier
         {
+            get => (BO.Courier?)GetValue(CurrentCourierProperty);
+            set => SetValue(CurrentCourierProperty, value);
+        }
+
+        public static readonly DependencyProperty CurrentCourierProperty =
+            DependencyProperty.Register(nameof(CurrentCourier), typeof(BO.Courier), typeof(CourierMainWindow), new PropertyMetadata(null));
+
+        public BO.OrderInProgress? CurrentOrderInProgress
+        {
+            get => (BO.OrderInProgress?)GetValue(CurrentOrderInProgressProperty);
+            set => SetValue(CurrentOrderInProgressProperty, value);
+        }
+
+        public static readonly DependencyProperty CurrentOrderInProgressProperty =
+            DependencyProperty.Register(nameof(CurrentOrderInProgress), typeof(BO.OrderInProgress), typeof(CourierMainWindow), new PropertyMetadata(null));
+
+        public CourierMainWindow()
+        {
+            InitializeComponent();
+            DataContext = this;
+
             try
             {
                 int adminId = s_bl.Admin.GetConfig().AdminId;
-                CurrentCourier = s_bl.Courier.Get(adminId, courierId);
-                CurrentOrderInProgress = null; // Explicitly set to null, no method to fetch order in progress
+                _userId = adminId;
+
+                var firstCourier = s_bl.Courier.GetList(adminId).FirstOrDefault();
+                if (firstCourier != null)
+                {
+                    _courierId = firstCourier.Id;
+                    CurrentCourier = s_bl.Courier.Get(_userId, _courierId);
+                }
+            }
+            catch
+            {
+                // ignore
+            }
+        }
+
+        public CourierMainWindow(int userId, int courierId)
+            : this()
+        {
+            _userId = userId;
+            _courierId = courierId;
+
+            try
+            {
+                CurrentCourier = s_bl.Courier.Get(_userId, _courierId);
             }
             catch
             {
                 CurrentCourier = null;
-                CurrentOrderInProgress = null;
             }
         }
-    }
 
-    private void BtnUpdateCourier_Click(object sender, RoutedEventArgs e)
-    {
-        if (CurrentCourier == null)
+        private void BtnHistory_Click(object sender, RoutedEventArgs e)
         {
-            new CourierWindow().Show();
-            return;
+            MessageBox.Show("Open delivery history (not implemented)", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
         }
-        new CourierWindow(CurrentCourier.Id).Show(); 
-    }
 
-    private void BtnSelectOrder_Click(object sender, RoutedEventArgs e)
-    {
-        new CourierListWindow().Show();
-    }
-
-    private void BtnHistory_Click(object sender, RoutedEventArgs e)
-    {
-        MessageBox.Show("Open delivery history (not implemented)", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-    }
-
-    private void BtnFinishHandling_Click(object sender, RoutedEventArgs e)
-    {
-        MessageBox.Show("Finish handling clicked", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-    }
-
-    private void BtnHandlingDetails_Click(object sender, RoutedEventArgs e)
-    {
-        MessageBox.Show("Handling details clicked", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-    }
-
-    private void BtnMarkCompleted_Click(object sender, RoutedEventArgs e)
-    {
-        MessageBox.Show("Mark as delivery completed clicked", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+        private void BtnOrderSelection_Click(object sender, RoutedEventArgs e)
+        {
+            // Open OrderListWindow (selection of orders) as required by the spec
+            var ordersWin = new PL.Order.OrderListWindow();
+            ordersWin.Show();
+        }
     }
 }

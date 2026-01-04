@@ -39,7 +39,7 @@ static class XMLTools
                 new XmlSerializer(typeof(List<T>)).Serialize(file, list);
                 return; // Success
             }
-            catch (IOException ex) when (attempt < maxRetries - 1)
+            catch (IOException) when (attempt < maxRetries - 1)
             {
                 // File is locked, retry
                 continue;
