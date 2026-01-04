@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Windows;
 
-namespace PL.Courier
+namespace PL
 {
     public partial class CourierMainWindow : Window
     {
@@ -75,7 +75,7 @@ namespace PL.Courier
         private void BtnOrderSelection_Click(object sender, RoutedEventArgs e)
         {
             // Open OrderListWindow (selection of orders) as required by the spec
-            var ordersWin = new PL.Order.OrderListWindow();
+            var ordersWin = new Order.OrderListWindow();
             ordersWin.Show();
         }
     }
