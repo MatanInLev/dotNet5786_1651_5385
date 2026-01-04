@@ -24,8 +24,8 @@
         <TextBlock Text="Closed Deliveries History" FontSize="18" FontWeight="Bold" Margin="0,0,0,8"/>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,6,0,12">
-            <TextBlock Text="Type:" VerticalAlignment="Center" Margin="0,0,6,0" />
-            <ComboBox Name="cmbType" Width="160" Margin="0,0,12,0" SelectionChanged="Filter_SelectionChanged">
+            <TextBlock Text="Type:" VerticalAlignment="Center"/>
+            <ComboBox Name="cmbType" Width="140" SelectionChanged="Filter_SelectionChanged" Margin="6,0,0,0">
                 <ComboBox.ItemsSource>
                     <CompositeCollection>
                         <ComboBoxItem Content="All" />
@@ -34,13 +34,23 @@
                 </ComboBox.ItemsSource>
             </ComboBox>
 
-            <TextBlock Text="End Status:" VerticalAlignment="Center" Margin="0,0,6,0" />
-            <ComboBox Name="cmbEndStatus" Width="160" SelectionChanged="Filter_SelectionChanged">
+            <TextBlock Text="End Status:" VerticalAlignment="Center" Margin="8,0,0,0" />
+            <ComboBox Name="cmbEndStatus" Width="140" SelectionChanged="Filter_SelectionChanged" Margin="6,0,0,0">
                 <ComboBoxItem Content="All" />
                 <ComboBoxItem Content="Delivered" />
                 <ComboBoxItem Content="Refused" />
                 <ComboBoxItem Content="Canceled" />
             </ComboBox>
+
+            <TextBlock Text="Sort:" VerticalAlignment="Center" Margin="8,0,0,0" />
+            <ComboBox Name="cmbSort" Width="150" SelectionChanged="Filter_SelectionChanged" Margin="6,0,0,0">
+                <ComboBoxItem Content="Schedule" Tag="schedule" />
+                <ComboBoxItem Content="Processing Time" Tag="processing" />
+                <ComboBoxItem Content="Distance" Tag="distance" />
+                <ComboBoxItem Content="End Status" Tag="status" />
+            </ComboBox>
+
+            <Button Content="Refresh" Width="90" Margin="8,0,0,0" Click="Refresh_Click"/>
         </StackPanel>
 
         <DataGrid Grid.Row="2" ItemsSource="{Binding ClosedDeliveries}" AutoGenerateColumns="False" IsReadOnly="True">

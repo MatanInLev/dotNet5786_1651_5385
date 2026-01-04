@@ -395,6 +395,13 @@ internal static class OrderManager
         // ...
 
         DO.Courier? courier = s_dal.Courier.Read(courierId);
+        if (courier == null)
+            throw new BO.BlDoesNotExistException($"Courier {courierId} not found");
+
+        DO.Order? order = s_dal.Order.Read(orderId);
+        if (order == null)
+            throw new BO.BlDoesNotExistException($"Order {orderId} not found");
+
         DO.Delivery newDelivery = new DO.Delivery
         {
             Id = 0,
@@ -407,6 +414,9 @@ internal static class OrderManager
         };
 
         s_dal.Delivery.Create(newDelivery);
+        
+        // Try sending an email notification to the courier (non-blocking, best-effort)
+        EmailSender.TrySendOrderAssignedEmail(courier, order);
         
         // Notify order observers
         Observers.NotifyItemUpdated(orderId);
@@ -684,6 +694,10 @@ internal static class OrderManager
                 Type = (BO.OrderType)item.Order.OrderType,
                 CustomerAddress = item.Order.Address,
                 DistanceFromCompany = aerialDist,
+                Latitude = item.Order.Latitude,
+                Longitude = item.Order.Longitude,
+                CompanyLatitude = companyLat,
+                CompanyLongitude = companyLon,
 
                 // ActualDistance/EstimatedTime would require API calculation. 
                 // For "List" views, we usually keep these null or basic unless async calc is active.

@@ -700,4 +700,14 @@
     <EndOfDelivery>Canceled</EndOfDelivery>
     <EndTime>2026-04-01T17:57:48</EndTime>
   </Delivery>
+  <Delivery>
+    <Id>3305</Id>
+    <OrderId>5401</OrderId>
+    <CourierId>390269490</CourierId>
+    <VehicleType>Bike</VehicleType>
+    <StartTime>2026-04-01T17:10:00</StartTime>
+    <Distance>5.2</Distance>
+    <EndOfDelivery>Delivered</EndOfDelivery>
+    <EndTime>2026-04-01T17:35:00</EndTime>
+  </Delivery>
 </ArrayOfDelivery>

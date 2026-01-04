@@ -35,6 +35,14 @@ public class OpenOrderInList
     /// <summary>Maximum allowed delivery date/time for the order.</summary>
     public DateTime MaxDeliveryDate { get; init; }
 
+    public double Latitude { get; init; }
+
+    public double Longitude { get; init; }
+
+    public double CompanyLatitude { get; init; }
+
+    public double CompanyLongitude { get; init; }
+
     /// <summary>Returns a textual representation of the object for debugging/logging.</summary>
     public override string ToString() => this.ToStringProperty();
 }
