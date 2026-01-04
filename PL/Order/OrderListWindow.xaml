@@ -342,6 +342,7 @@
                 </StackPanel>
 
                 <ComboBox Grid.Column="4"
+                          x:Name="cmbOrderStatus"
                           ItemsSource="{Binding Source={StaticResource OrderStatusCollection}}"
                           SelectedItem="{Binding SelectedOrderStatus, Mode=TwoWay}"
                           SelectionChanged="FilterComboBox_SelectionChanged"
