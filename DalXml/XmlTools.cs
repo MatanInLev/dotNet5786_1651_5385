@@ -4,6 +4,7 @@ using DO;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using System.Globalization;
 
 static class XMLTools
 {
@@ -157,7 +158,7 @@ static class XMLTools
     public static void SetConfigDoubleVal(string xmlFileName, string elemName, double elemVal)
     {
         XElement root = XMLTools.LoadListFromXMLElement(xmlFileName);
-        root.Element(elemName)?.SetValue((elemVal).ToString());
+        root.Element(elemName)?.SetValue((elemVal).ToString(CultureInfo.InvariantCulture));
         XMLTools.SaveListToXMLElement(root, xmlFileName);
     }
     public static void SetConfigTimeSpanVal(string xmlFileName, string elemName, TimeSpan elemVal)
@@ -170,20 +171,35 @@ static class XMLTools
     {
         XElement root = XMLTools.LoadListFromXMLElement(xmlFileName);
         string str = root.Element(elemName)?.Value ?? throw new FormatException($"can't convert: {xmlFileName}, {elemName} (element is null)");
-        return TimeSpan.Parse(str);
+        return TimeSpan.Parse(str, CultureInfo.InvariantCulture);
     }
     #endregion
 
 
     #region ExtensionFuctions
-    public static T? ToEnumNullable<T>(this XElement element, string name) where T : struct, Enum =>
-        Enum.TryParse<T>((string?)element.Element(name), out var result) ? (T?)result : null;
-    public static DateTime? ToDateTimeNullable(this XElement element, string name) =>
-        DateTime.TryParse((string?)element.Element(name), out var result) ? (DateTime?)result : null;
-    public static double? ToDoubleNullable(this XElement element, string name) =>
-        double.TryParse((string?)element.Element(name), out var result) ? (double?)result : null;
-    public static int? ToIntNullable(this XElement element, string name) =>
-        int.TryParse((string?)element.Element(name), out var result) ? (int?)result : null;
+    public static T? ToEnumNullable<T>(this XElement element, string name) where T : struct, Enum
+        => Enum.TryParse<T>((string?)element.Element(name), out var result) ? (T?)result : null;
+
+    public static DateTime? ToDateTimeNullable(this XElement element, string name)
+    {
+        string? v = element.Element(name)?.Value;
+        if (string.IsNullOrWhiteSpace(v)) return null;
+        return DateTime.TryParse(v, CultureInfo.InvariantCulture, DateTimeStyles.None, out var result) ? (DateTime?)result : null;
+    }
+
+    public static double? ToDoubleNullable(this XElement element, string name)
+    {
+        string? v = element.Element(name)?.Value;
+        if (string.IsNullOrWhiteSpace(v)) return null;
+        return double.TryParse(v, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out var result) ? (double?)result : null;
+    }
+
+    public static int? ToIntNullable(this XElement element, string name)
+    {
+        string? v = element.Element(name)?.Value;
+        if (string.IsNullOrWhiteSpace(v)) return null;
+        return int.TryParse(v, NumberStyles.Integer, CultureInfo.InvariantCulture, out var result) ? (int?)result : null;
+    }
     #endregion
 
 }
