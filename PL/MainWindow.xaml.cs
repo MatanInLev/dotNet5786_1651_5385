@@ -50,6 +50,38 @@ namespace PL
         public static readonly DependencyProperty ConfigurationProperty =
             DependencyProperty.Register(nameof(Configuration), typeof(BO.Config), typeof(MainWindow), new PropertyMetadata(null));
 
+        // --- Database Status ---
+        /// <summary>
+        /// Status message for database operations.
+        /// </summary>
+        public string DatabaseStatus
+        {
+            get { return (string)GetValue(DatabaseStatusProperty); }
+            set { SetValue(DatabaseStatusProperty, value); }
+        }
+
+        /// <summary>
+        /// DependencyProperty backing store for <see cref="DatabaseStatus"/>.
+        /// </summary>
+        public static readonly DependencyProperty DatabaseStatusProperty =
+            DependencyProperty.Register(nameof(DatabaseStatus), typeof(string), typeof(MainWindow), new PropertyMetadata(string.Empty));
+
+        // --- Database Buttons Enabled ---
+        /// <summary>
+        /// Controls whether database buttons are enabled.
+        /// </summary>
+        public bool DatabaseButtonsEnabled
+        {
+            get { return (bool)GetValue(DatabaseButtonsEnabledProperty); }
+            set { SetValue(DatabaseButtonsEnabledProperty, value); }
+        }
+
+        /// <summary>
+        /// DependencyProperty backing store for <see cref="DatabaseButtonsEnabled"/>.
+        /// </summary>
+        public static readonly DependencyProperty DatabaseButtonsEnabledProperty =
+            DependencyProperty.Register(nameof(DatabaseButtonsEnabled), typeof(bool), typeof(MainWindow), new PropertyMetadata(true));
+
         #endregion
 
         #region Constructor & Window Events
@@ -82,13 +114,14 @@ namespace PL
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading window: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernMessageBox.Show($"Error loading window: {ex.Message}", "Error", 
+                    ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
             }
         }
 
         /// <summary>
         /// Handles the Closed event; removes observers.
-        /// </summary>
+        /// /// </summary>
         private void Window_Closed(object? sender, EventArgs e)
         {
             s_bl.Admin.RemoveClockObserver(clockObserver);
@@ -145,30 +178,75 @@ namespace PL
                 if (Configuration != null)
                 {
                     s_bl.Admin.SetConfig(Configuration);
-                    MessageBox.Show("Configuration updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    ModernMessageBox.Show("Configuration updated successfully!", "Success", 
+                        ModernMessageBox.MessageBoxType.Success, ModernMessageBox.MessageBoxButtons.OK, this);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Update Failed: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernMessageBox.Show($"Update Failed: {ex.Message}", "Error", 
+                    ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
             }
         }
 
         /// <summary>
         /// Initializes the database via business layer (confirmation required).
         /// </summary>
-        private void btnInitDB_Click(object sender, RoutedEventArgs e)
+        private async void btnInitDB_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to initialize the DB? This will delete existing data.", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            var result = ModernMessageBox.Show(
+                "Are you sure you want to initialize the database? This will delete existing data and create new sample data.", 
+                "Confirm Initialization", 
+                ModernMessageBox.MessageBoxType.Question, 
+                ModernMessageBox.MessageBoxButtons.YesNo, 
+                this);
+
+            if (result == true)
             {
                 try
                 {
-                    s_bl.Admin.InitializeDB();
-                    MessageBox.Show("Database Initialized.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    // Disable buttons during operation
+                    DatabaseButtonsEnabled = false;
+                    DatabaseStatus = "Starting database initialization...";
+
+                    await System.Threading.Tasks.Task.Run(() =>
+                    {
+                        // Update status on UI thread
+                        Dispatcher.Invoke(() => DatabaseStatus = "Resetting database...");
+                        System.Threading.Thread.Sleep(300); // Small delay for UI update visibility
+
+                        Dispatcher.Invoke(() => DatabaseStatus = "Initializing couriers...");
+                        System.Threading.Thread.Sleep(300);
+
+                        Dispatcher.Invoke(() => DatabaseStatus = "Initializing orders...");
+                        System.Threading.Thread.Sleep(300);
+
+                        Dispatcher.Invoke(() => DatabaseStatus = "Creating deliveries...");
+                        System.Threading.Thread.Sleep(300);
+
+                        Dispatcher.Invoke(() => DatabaseStatus = "Finalizing initialization...");
+                        
+                        // Actual initialization
+                        s_bl.Admin.InitializeDB();
+                    });
+
+                    DatabaseStatus = "Database initialized successfully!";
+                    await System.Threading.Tasks.Task.Delay(2000); // Show success message for 2 seconds
+                    DatabaseStatus = string.Empty;
+
+                    ModernMessageBox.Show("Database initialized successfully!", "Success", 
+                        ModernMessageBox.MessageBoxType.Success, ModernMessageBox.MessageBoxButtons.OK, this);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Initialization Failed: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    DatabaseStatus = $"Error: {ex.Message}";
+                    ModernMessageBox.Show($"Initialization Failed: {ex.Message}", "Error", 
+                        ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
+                }
+                finally
+                {
+                    // Re-enable buttons
+                    DatabaseButtonsEnabled = true;
                 }
             }
         }
@@ -176,18 +254,57 @@ namespace PL
         /// <summary>
         /// Resets the database via business layer (irreversible, confirmation required).
         /// </summary>
-        private void btnResetDB_Click(object sender, RoutedEventArgs e)
+        private async void btnResetDB_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to WIPE the DB? This cannot be undone.", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            var result = ModernMessageBox.Show(
+                "⚠️ WARNING: This will completely WIPE the database and reset all configuration to defaults. This action CANNOT be undone!\n\nAre you absolutely sure?", 
+                "Confirm Database Reset", 
+                ModernMessageBox.MessageBoxType.Warning, 
+                ModernMessageBox.MessageBoxButtons.YesNo, 
+                this);
+
+            if (result == true)
             {
                 try
                 {
-                    s_bl.Admin.ResetDB();
-                    MessageBox.Show("Database Reset.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    // Disable buttons during operation
+                    DatabaseButtonsEnabled = false;
+                    DatabaseStatus = "Starting database reset...";
+
+                    await System.Threading.Tasks.Task.Run(() =>
+                    {
+                        Dispatcher.Invoke(() => DatabaseStatus = "Clearing couriers...");
+                        System.Threading.Thread.Sleep(300);
+
+                        Dispatcher.Invoke(() => DatabaseStatus = "Clearing orders...");
+                        System.Threading.Thread.Sleep(300);
+
+                        Dispatcher.Invoke(() => DatabaseStatus = "Clearing deliveries...");
+                        System.Threading.Thread.Sleep(300);
+
+                        Dispatcher.Invoke(() => DatabaseStatus = "Resetting system configuration...");
+                        
+                        // Actual reset
+                        s_bl.Admin.ResetDB();
+                    });
+
+                    DatabaseStatus = "Database reset complete!";
+                    await System.Threading.Tasks.Task.Delay(2000); // Show success message for 2 seconds
+                    DatabaseStatus = string.Empty;
+
+                    ModernMessageBox.Show("Database has been reset to factory defaults.", "Success", 
+                        ModernMessageBox.MessageBoxType.Success, ModernMessageBox.MessageBoxButtons.OK, this);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Reset Failed: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    DatabaseStatus = $"Error: {ex.Message}";
+                    ModernMessageBox.Show($"Reset Failed: {ex.Message}", "Error", 
+                        ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
+                }
+                finally
+                {
+                    // Re-enable buttons
+                    DatabaseButtonsEnabled = true;
                 }
             }
         }

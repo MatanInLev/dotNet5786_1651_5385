@@ -7,11 +7,13 @@ using System.Windows;
 
 namespace PL.Courier
 {
-    public partial class CourierWindow : Window
+    public partial class CourierWindow : Window, IDisposable
     {
         static readonly IBl s_bl = Factory.Get();
 
-        private BO.Courier? _originalCourier; // the source object from BL (for existing courier)
+        private BO.Courier? _originalCourier;
+        private bool _observerRegistered = false;
+        private bool _disposed = false;
 
         #region Dependency Properties
 
@@ -144,10 +146,47 @@ namespace PL.Courier
                 }
                 else
                 {
+                    // Check if courier is being deactivated and has active deliveries
+                    if (_originalCourier != null && _originalCourier.IsActive && !CurrentCourier.IsActive)
+                    {
+                        if (CurrentCourier.OrderInProgress != null)
+                        {
+                            var result = MessageBox.Show(
+                                $"This courier is currently delivering Order #{CurrentCourier.OrderInProgress.OrderId}.\n\n" +
+                                "Deactivating will cancel this active delivery.\n\n" +
+                                "Are you sure you want to continue?",
+                                "Confirm Deactivation",
+                                MessageBoxButton.YesNo,
+                                MessageBoxImage.Warning);
+
+                            if (result != MessageBoxResult.Yes)
+                            {
+                                return; // User cancelled
+                            }
+                        }
+                        else
+                        {
+                            var result = MessageBox.Show(
+                                $"Are you sure you want to deactivate courier {CurrentCourier.Name}?",
+                                "Confirm Deactivation",
+                                MessageBoxButton.YesNo,
+                                MessageBoxImage.Question);
+
+                            if (result != MessageBoxResult.Yes)
+                            {
+                                return; // User cancelled
+                            }
+                        }
+                    }
+
                     s_bl.Courier.Update(adminId, CurrentCourier);
                     MessageBox.Show("Courier updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 Close();
+            }
+            catch (BlDoesNotExistException ex)
+            {
+                MessageBox.Show($"Not Found: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             catch (BlInvalidValueException ex)
             {
@@ -155,11 +194,16 @@ namespace PL.Courier
             }
             catch (BlAlreadyExistsException ex)
             {
-                MessageBox.Show($"ID already exists: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"ID Already Exists: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (BlBaseException ex)
+            {
+                MessageBox.Show($"Business Logic Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"An unexpected error occurred. Please try again or contact support.\n\nDetails: {ex.Message}", 
+                    "Unexpected Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -185,15 +229,13 @@ namespace PL.Courier
         {
             if (CurrentCourier != null && CurrentCourier.Id != 0)
             {
-                s_bl.Courier.AddObserver(CurrentCourier.Id, CourierObserver);
+                (s_bl.Courier as IObservable)?.AddObserver(CurrentCourier.Id, CourierObserver);
+                _observerRegistered = true;
             }
         }
         private void Window_Closed(object? sender, EventArgs e)
         {
-            if (CurrentCourier != null && CurrentCourier.Id != 0)
-            {
-                s_bl.Courier.RemoveObserver(CurrentCourier.Id, CourierObserver);
-            }
+            Dispose();
         }
 
         private BO.Courier CloneCourier(BO.Courier src)
@@ -216,9 +258,30 @@ namespace PL.Courier
             };
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        public void Dispose()
         {
+            if (_disposed) return;
 
+            if (_observerRegistered && CurrentCourier != null && CurrentCourier.Id != 0)
+            {
+                try
+                {
+                    (s_bl.Courier as IObservable)?.RemoveObserver(CurrentCourier.Id, CourierObserver);
+                }
+                catch
+                {
+                    // Silently ignore errors during cleanup
+                }
+                _observerRegistered = false;
+            }
+
+            _disposed = true;
+            GC.SuppressFinalize(this);
+        }
+
+        ~CourierWindow()
+        {
+            Dispose();
         }
     }
 }

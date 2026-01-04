@@ -99,13 +99,12 @@ namespace PL.Courier
 
             if (selectedItem == null) return;
 
-            // 2. Open the window
-            // We keep the Dispatcher to be safe, but 'e.Handled = true' usually fixes the main crash.
+            // 2. Open the window modally
             Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.ApplicationIdle, new Action(() =>
             {
                 try
                 {
-                    new CourierWindow(selectedItem.Id).Show();
+                    new CourierWindow(selectedItem.Id).ShowDialog();
                 }
                 catch (Exception ex)
                 {
@@ -113,9 +112,17 @@ namespace PL.Courier
                 }
             }));
         }
+        
         private void addCourierButton_Click(object sender, RoutedEventArgs e)
         {
-            new CourierWindow().Show();
+            try
+            {
+                new CourierWindow().ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

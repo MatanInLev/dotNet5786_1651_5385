@@ -120,7 +120,7 @@ namespace PL.Order
             {
                 try
                 {
-                    new OrderWindow(selectedItem.Id).Show();
+                    new OrderWindow(selectedItem.Id).ShowDialog();
                 }
                 catch (Exception ex)
                 {
@@ -136,7 +136,7 @@ namespace PL.Order
         {
             try
             {
-                new OrderWindow().Show();
+                new OrderWindow().ShowDialog();
             }
             catch (Exception ex)
             {

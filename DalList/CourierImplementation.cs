@@ -44,14 +44,18 @@ internal class CourierImplementation : ICourier
     /// <remarks>
     /// - The provided instance is appended directly to the in-memory collection; a defensive copy is not created.
     /// - The method does not auto-generate an Id; callers must supply a unique Id.
+    /// - Thread-safe: uses DataSource.CouriersLock for synchronization.
     /// </remarks>
     public void Create(Courier item)
     {
-        if (DataSource.Couriers.FirstOrDefault(c => c.Id == item.Id) != null)
+        lock (DataSource.CouriersLock)
         {
-            throw new DalAlreadyExistsException($"An object of type courier with ID: {item.Id} already exist.");
+            if (DataSource.Couriers.FirstOrDefault(c => c.Id == item.Id) != null)
+            {
+                throw new DalAlreadyExistsException($"An object of type courier with ID: {item.Id} already exist.");
+            }
+            DataSource.Couriers.Add(item);
         }
-        DataSource.Couriers.Add(item);
     }
 
     /// <summary>
@@ -62,18 +66,20 @@ internal class CourierImplementation : ICourier
     /// <exception cref="DalDoesNotExistException">
     /// Thrown when no courier with the provided id exists.
     /// </exception>
+    /// <remarks>
+    /// Thread-safe: uses DataSource.CouriersLock for synchronization.
+    /// </remarks>
     public void Delete(int id)
-
     {
+        lock (DataSource.CouriersLock)
+        {
+            int index = DataSource.Couriers.FindIndex(Courier => Courier.Id == id);
 
-        int index = DataSource.Couriers.FindIndex(Courier => Courier.Id == id);
+            if (index == -1)
+                throw new DalDoesNotExistException($"An object of type courier with ID: {id} does not exist.");
 
-        if (index == -1)
-
-            throw new DalDoesNotExistException($"An object of type courier with ID: {id} does not exist.");
-
-        DataSource.Couriers.RemoveAt(index);
-
+            DataSource.Couriers.RemoveAt(index);
+        }
     }
 
     /// <summary>
@@ -82,10 +88,14 @@ internal class CourierImplementation : ICourier
     /// <remarks>
     /// Clears the entire <c>DataSource.Couriers</c> list. This operation is global and cannot be undone.
     /// Use only when you intend to reset the entire courier dataset for the process.
+    /// Thread-safe: uses DataSource.CouriersLock for synchronization.
     /// </remarks>
     public void DeleteAll()
     {
-        DataSource.Couriers.Clear();
+        lock (DataSource.CouriersLock)
+        {
+            DataSource.Couriers.Clear();
+        }
     }
 
     /// <summary>

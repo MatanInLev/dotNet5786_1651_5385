@@ -7,8 +7,9 @@
         xmlns:bo="clr-namespace:BO;assembly=BL"
         xmlns:pl="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="Order Management" Height="700" Width="1000"
+        Title="Order Management" Height="750" Width="1100"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Background="#F5F7FA"
         WindowStartupLocation="CenterScreen">
     
     <Window.Resources>
@@ -27,9 +28,98 @@
                 <x:Type TypeName="bo:OrderType"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+
+        <!-- Modern Button Template -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                BorderThickness="0"
+                                Padding="12,8">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" Value="0.8"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+
+        <!-- Small Button Style -->
+        <Style x:Key="SmallButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                BorderThickness="0"
+                                Padding="8,5">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" Value="0.8"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Card Style -->
+        <Style x:Key="CardPanel" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="18"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#000000" BlurRadius="12" ShadowDepth="3" Opacity="0.1"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Modern ComboBox Style -->
+        <Style x:Key="ModernComboBox" TargetType="ComboBox">
+            <Setter Property="Background" Value="#F5F7FA"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+
+        <!-- Modern DataGrid Style -->
+        <Style x:Key="ModernDataGrid" TargetType="DataGrid">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="AlternatingRowBackground" Value="#F9FAFB"/>
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="CanUserDeleteRows" Value="False"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
     </Window.Resources>
     
-    <Grid Margin="10">
+    <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -37,28 +127,41 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Title -->
-        <Label Grid.Row="0" Content="Orders Management" FontSize="28" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+        <!-- Header -->
+        <TextBlock Grid.Row="0" 
+                   Text="Order Management" 
+                   FontSize="28" 
+                   FontWeight="Bold" 
+                   Foreground="#2C3E50"
+                   Margin="0,0,0,15"/>
 
         <!-- Filter Panel -->
-        <GroupBox Grid.Row="1" Header="Filters" Margin="0,0,0,10">
+        <Border Grid.Row="1" Style="{StaticResource CardPanel}" Margin="0,0,0,15">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="200"/>
-                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="180"/>
+                    <ColumnDefinition Width="15"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="180"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 
-                <Label Grid.Column="0" Content="Order Type:" VerticalAlignment="Center" Margin="5"/>
+                <TextBlock Grid.Column="0" 
+                           Text="Order Type:" 
+                           VerticalAlignment="Center"
+                           FontSize="13"
+                           FontWeight="SemiBold"
+                           Foreground="#555"
+                           Margin="0,0,10,0"/>
+
                 <ComboBox Grid.Column="1" 
                           ItemsSource="{Binding Source={StaticResource OrderTypeCollection}}"
                           SelectedItem="{Binding SelectedOrderType, Mode=TwoWay}"
                           SelectionChanged="FilterComboBox_SelectionChanged"
-                          VerticalAlignment="Center" Margin="5">
+                          Style="{StaticResource ModernComboBox}"
+                          VerticalAlignment="Center">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding}"/>
@@ -66,12 +169,20 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
 
-                <Label Grid.Column="3" Content="Order Status:" VerticalAlignment="Center" Margin="5"/>
+                <TextBlock Grid.Column="3" 
+                           Text="Order Status:" 
+                           VerticalAlignment="Center"
+                           FontSize="13"
+                           FontWeight="SemiBold"
+                           Foreground="#555"
+                           Margin="0,0,10,0"/>
+
                 <ComboBox Grid.Column="4" 
                           ItemsSource="{Binding Source={StaticResource OrderStatusCollection}}"
                           SelectedItem="{Binding SelectedOrderStatus, Mode=TwoWay}"
                           SelectionChanged="FilterComboBox_SelectionChanged"
-                          VerticalAlignment="Center" Margin="5">
+                          Style="{StaticResource ModernComboBox}"
+                          VerticalAlignment="Center">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding}"/>
@@ -79,55 +190,60 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
 
-                <Button Grid.Column="6" Content="Clear Filters" Width="100" Height="30" 
-                        Click="ClearFilters_Click" Margin="5"/>
+                <Button Grid.Column="6" 
+                        Content="Clear Filters" 
+                        Click="ClearFilters_Click"
+                        Style="{StaticResource ModernButton}"
+                        Background="#95A5A6"
+                        Width="130"
+                        Height="35"/>
             </Grid>
-        </GroupBox>
+        </Border>
 
         <!-- DataGrid -->
-        <DataGrid Grid.Row="2" 
-                  ItemsSource="{Binding OrderList}" 
-                  SelectedItem="{Binding SelectedOrder}" 
-                  MouseDoubleClick="OrderList_MouseDoubleClick" 
-                  IsReadOnly="True"
-                  AutoGenerateColumns="False"
-                  CanUserAddRows="False"
-                  CanUserDeleteRows="False"
-                  SelectionMode="Single"
-                  AlternatingRowBackground="LightGray"
-                  GridLinesVisibility="Horizontal">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Order ID" Binding="{Binding Id}" Width="80"/>
-                <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="100"/>
-                <DataGridTextColumn Header="Distance (km)" Binding="{Binding Distance, StringFormat=N2}" Width="100"/>
-                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120"/>
-                <DataGridTextColumn Header="Schedule" Binding="{Binding ScheduleStatus}" Width="100"/>
-                <DataGridTextColumn Header="Time Left" Binding="{Binding TimeLeft, StringFormat=hh\\:mm\\:ss}" Width="100"/>
-                <DataGridTextColumn Header="Processing Time" Binding="{Binding TotalProcessingTime, StringFormat=hh\\:mm\\:ss}" Width="120"/>
-                <DataGridTextColumn Header="Deliveries" Binding="{Binding AmountOfDeliveries}" Width="80"/>
-                <DataGridTemplateColumn Header="Actions" Width="100">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button Content="Cancel" 
-                                    Click="CancelOrder_Click"
-                                    Tag="{Binding Id}"
-                                    Visibility="{Binding Status, Converter={StaticResource OrderStatusToCancelVisibilityConverter}}"
-                                    Background="#FFD32F2F" 
-                                    Foreground="White"
-                                    Width="70"
-                                    Height="25"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+        <Border Grid.Row="2" Style="{StaticResource CardPanel}">
+            <DataGrid ItemsSource="{Binding OrderList}" 
+                      SelectedItem="{Binding SelectedOrder}" 
+                      MouseDoubleClick="OrderList_MouseDoubleClick" 
+                      IsReadOnly="True"
+                      Style="{StaticResource ModernDataGrid}"
+                      AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Order ID" Binding="{Binding Id}" Width="80"/>
+                    <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="100"/>
+                    <DataGridTextColumn Header="Distance (km)" Binding="{Binding Distance, StringFormat=N2}" Width="110"/>
+                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120"/>
+                    <DataGridTextColumn Header="Schedule" Binding="{Binding ScheduleStatus}" Width="100"/>
+                    <DataGridTextColumn Header="Time Left" Binding="{Binding TimeLeft, StringFormat=hh\\:mm\\:ss}" Width="100"/>
+                    <DataGridTextColumn Header="Processing Time" Binding="{Binding TotalProcessingTime, StringFormat=hh\\:mm\\:ss}" Width="130"/>
+                    <DataGridTextColumn Header="Deliveries" Binding="{Binding AmountOfDeliveries}" Width="90"/>
+                    <DataGridTemplateColumn Header="Actions" Width="90">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Cancel" 
+                                        Click="CancelOrder_Click"
+                                        Tag="{Binding Id}"
+                                        Visibility="{Binding Status, Converter={StaticResource OrderStatusToCancelVisibilityConverter}}"
+                                        Style="{StaticResource SmallButton}"
+                                        Background="#E74C3C"
+                                        Width="75"
+                                        Height="28"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
 
         <!-- Add Order Button -->
-        <Button Grid.Row="3" Content="Add Order" 
-                HorizontalAlignment="Center" 
-                Height="40" Width="120" 
-                FontSize="14"
-                Click="AddOrder_Click" 
-                Margin="0,10,0,0"/>
+        <Button Grid.Row="3" 
+                Content="Add Order" 
+                Click="AddOrder_Click"
+                Style="{StaticResource ModernButton}"
+                Background="#8E44AD"
+                HorizontalAlignment="Center"
+                Width="180"
+                Height="45"
+                Margin="0,15,0,0"/>
     </Grid>
 </Window>

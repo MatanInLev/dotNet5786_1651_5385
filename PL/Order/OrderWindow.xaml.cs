@@ -9,11 +9,13 @@ namespace PL.Order
     /// <summary>
     /// Interaction logic for OrderWindow.xaml
     /// </summary>
-    public partial class OrderWindow : Window
+    public partial class OrderWindow : Window, IDisposable
     {
         static readonly IBl s_bl = Factory.Get();
 
-        private BO.Order? _originalOrder; // the source object from BL (for existing order)
+        private BO.Order? _originalOrder;
+        private bool _observerRegistered = false;
+        private bool _disposed = false;
 
         #region Dependency Properties
 
@@ -35,7 +37,7 @@ namespace PL.Order
         }
 
         public static readonly DependencyProperty DeleteButtonTextProperty =
-            DependencyProperty.Register(nameof(DeleteButtonText), typeof(string), typeof(OrderWindow), new PropertyMetadata("Delete Order"));
+            DependencyProperty.Register(nameof(DeleteButtonText), typeof(string), typeof(OrderWindow), new PropertyMetadata("Close"));
 
         // Property for the button background color (so Cancel isn't Red)
         public Brush DeleteButtonBackground
@@ -73,7 +75,7 @@ namespace PL.Order
 
             (ButtonText, DeleteButtonText, DeleteButtonBackground, DeleteButtonForeground) = (orderId == 0)
             ? ("Add", "Cancel", Brushes.LightGray, Brushes.Black)
-            : ("Update", "Delete Order", Brushes.Red, Brushes.White);
+            : ("Update", "Close", Brushes.LightGray, Brushes.Black);
 
             InitializeComponent();
             Closed += Window_Closed;
@@ -103,37 +105,9 @@ namespace PL.Order
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                if (CurrentOrder == null) return;
-                if (CurrentOrder.Id == 0)
-                {
-                    Close();
-                    return;
-                }
-
-                var result = MessageBox.Show(
-                    $"Are you sure you want to delete order {CurrentOrder.Id}?",
-                    "Confirm Deletion",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Warning);
-
-                if (result == MessageBoxResult.Yes)
-                {
-                    int adminId = s_bl.Admin.GetConfig().AdminId;
-                    s_bl.Order.Delete(adminId, CurrentOrder.Id);
-                    MessageBox.Show("Order deleted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    Close();
-                }
-            }
-            catch (BlInvalidValueException ex)
-            {
-                MessageBox.Show($"Invalid Data: {ex.Message}", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            // This button now acts as "Cancel" for new orders or "Close" for existing orders
+            // No deletion happens - orders cannot be deleted per business rules
+            Close();
         }
 
         /// <summary>
@@ -160,17 +134,26 @@ namespace PL.Order
                 }
                 Close();
             }
+            catch (BlDoesNotExistException ex)
+            {
+                MessageBox.Show($"Not Found: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
             catch (BlInvalidValueException ex)
             {
                 MessageBox.Show($"Invalid Data: {ex.Message}", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             catch (BlAlreadyExistsException ex)
             {
-                MessageBox.Show($"Order already exists: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Already Exists: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (BlBaseException ex)
+            {
+                MessageBox.Show($"Business Logic Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"An unexpected error occurred. Please try again or contact support.\n\nDetails: {ex.Message}", 
+                    "Unexpected Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -183,7 +166,28 @@ namespace PL.Order
                 try
                 {
                     int adminId = s_bl.Admin.GetConfig().AdminId;
-                    CurrentOrder = s_bl.Order.Get(adminId, CurrentOrder!.Id);
+                    var updatedOrder = s_bl.Order.Get(adminId, CurrentOrder!.Id);
+                    
+                    // Preserve user edits for editable fields by creating a new order with updated calculated fields
+                    CurrentOrder = new BO.Order
+                    {
+                        Id = updatedOrder.Id,
+                        Type = CurrentOrder.Type, // Keep user's edit
+                        Description = CurrentOrder.Description, // Keep user's edit
+                        CustomerAddress = CurrentOrder.CustomerAddress, // Keep user's edit
+                        CustomerName = CurrentOrder.CustomerName, // Keep user's edit
+                        CustomerPhone = CurrentOrder.CustomerPhone, // Keep user's edit
+                        Latitude = updatedOrder.Latitude,
+                        Longitude = updatedOrder.Longitude,
+                        Distance = updatedOrder.Distance, // Updated from BL
+                        OrderDate = updatedOrder.OrderDate,
+                        ExpectedDelivery = updatedOrder.ExpectedDelivery, // Updated from BL
+                        MaxDelivery = updatedOrder.MaxDelivery, // Updated from BL
+                        Status = updatedOrder.Status, // Updated from BL
+                        ScheduleStatus = updatedOrder.ScheduleStatus, // Updated from BL
+                        TimeLeft = updatedOrder.TimeLeft, // Updated from BL
+                        DeliveryList = updatedOrder.DeliveryList // Updated from BL
+                    };
                 }
                 catch (Exception)
                 {
@@ -197,15 +201,39 @@ namespace PL.Order
             if (CurrentOrder != null && CurrentOrder.Id != 0)
             {
                 (s_bl.Order as IObservable)?.AddObserver(OrderObserver);
+                _observerRegistered = true;
             }
         }
 
         private void Window_Closed(object? sender, EventArgs e)
         {
-            if (CurrentOrder != null && CurrentOrder.Id != 0)
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            if (_disposed) return;
+
+            if (_observerRegistered && CurrentOrder != null && CurrentOrder.Id != 0)
             {
-                (s_bl.Order as IObservable)?.RemoveObserver(OrderObserver);
+                try
+                {
+                    (s_bl.Order as IObservable)?.RemoveObserver(OrderObserver);
+                }
+                catch
+                {
+                    // Silently ignore errors during cleanup
+                }
+                _observerRegistered = false;
             }
+
+            _disposed = true;
+            GC.SuppressFinalize(this);
+        }
+
+        ~OrderWindow()
+        {
+            Dispose();
         }
 
         private BO.Order CloneOrder(BO.Order src)

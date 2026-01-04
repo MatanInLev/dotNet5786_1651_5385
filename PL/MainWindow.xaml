@@ -5,66 +5,287 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="Main Management Window" Height="530" Width="800"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+        Title="Admin Dashboard" Height="650" Width="700"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Background="#F5F7FA"
+        WindowStartupLocation="CenterScreen">
 
-        <StackPanel Grid.Column="0" Margin="20" VerticalAlignment="Center">
+    <Window.Resources>
+        <!-- Modern Button Template -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                BorderThickness="0"
+                                Padding="12,8">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" Value="0.8"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
 
-            <!--Config Update-->
-            <Label Content="Configuration Parameters:" FontWeight="Bold" Margin="0,0,0,10"/>
+        <!-- Card Style -->
+        <Style x:Key="CardPanel" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="18"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#000000" BlurRadius="12" ShadowDepth="3" Opacity="0.1"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-            <StackPanel Orientation="Horizontal" Margin="0,3">
-                <Label Content="Max Range (km):" Width="140"/>
-                <TextBox Width="80" VerticalContentAlignment="Center" Text="{Binding Configuration.MaxRange, UpdateSourceTrigger=PropertyChanged}"/>
-            </StackPanel>
+        <!-- Input TextBox Style -->
+        <Style x:Key="ModernTextBox" TargetType="TextBox">
+            <Setter Property="Background" Value="#F5F7FA"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
 
-            <StackPanel Orientation="Horizontal" Margin="0,3">
-                <Label Content="Max Delivery Time:" Width="140"/>
-                <TextBox Width="80" VerticalContentAlignment="Center" ToolTip="Format: hh:mm:ss" Text="{Binding Configuration.MaxDeliveryTime, UpdateSourceTrigger=PropertyChanged}"/>
-            </StackPanel>
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-            <StackPanel Orientation="Horizontal" Margin="0,3">
-                <Label Content="Risk Range:" Width="140"/>
-                <TextBox Width="80" VerticalContentAlignment="Center" ToolTip="Format: hh:mm:ss" Text="{Binding Configuration.RiskRange, UpdateSourceTrigger=PropertyChanged}"/>
-            </StackPanel>
-
-            <StackPanel Orientation="Horizontal" Margin="0,3">
-                <Label Content="Inactivity Time:" Width="140"/>
-                <TextBox Width="80" VerticalContentAlignment="Center" ToolTip="Format: hh:mm:ss" Text="{Binding Configuration.InactivityTime, UpdateSourceTrigger=PropertyChanged}"/>
-            </StackPanel>
-
-            <Button Content="Update Configuration" Click="btnUpdateConfig_Click" Margin="0,15,0,30" Padding="5" HorizontalAlignment="Left" Width="150"/>
-            
-            <!--Database Actions-->
-            <Label Content="Database Actions:" FontWeight="Bold"/>
-            <Button Content="Initialize DB" Click="btnInitDB_Click" Margin="0,5" Padding="5"/>
-            <Button Content="Reset DB" Click="btnResetDB_Click" Margin="0,5" Padding="5"/>
-
-            <!--Management Windows-->
-            <Button Content="Couriers List" Click="btnOpenCourierList_Click" Margin="0,30,0,5" Padding="10" FontWeight="Bold" Background="#DDDDDD"/>
-            <Button Content="Orders List" Click="btnOpenOrderList_Click" Margin="0,5,0,0" Padding="10" FontWeight="Bold" Background="#DDDDDD"/>
-        </StackPanel>
-
-        <!--Clock Panel-->
-        <StackPanel Grid.Column="1" Margin="20" HorizontalAlignment="Center" VerticalAlignment="Center">
-
-            <Label Content="{Binding CurrentTime, Converter={StaticResource DateTimeFormatConverterKey}}"              
+        <!-- Header -->
+        <TextBlock Grid.Row="0" 
+                   Text="Admin Dashboard" 
+                   FontSize="28" 
                    FontWeight="Bold" 
-                   FontSize="20"
-                   HorizontalAlignment="Center" 
-                   Margin="0,0,0,20"/>
+                   Foreground="#2C3E50"
+                   Margin="0,0,0,15"/>
 
-            <Button Content="Add Minute" Click="btnAddOneMinute_click" Margin="0,2" Padding="5"/>
-            <Button Content="Add Hour" Click="btnAddOneHour_click" Margin="0,2" Padding="5"/>
-            <Button Content="Add Day" Click="btnAddOneDay_click" Margin="0,2" Padding="5"/>
-            <Button Content="Add Month" Click="btnAddOneMonth_click" Margin="0,2" Padding="5"/>
-            <Button Content="Add Year" Click="btnAddOneYear_click" Margin="0,2" Padding="5"/>
-        </StackPanel>
+        <!-- Main Content -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="15"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
+            <!-- Left Panel - Configuration -->
+            <Border Grid.Column="0" Style="{StaticResource CardPanel}">
+                <StackPanel>
+                    <TextBlock Text="Configuration" 
+                               FontSize="16" 
+                               FontWeight="Bold" 
+                               Foreground="#3498DB"
+                               Margin="0,0,0,12"/>
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="95"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Max Range -->
+                        <TextBlock Grid.Row="0" Grid.Column="0" 
+                                   Text="Max Range (km)" 
+                                   VerticalAlignment="Center"
+                                   FontSize="12"
+                                   Foreground="#555"
+                                   Margin="0,4"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" 
+                                 Style="{StaticResource ModernTextBox}"
+                                 Text="{Binding Configuration.MaxRange, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="0,4"/>
+
+                        <!-- Max Delivery Time -->
+                        <TextBlock Grid.Row="1" Grid.Column="0" 
+                                   Text="Max Delivery Time" 
+                                   VerticalAlignment="Center"
+                                   FontSize="12"
+                                   Foreground="#555"
+                                   Margin="0,4"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" 
+                                 Style="{StaticResource ModernTextBox}"
+                                 ToolTip="Format: hh:mm:ss"
+                                 Text="{Binding Configuration.MaxDeliveryTime, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="0,4"/>
+
+                        <!-- Risk Range -->
+                        <TextBlock Grid.Row="2" Grid.Column="0" 
+                                   Text="Risk Range" 
+                                   VerticalAlignment="Center"
+                                   FontSize="12"
+                                   Foreground="#555"
+                                   Margin="0,4"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" 
+                                 Style="{StaticResource ModernTextBox}"
+                                 ToolTip="Format: hh:mm:ss"
+                                 Text="{Binding Configuration.RiskRange, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="0,4"/>
+
+                        <!-- Inactivity Time -->
+                        <TextBlock Grid.Row="3" Grid.Column="0" 
+                                   Text="Inactivity Time" 
+                                   VerticalAlignment="Center"
+                                   FontSize="12"
+                                   Foreground="#555"
+                                   Margin="0,4"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" 
+                                 Style="{StaticResource ModernTextBox}"
+                                 ToolTip="Format: hh:mm:ss"
+                                 Text="{Binding Configuration.InactivityTime, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="0,4"/>
+                    </Grid>
+
+                    <Button Content="Update Configuration" 
+                            Click="btnUpdateConfig_Click" 
+                            Style="{StaticResource ModernButton}"
+                            Background="#3498DB"
+                            Margin="0,15,0,0"
+                            Height="38"/>
+
+                    <!-- Database Actions -->
+                    <TextBlock Text="Database" 
+                               FontSize="16" 
+                               FontWeight="Bold" 
+                               Foreground="#E74C3C"
+                               Margin="0,20,0,10"/>
+
+                    <Button Content="Initialize Database" 
+                            Click="btnInitDB_Click" 
+                            Style="{StaticResource ModernButton}"
+                            Background="#27AE60"
+                            IsEnabled="{Binding DatabaseButtonsEnabled}"
+                            Margin="0,4"
+                            Height="38"/>
+
+                    <Button Content="Reset Database" 
+                            Click="btnResetDB_Click" 
+                            Style="{StaticResource ModernButton}"
+                            Background="#E74C3C"
+                            IsEnabled="{Binding DatabaseButtonsEnabled}"
+                            Margin="0,4"
+                            Height="38"/>
+
+                    <!-- Database Status -->
+                    <TextBlock Text="{Binding DatabaseStatus}"
+                               FontSize="11"
+                               Foreground="#3498DB"
+                               TextWrapping="Wrap"
+                               Margin="0,10,0,0"
+                               MinHeight="40"
+                               VerticalAlignment="Top"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Right Panel - Management & Clock -->
+            <Border Grid.Column="2" Style="{StaticResource CardPanel}">
+                <StackPanel>
+                    <!-- Management Panels -->
+                    <TextBlock Text="Management" 
+                               FontSize="16" 
+                               FontWeight="Bold" 
+                               Foreground="#9B59B6"
+                               Margin="0,0,0,12"/>
+
+                    <Button Content="Couriers Management" 
+                            Click="btnOpenCourierList_Click" 
+                            Style="{StaticResource ModernButton}"
+                            Background="#9B59B6"
+                            Margin="0,4"
+                            Height="45"/>
+
+                    <Button Content="Orders Management" 
+                            Click="btnOpenOrderList_Click" 
+                            Style="{StaticResource ModernButton}"
+                            Background="#8E44AD"
+                            Margin="0,4"
+                            Height="45"/>
+
+                    <!-- System Clock -->
+                    <TextBlock Text="System Clock" 
+                               FontSize="16" 
+                               FontWeight="Bold" 
+                               Foreground="#F39C12"
+                               Margin="0,20,0,12"/>
+
+                    <!-- Current Time Display -->
+                    <Border Background="#FFF3E0" 
+                            CornerRadius="8" 
+                            Padding="15"
+                            Margin="0,0,0,15">
+                        <TextBlock Text="{Binding CurrentTime, Converter={StaticResource DateTimeFormatConverterKey}}"
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Foreground="#E67E22"
+                                   HorizontalAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   TextAlignment="Center"/>
+                    </Border>
+
+                    <!-- Time Adjustment Buttons -->
+                    <TextBlock Text="Adjust Time:" 
+                               FontSize="12" 
+                               Foreground="#666"
+                               Margin="0,0,0,8"/>
+
+                    <Button Content="Add Minute" 
+                            Click="btnAddOneMinute_click" 
+                            Style="{StaticResource ModernButton}"
+                            Background="#16A085"
+                            Margin="0,3"
+                            Height="32"/>
+
+                    <Button Content="Add Hour" 
+                            Click="btnAddOneHour_click" 
+                            Style="{StaticResource ModernButton}"
+                            Background="#1ABC9C"
+                            Margin="0,3"
+                            Height="32"/>
+
+                    <Button Content="Add Day" 
+                            Click="btnAddOneDay_click" 
+                            Style="{StaticResource ModernButton}"
+                            Background="#F39C12"
+                            Margin="0,3"
+                            Height="32"/>
+
+                    <Button Content="Add Month" 
+                            Click="btnAddOneMonth_click" 
+                            Style="{StaticResource ModernButton}"
+                            Background="#E67E22"
+                            Margin="0,3"
+                            Height="32"/>
+
+                    <Button Content="Add Year" 
+                            Click="btnAddOneYear_click" 
+                            Style="{StaticResource ModernButton}"
+                            Background="#D35400"
+                            Margin="0,3"
+                            Height="32"/>
+                </StackPanel>
+            </Border>
+
+        </Grid>
     </Grid>
 </Window>
