@@ -178,11 +178,16 @@
                            Margin="0,0,10,0"/>
 
                 <ComboBox Grid.Column="4" 
-                          ItemsSource="{Binding Source={StaticResource OrderStatusCollection}}"
-                          SelectedItem="{Binding SelectedOrderStatus, Mode=TwoWay}"
+                          Name="cmbOrderStatus"
                           SelectionChanged="FilterComboBox_SelectionChanged"
                           Style="{StaticResource ModernComboBox}"
                           VerticalAlignment="Center">
+                    <ComboBox.ItemsSource>
+                        <CompositeCollection>
+                            <ComboBoxItem Content="All" />
+                            <CollectionContainer Collection="{Binding Source={StaticResource OrderStatusCollection}}" />
+                        </CompositeCollection>
+                    </ComboBox.ItemsSource>
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding}"/>
