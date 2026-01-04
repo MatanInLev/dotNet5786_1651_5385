@@ -63,6 +63,10 @@ namespace PL.Order
 
             // Subscribe to updates (if BL supports observers)
             (s_bl.Order as IObservable)?.AddObserver(QueryOrderList);
+
+            // Initialize status combobox to "All"
+            if (cmbOrderStatus != null)
+                cmbOrderStatus.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -74,9 +78,11 @@ namespace PL.Order
             {
                 int adminId = s_bl.Admin.GetConfig().AdminId;
 
+                // If SelectedOrderStatus is null -> show all orders
+                var statusFilter = SelectedOrderStatus;
+
                 // GetList signature: GetList(int userId, BO.OrderStatus? filter, object? filterValue, BO.OrderType? sort)
-                // We'll use SelectedOrderStatus as filter and SelectedOrderType as sort
-                var orders = s_bl.Order.GetList(adminId, SelectedOrderStatus, null, SelectedOrderType);
+                var orders = s_bl.Order.GetList(adminId, statusFilter, null, SelectedOrderType);
 
                 OrderList = orders;
             }
@@ -91,6 +97,20 @@ namespace PL.Order
         /// </summary>
         private void FilterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // If status combobox: first item is 'All' (ComboBoxItem) -> set SelectedOrderStatus = null
+            if (sender == cmbOrderStatus)
+            {
+                if (cmbOrderStatus.SelectedItem is ComboBoxItem)
+                {
+                    SelectedOrderStatus = null;
+                }
+                else
+                {
+                    // Selected is one of the enum values
+                    SelectedOrderStatus = (BO.OrderStatus?)cmbOrderStatus.SelectedItem;
+                }
+            }
+
             QueryOrderList();
         }
 
@@ -101,6 +121,9 @@ namespace PL.Order
         {
             SelectedOrderType = null;
             SelectedOrderStatus = null;
+
+            if (cmbOrderStatus != null) cmbOrderStatus.SelectedIndex = 0;
+
             QueryOrderList();
         }
 
