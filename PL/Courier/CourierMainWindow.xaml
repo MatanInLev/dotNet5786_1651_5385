@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Courier - Main Screen"
         Width="900"
-        Height="620"
+        Height="720"
         WindowStartupLocation="CenterScreen"
         Background="White"
         ResizeMode="CanResize">
@@ -35,20 +35,81 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
                         <TextBlock Text="Id:" FontWeight="Bold"/>
                         <TextBlock Text="{Binding CurrentCourier.Id}" Grid.Column="1"/>
+
+                        <TextBlock Text="Name:" Grid.Row="1"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding CurrentCourier.Name, Mode=TwoWay}"/>
+
+                        <TextBlock Text="Phone:" Grid.Row="2"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding CurrentCourier.Phone, Mode=TwoWay}"/>
+
+                        <TextBlock Text="Email:" Grid.Row="3"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding CurrentCourier.Email, Mode=TwoWay}"/>
+
+                        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Vehicle:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <ComboBox x:Name="cmbVehicleMain" Width="150" ItemsSource="{Binding VehicleOptions}" SelectedItem="{Binding CurrentCourier.Vehicle, Mode=TwoWay}"/>
+
+                            <TextBlock Text="Max Distance (km):" Margin="16,0,8,0" VerticalAlignment="Center"/>
+                            <TextBox x:Name="txtMaxDistance" Width="80" Text="{Binding CurrentCourier.MaxDistance, Mode=TwoWay}"/>
+
+                            <CheckBox Content="Active" IsEnabled="False" Margin="16,0,0,0" IsChecked="{Binding CurrentCourier.IsActive}"/>
+                        </StackPanel>
                     </Grid>
                 </GroupBox>
 
                 <GroupBox Grid.Row="2" Header="Current order in handling (only if exists)" Margin="0,0,0,12">
-                    <StackPanel Margin="8">
-                        <TextBlock Text="Order details go here"/>
-                    </StackPanel>
+                    <Grid Margin="8">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Display area for OrderInProgress; hidden when null via code-behind -->
+                        <StackPanel x:Name="orderPanel" Visibility="Collapsed">
+                            <TextBlock Text="Order ID: " FontWeight="Bold"/>
+                            <TextBlock Text="{Binding CurrentCourier.OrderInProgress.OrderId}"/>
+                            <TextBlock Text="Customer:" FontWeight="Bold" Margin="0,8,0,0"/>
+                            <TextBlock Text="{Binding CurrentCourier.OrderInProgress.CustomerName}"/>
+                            <TextBlock Text="Address:" FontWeight="Bold" Margin="0,8,0,0"/>
+                            <TextBlock Text="{Binding CurrentCourier.OrderInProgress.CustomerAddress}"/>
+                            <TextBlock Text="Distance (km):" FontWeight="Bold" Margin="0,8,0,0"/>
+                            <TextBlock Text="{Binding CurrentCourier.OrderInProgress.Distance, StringFormat=N2}"/>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                                <TextBlock Text="Finish status:" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <ComboBox x:Name="cmbFinishStatus" Width="180">
+                                    <ComboBoxItem Content="Delivered"/>
+                                    <ComboBoxItem Content="Refused"/>
+                                    <ComboBoxItem Content="CustomerUnreachable"/>
+                                    <ComboBoxItem Content="Canceled"/>
+                                    <ComboBoxItem Content="Failed"/>
+                                </ComboBox>
+                                <Button x:Name="btnFinish" Content="Finish Delivery" Width="140" Margin="12,0,0,0" Click="BtnFinish_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- When no order in progress -->
+                        <StackPanel x:Name="noOrderPanel" Visibility="Collapsed">
+                            <TextBlock Text="No current order in handling." FontStyle="Italic"/>
+                        </StackPanel>
+                    </Grid>
                 </GroupBox>
 
                 <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,8,0,0">
-                    <Button Content="Delivery history" Width="200" Height="40" Margin="10,0" Click="BtnHistory_Click"/>
-                    <Button Content="Order selection" Width="200" Height="40" Margin="10,0" Click="BtnOrderSelection_Click"/>
+                    <Button x:Name="btnHistory" Content="Delivery history" Width="200" Height="40" Margin="10,0" Click="BtnHistory_Click"/>
+                    <Button x:Name="btnOrderSelection" Content="Order selection" Width="200" Height="40" Margin="10,0" Click="BtnOrderSelection_Click"/>
+                    <Button x:Name="btnUpdate" Content="Update Details" Width="160" Height="40" Margin="10,0" Click="BtnUpdate_Click"/>
                 </StackPanel>
             </Grid>
         </Border>

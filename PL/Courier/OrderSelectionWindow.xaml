@@ -1,0 +1,87 @@
+<Window x:Class="PL.Courier.OrderSelectionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:bo="clr-namespace:BO;assembly=BL"
+        Title="Select Order for Delivery" Height="700" Width="1100"
+        WindowStartupLocation="CenterOwner"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Grid Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="250"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,8">
+            <Label Content="Filter by Type:" VerticalAlignment="Center"/>
+            <ComboBox x:Name="cmbTypeFilter" Width="180" Margin="6,0,12,0"
+                      ItemsSource="{Binding OrderTypes}"
+                      SelectedItem="{Binding SelectedOrderType, Mode=TwoWay}"/>
+
+            <Label Content="Sort by:" VerticalAlignment="Center"/>
+            <ComboBox x:Name="cmbSort" Width="180" Margin="6,0,12,0" SelectedIndex="0">
+                <ComboBoxItem Content="ScheduleStatus"/>
+                <ComboBoxItem Content="Distance"/>
+                <ComboBoxItem Content="TimeLeft"/>
+            </ComboBox>
+
+            <Button Content="Apply" Width="80" Click="ApplyFilters_Click"/>
+            <Button Content="Clear" Width="80" Margin="6,0,0,0" Click="ClearFilters_Click"/>
+
+            <TextBlock Text="" HorizontalAlignment="Right" Margin="20,0,0,0"/>
+        </StackPanel>
+
+        <DataGrid x:Name="dgOrders" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single"
+                  MouseLeftButtonUp="DgOrders_MouseLeftButtonUp">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Order ID" Binding="{Binding Id}" Width="80"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="120"/>
+                <DataGridTextColumn Header="Distance (km)" Binding="{Binding DistanceFromCompany, StringFormat=N2}" Width="120"/>
+                <DataGridTextColumn Header="Schedule" Binding="{Binding ScheduleStatus}" Width="120"/>
+                <DataGridTextColumn Header="Time Left" Binding="{Binding TimeLeft, StringFormat=hh\:mm\:ss}" Width="120"/>
+                <DataGridTextColumn Header="Max Delivery" Binding="{Binding MaxDeliveryDate}" Width="160"/>
+                <DataGridTemplateColumn Header="Action" Width="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Collect" Width="90" Click="Collect_Click" Tag="{Binding Id}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Grid Grid.Row="2" Margin="0,8,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="400"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Left: map / details -->
+            <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1" CornerRadius="6" Padding="6">
+                <DockPanel>
+                    <TextBlock Text="Selected order map / route" FontWeight="Bold" Margin="0,0,0,6"/>
+                    <WebBrowser x:Name="wbMap" />
+                </DockPanel>
+            </Border>
+
+            <!-- Right: details -->
+            <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="1" CornerRadius="6" Padding="8" Margin="8,0,0,0">
+                <StackPanel>
+                    <TextBlock Text="Order Preview" FontWeight="Bold" Margin="0,0,0,8"/>
+                    <TextBlock Text="Order ID:" FontWeight="SemiBold"/>
+                    <TextBlock x:Name="tbOrderId" />
+                    <TextBlock Text="Customer:" FontWeight="SemiBold" Margin="0,8,0,0"/>
+                    <TextBlock x:Name="tbCustomer" />
+                    <TextBlock Text="Address:" FontWeight="SemiBold" Margin="0,8,0,0"/>
+                    <TextBlock x:Name="tbAddress" TextWrapping="Wrap"/>
+                    <TextBlock Text="Distance:" FontWeight="SemiBold" Margin="0,8,0,0"/>
+                    <TextBlock x:Name="tbDistance" />
+                    <TextBlock Text="Schedule Status:" FontWeight="SemiBold" Margin="0,8,0,0"/>
+                    <TextBlock x:Name="tbSched" />
+                    <TextBlock Text="Time Left:" FontWeight="SemiBold" Margin="0,8,0,0"/>
+                    <TextBlock x:Name="tbTimeLeft" />
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
