@@ -1,0 +1,48 @@
+<Window x:Class="PL.Courier.ClosedDeliveryListWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:bo="clr-namespace:BO;assembly=BL"
+        Title="Closed Deliveries" Height="600" Width="900"
+        WindowStartupLocation="CenterOwner"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Closed Deliveries History" FontSize="18" FontWeight="Bold" Margin="0,0,0,8"/>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,6,0,12">
+            <TextBlock Text="Type:" VerticalAlignment="Center" Margin="0,0,6,0" />
+            <ComboBox Name="cmbType" Width="160" Margin="0,0,12,0" SelectionChanged="Filter_SelectionChanged">
+                <ComboBox.Items>
+                    <ComboBoxItem Content="All" />
+                    <CollectionContainer Collection="{Binding Source={x:Static bo:OrderType.GetValues}}" />
+                </ComboBox.Items>
+            </ComboBox>
+
+            <TextBlock Text="End Status:" VerticalAlignment="Center" Margin="0,0,6,0" />
+            <ComboBox Name="cmbEndStatus" Width="160" SelectionChanged="Filter_SelectionChanged">
+                <ComboBoxItem Content="All" />
+                <ComboBoxItem Content="Delivered" />
+                <ComboBoxItem Content="Refused" />
+                <ComboBoxItem Content="Canceled" />
+            </ComboBox>
+        </StackPanel>
+
+        <DataGrid Grid.Row="2" ItemsSource="{Binding ClosedDeliveries}" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Delivery ID" Binding="{Binding DeliveryId}" Width="80"/>
+                <DataGridTextColumn Header="Order ID" Binding="{Binding OrderId}" Width="80"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding OrderType}" Width="110"/>
+                <DataGridTextColumn Header="Customer Address" Binding="{Binding CustomerAddress}" Width="220"/>
+                <DataGridTextColumn Header="Vehicle" Binding="{Binding Vehicle}" Width="100"/>
+                <DataGridTextColumn Header="Distance (km)" Binding="{Binding ActualDistance, StringFormat=N2}" Width="100"/>
+                <DataGridTextColumn Header="Processing Time" Binding="{Binding ProcessingTime, StringFormat=hh\:mm\:ss}" Width="120"/>
+                <DataGridTextColumn Header="End Status" Binding="{Binding DeliveryEndStatus}" Width="110"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>
