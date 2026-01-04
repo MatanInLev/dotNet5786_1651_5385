@@ -112,9 +112,6 @@ namespace PL.Courier
                     StartWorkDate = s_bl.Admin.GetClock()
                 };
             }
-
-            // Update UI element states based on CurrentCourier
-            UpdateUIState();
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
@@ -217,8 +214,6 @@ namespace PL.Courier
                     s_bl.Courier.Update(adminId, CurrentCourier);
                     MessageBox.Show("Courier updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-                // Refresh UI state after operation
-                UpdateUIState();
                 Close();
             }
             catch (BlDoesNotExistException ex)
@@ -254,7 +249,6 @@ namespace PL.Courier
                 {
                     int adminId = s_bl.Admin.GetConfig().AdminId; 
                     CurrentCourier = s_bl.Courier.Get(adminId, CurrentCourier!.Id);
-                    UpdateUIState();
                 }
                 catch (Exception)
                 {
@@ -350,25 +344,6 @@ namespace PL.Courier
                 return "Max distance cannot be negative.";
 
             return null;
-        }
-
-        /// <summary>
-        /// Update UI enabled/readonly states based on CurrentCourier values.
-        /// </summary>
-        private void UpdateUIState()
-        {
-            // If controls not yet loaded, nothing to do
-            if (!IsLoaded) return;
-
-            // Delete enabled only for existing courier (Id != 0)
-            if (btnDelete != null)
-                btnDelete.IsEnabled = (CurrentCourier != null && CurrentCourier.Id != 0);
-
-            // Vehicle selection disabled if courier currently has an order in progress
-            if (cmbVehicle != null)
-                cmbVehicle.IsEnabled = !(CurrentCourier?.OrderInProgress != null);
-
-            // ID TextBox read-only already bound to IsIdReadOnly property
         }
     }
 }

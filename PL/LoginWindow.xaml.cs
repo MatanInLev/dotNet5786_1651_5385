@@ -93,8 +93,8 @@ namespace PL
                     
                     if (courier != null)
                     {
-                        // Open CourierMainWindow for courier
-                        CourierMainWindow courierWindow = new CourierMainWindow(userId);
+                        // Open CourierMainWindow for courier (userId is same as courierId when courier logs in)
+                        CourierMainWindow courierWindow = new CourierMainWindow(adminId, userId);
                         courierWindow.Show();
                         this.Close();
                         return;
