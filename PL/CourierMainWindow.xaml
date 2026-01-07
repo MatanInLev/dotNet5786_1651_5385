@@ -15,6 +15,8 @@
         ResizeMode="CanResize">
 
     <Window.Resources>
+        <!-- BoolToVis Converter -->
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
         <!-- Modern Button Template -->
         <Style x:Key="ModernButton" TargetType="Button">
             <Setter Property="Template">
@@ -43,7 +45,6 @@
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
-
         <!-- Card Style -->
         <Style x:Key="CardPanel" TargetType="Border">
             <Setter Property="Background" Value="White"/>
@@ -55,7 +56,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
         <!-- Info Panel Style -->
         <Style x:Key="InfoPanel" TargetType="Border">
             <Setter Property="Background" Value="#F5F7FA"/>
@@ -305,7 +305,8 @@
                     Background="#27AE60"
                     Style="{StaticResource ModernButton}"
                     Click="BtnSelectOrder_Click"
-                    IsEnabled="{Binding CanPickOrder}"/>
+                    IsEnabled="{Binding CanPickOrder}"
+                    Visibility="{Binding CanPickOrder, Converter={StaticResource BoolToVis}}"/>
             <Button Content="✅ Complete Delivery" 
                     Width="200" 
                     Height="45" 
@@ -313,7 +314,8 @@
                     Background="#9B59B6"
                     Style="{StaticResource ModernButton}"
                     Click="BtnFinish_Click"
-                    IsEnabled="{Binding CanFinishDelivery}"/>
+                    IsEnabled="{Binding CanFinishDelivery}"
+                    Visibility="{Binding CanFinishDelivery, Converter={StaticResource BoolToVis}}"/>
             <Button Content="📋 History" 
                     Width="180" 
                     Height="45" 

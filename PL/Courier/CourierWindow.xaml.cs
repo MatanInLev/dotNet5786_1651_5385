@@ -109,7 +109,7 @@ namespace PL.Courier
                     Id = 0,
                     IsActive = true,
                     Vehicle = BO.Vehicle.None,
-                    StartWorkDate = s_bl.Admin.GetClock()
+                    StartWorkDate = DateTime.Today
                 };
             }
         }
@@ -272,7 +272,7 @@ namespace PL.Courier
 
         private BO.Courier CloneCourier(BO.Courier src)
         {
-            if (src == null) return new BO.Courier() { Id = 0, IsActive = true, Vehicle = BO.Vehicle.None, StartWorkDate = s_bl.Admin.GetClock() };
+            if (src == null) return new BO.Courier() { Id = 0, IsActive = true, Vehicle = BO.Vehicle.None, StartWorkDate = DateTime.Today };
 
             return new BO.Courier()
             {

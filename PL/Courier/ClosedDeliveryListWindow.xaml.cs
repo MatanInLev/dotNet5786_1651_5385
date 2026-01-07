@@ -2,6 +2,7 @@ using BlApi;
 using BO;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 
 namespace PL.Courier
@@ -28,10 +29,8 @@ namespace PL.Courier
             _userId = userId;
             _courierId = courierId;
 
-            // load default
-            QueryList();
+            Loaded += (_, _) => QueryList();
 
-            // subscribe to updates
             (s_bl.Order as IObservable)?.AddObserver(QueryList);
         }
 
@@ -39,37 +38,39 @@ namespace PL.Courier
         {
             try
             {
-                // read filters
                 BO.OrderType? typeFilter = null;
-                var typeItem = cmbType.SelectedItem;
+                var typeItem = cmbType?.SelectedItem;
                 if (typeItem is System.Windows.Controls.ComboBoxItem cb && cb.Content?.ToString() != "All")
                 {
                     if (Enum.TryParse(cb.Content?.ToString(), out BO.OrderType parsed)) typeFilter = parsed;
                 }
 
                 BO.DeliveryStatus? statusFilter = null;
-                var statusItem = cmbEndStatus.SelectedItem as System.Windows.Controls.ComboBoxItem;
+                var statusItem = cmbEndStatus?.SelectedItem as System.Windows.Controls.ComboBoxItem;
                 if (statusItem != null && statusItem.Content?.ToString() != "All")
                 {
                     if (Enum.TryParse(statusItem.Content?.ToString(), out BO.DeliveryStatus st)) statusFilter = st;
                 }
 
                 string? sortTag = null;
-                if (cmbSort.SelectedItem is System.Windows.Controls.ComboBoxItem sortItem)
+                if (cmbSort?.SelectedItem is System.Windows.Controls.ComboBoxItem sortItem)
+                {
                     sortTag = sortItem.Tag as string;
+                }
 
-                var list = s_bl.Order.GetClosedOrdersForCourier(_userId, _courierId, typeFilter, null);
+                var list = s_bl.Order.GetClosedOrdersForCourier(_userId, _courierId, typeFilter, null) ?? Enumerable.Empty<ClosedDeliveryInList>();
 
-                // apply status filter client-side
-                if (statusFilter != null) list = System.Linq.Enumerable.Where(list, d => d.DeliveryEndStatus == statusFilter);
+                if (statusFilter != null)
+                {
+                    list = list.Where(d => d.DeliveryEndStatus == statusFilter);
+                }
 
-                // apply sorting client-side
                 list = sortTag switch
                 {
-                    "processing" => System.Linq.Enumerable.OrderBy(list, d => d.ProcessingTime),
-                    "distance" => System.Linq.Enumerable.OrderBy(list, d => d.ActualDistance ?? double.MaxValue),
-                    "status" => System.Linq.Enumerable.OrderBy(list, d => d.DeliveryEndStatus),
-                    _ => System.Linq.Enumerable.OrderBy(list, d => d.DeliveryEndStatus) // default
+                    "processing" => list.OrderBy(d => d.ProcessingTime),
+                    "distance" => list.OrderBy(d => d.ActualDistance ?? double.MaxValue),
+                    "status" => list.OrderBy(d => d.DeliveryEndStatus),
+                    _ => list.OrderBy(d => d.DeliveryEndStatus)
                 };
 
                 ClosedDeliveries = list;
@@ -82,6 +83,11 @@ namespace PL.Courier
 
         private void Filter_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
+            if (!IsLoaded)
+            {
+                return;
+            }
+
             QueryList();
         }
 
