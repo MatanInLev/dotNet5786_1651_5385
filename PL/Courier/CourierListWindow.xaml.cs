@@ -99,7 +99,7 @@ namespace PL.Courier
             // 2. Open the courier main screen for this courier
             try
             {
-                var win = new CourierMainWindow(_userId, selectedItem.Id);
+                var win = new CourierWindow(selectedItem.Id);
                 win.Show();
             }
             catch (Exception ex)

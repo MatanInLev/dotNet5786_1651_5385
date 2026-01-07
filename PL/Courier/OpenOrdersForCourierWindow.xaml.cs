@@ -23,10 +23,13 @@ namespace PL.Courier
 
         public System.Collections.Generic.IEnumerable<OrderTypeOption> OrderTypeOptions { get; private set; }
 
+        private readonly BO.Vehicle _vehicle;
+
         public OpenOrdersForCourierWindow(int adminId, int courierId)
         {
             _adminId = adminId;
             _courierId = courierId;
+            _vehicle = _bl.Courier.Get(_adminId, _courierId).Vehicle;
             InitializeComponent();
             OrderTypeOptions = Enum.GetValues(typeof(OrderType))
                                     .Cast<OrderType>()
@@ -93,6 +96,12 @@ namespace PL.Courier
             }
         }
 
+        protected override void OnClosed(EventArgs e)
+        {
+            (_bl.Order as IObservable)?.RemoveObserver(LoadData);
+            base.OnClosed(e);
+        }
+
         private void ShowMapForSelection(OpenOrderInList sel)
         {
             if (sel == null) return;
@@ -102,24 +111,55 @@ namespace PL.Courier
             double ordLat = sel.Latitude;
             double ordLon = sel.Longitude;
 
-            string summary = $"Company: {compLat:F4},{compLon:F4} | Order: {ordLat:F4},{ordLon:F4}";
+            double routeDistanceKm = sel.DistanceFromCompany;
+            try
+            {
+                routeDistanceKm = BO.Tools.CalculateRouteDistance(compLat, compLon, ordLat, ordLon, _vehicle);
+            }
+            catch
+            {
+                // keep aerial if routing fails
+            }
+
+            // Simple simulated route polyline between points to visualize driving/walking/bike
+            // Build a couple of intermediate points to mimic a route instead of a straight line
+            double midLat = (compLat + ordLat) / 2.0 + 0.005;
+            double midLon = (compLon + ordLon) / 2.0 - 0.005;
+
+            string vehicleColor = _vehicle switch
+            {
+                BO.Vehicle.Car => "#2E86DE",
+                BO.Vehicle.Motorcycle => "#8E44AD",
+                BO.Vehicle.Bicycle => "#27AE60",
+                BO.Vehicle.Foot => "#E67E22",
+                _ => "#2E86DE"
+            };
+
+            string summary = $"Company: {compLat:F4},{compLon:F4} | Order: {ordLat:F4},{ordLon:F4} | Vehicle: {_vehicle} | Route: {routeDistanceKm:F2} km";
 
             string html = $@"<html>
   <head>
     <meta http-equiv='X-UA-Compatible' content='IE=Edge'/>
-    <style>body {{ font-family: Segoe UI, Arial; }} .label{{font-size:12px;}}</style>
+    <style>
+      body {{ font-family: Segoe UI, Arial; }}
+      .label{{font-size:12px;}}
+    </style>
   </head>
   <body>
     <h4>Map (demo)</h4>
     <div class='label'>{summary}</div>
     <div>
-      <svg width='900' height='220' xmlns='http://www.w3.org/2000/svg'>
-        <line x1='50' y1='110' x2='850' y2='110' stroke='blue' stroke-width='2' stroke-dasharray='6'/>
-        <circle cx='50' cy='110' r='6' fill='green' />
-        <text x='70' y='105' class='label'>Company ({compLat:F4},{compLon:F4})</text>
-        <circle cx='850' cy='110' r='6' fill='red' />
-        <text x='600' y='105' class='label'>Order ({ordLat:F4},{ordLon:F4})</text>
-        <text x='400' y='140' class='label'>Aerial distance: {sel.DistanceFromCompany:F2} km</text>
+      <svg width='900' height='260' xmlns='http://www.w3.org/2000/svg'>
+        <!-- Aerial line -->
+        <line x1='80' y1='180' x2='820' y2='60' stroke='gray' stroke-width='1.5' stroke-dasharray='4'/>
+        <!-- Simulated route polyline -->
+        <polyline points='80,180 450,200 820,60' fill='none' stroke='{vehicleColor}' stroke-width='3' stroke-linejoin='round' stroke-linecap='round' />
+        <circle cx='80' cy='180' r='7' fill='green' />
+        <text x='95' y='175' class='label'>Company ({compLat:F4},{compLon:F4})</text>
+        <circle cx='820' cy='60' r='7' fill='red' />
+        <text x='640' y='55' class='label'>Order ({ordLat:F4},{ordLon:F4})</text>
+        <text x='360' y='225' class='label'>Aerial distance: {sel.DistanceFromCompany:F2} km</text>
+        <text x='360' y='245' class='label'>Route distance: {routeDistanceKm:F2} km (mode: {_vehicle})</text>
       </svg>
     </div>
   </body>
@@ -127,12 +167,6 @@ namespace PL.Courier
 ";
 
             wbMap.NavigateToString(html);
-        }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            (_bl.Order as IObservable)?.RemoveObserver(LoadData);
-            base.OnClosed(e);
         }
     }
 }
