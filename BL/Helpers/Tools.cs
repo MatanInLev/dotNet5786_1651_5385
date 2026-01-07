@@ -6,7 +6,7 @@ using System.Globalization;
 
 namespace BO;
 
-static class Tools
+public static class Tools
 {
     public static string ToStringProperty<T>(this T t)
     {
@@ -83,7 +83,7 @@ static class Tools
     /// <param name="vehicle">The vehicle type (Car, Bicycle, Foot, etc.).</param>
     /// <returns>The route distance in kilometers (double).</returns>
     /// <exception cref="BO.BlTemporaryNotAvailableException">Thrown on network error or parsing failure.</exception>
-    internal static double CalculateRouteDistance(double lat1, double lon1, double lat2, double lon2, BO.Vehicle vehicle)
+    public static double CalculateRouteDistance(double lat1, double lon1, double lat2, double lon2, BO.Vehicle vehicle)
     {
         // 1. Determine the Routing Mode for the API call
         string mode;
