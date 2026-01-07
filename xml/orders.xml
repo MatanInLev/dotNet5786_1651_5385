@@ -473,7 +473,7 @@
     <CustomerPhone>0538972341</CustomerPhone>
     <Weight xsi:nil="true" />
     <Volume>2</Volume>
-    <Fragile>true</Fragile>
+    <Fragile xsi:nil="true" />
     <OrderTime>2026-04-01T16:53:48</OrderTime>
   </Order>
   <Order>
@@ -1399,5 +1399,19 @@
     <Volume xsi:nil="true" />
     <Fragile xsi:nil="true" />
     <OrderTime>2026-04-01T16:41:48</OrderTime>
+  </Order>
+  <Order>
+    <Id>5401</Id>
+    <OrderType>Pizza</OrderType>
+    <Description>Pizza order for Test Courier</Description>
+    <Address>1 Herzl Street, Jerusalem</Address>
+    <Latitude>31.7810</Latitude>
+    <Longitude>35.2170</Longitude>
+    <CustomerName>Test Customer</CustomerName>
+    <CustomerPhone>0501234567</CustomerPhone>
+    <Weight>2</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile>false</Fragile>
+    <OrderTime>2026-04-01T17:00:00</OrderTime>
   </Order>
 </ArrayOfOrder>

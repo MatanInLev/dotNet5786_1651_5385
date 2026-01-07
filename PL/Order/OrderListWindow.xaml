@@ -6,26 +6,27 @@
         xmlns:local="clr-namespace:PL.Order"
         xmlns:bo="clr-namespace:BO;assembly=BL"
         xmlns:pl="clr-namespace:PL"
+        xmlns:sys="clr-namespace:System;assembly=System.Runtime"
         mc:Ignorable="d"
         Title="Order Management" 
         Height="750" 
         Width="1200"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Background="#F0F2F5"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"> 
     
     <Window.Resources>
         <!-- Converters -->
         <pl:OrderStatusToCancelVisibilityConverter x:Key="OrderStatusToCancelVisibilityConverter"/>
         
         <!-- Enum collections for ComboBox bindings -->
-        <ObjectDataProvider x:Key="OrderStatusCollection" MethodName="GetValues" ObjectType="{x:Type bo:OrderStatus}">
+        <ObjectDataProvider x:Key="OrderStatusCollection" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="bo:OrderStatus"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
         
-        <ObjectDataProvider x:Key="OrderTypeCollection" MethodName="GetValues" ObjectType="{x:Type bo:OrderType}">
+        <ObjectDataProvider x:Key="OrderTypeCollection" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="bo:OrderType"/>
             </ObjectDataProvider.MethodParameters>
@@ -382,8 +383,8 @@
                     <DataGridTextColumn Header="Distance (km)" Binding="{Binding Distance, StringFormat=N2}" Width="120"/>
                     <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="130"/>
                     <DataGridTextColumn Header="Schedule" Binding="{Binding ScheduleStatus}" Width="110"/>
-                    <DataGridTextColumn Header="Time Left" Binding="{Binding TimeLeft, StringFormat=hh\\:mm\\:ss}" Width="110"/>
-                    <DataGridTextColumn Header="Processing Time" Binding="{Binding TotalProcessingTime, StringFormat=hh\\:mm\\:ss}" Width="140"/>
+                    <DataGridTextColumn Header="Time Left" Binding="{Binding TimeLeft, StringFormat={}{0:hh\\:mm\\:ss}}" Width="110"/>
+                    <DataGridTextColumn Header="Processing Time" Binding="{Binding TotalProcessingTime, StringFormat={}{0:hh\\:mm\\:ss}}" Width="140"/>
                     <DataGridTextColumn Header="Deliveries" Binding="{Binding AmountOfDeliveries}" Width="100"/>
                     <DataGridTemplateColumn Header="Actions" Width="*" MinWidth="100">
                         <DataGridTemplateColumn.CellTemplate>

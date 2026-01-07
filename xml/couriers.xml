@@ -200,4 +200,14 @@
     <Date>2026-01-04T18:21:49.1896218+02:00</Date>
     <VehicleType>Car</VehicleType>
   </Courier>
+  <Courier>
+    <Id>390269490</Id>
+    <Name>Test Courier</Name>
+    <PhoneNumber>0500000000</PhoneNumber>
+    <Email>courier390269490@example.com</Email>
+    <Distance xsi:nil="true" />
+    <IsActive>true</IsActive>
+    <Date>2026-01-04T18:21:49.2000000+02:00</Date>
+    <VehicleType>Bike</VehicleType>
+  </Courier>
 </ArrayOfCourier>
