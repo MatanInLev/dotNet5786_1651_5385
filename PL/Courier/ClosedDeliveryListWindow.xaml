@@ -36,7 +36,7 @@
 
             <TextBlock Text="End Status:" VerticalAlignment="Center" Margin="0,0,6,0" />
             <ComboBox Name="cmbEndStatus" Width="160" SelectionChanged="Filter_SelectionChanged">
-                <ComboBoxItem Content="All" />
+                <ComboBoxItem Content="All" IsSelected="True"/>
                 <ComboBoxItem Content="Delivered" />
                 <ComboBoxItem Content="Refused" />
                 <ComboBoxItem Content="Canceled" />

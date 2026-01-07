@@ -417,3 +417,5 @@ FodyWeavers.xsd
 *.msm
 *.msp
 /PL/CourierMainWindow.xaml.cs
+/PL/Courier/ClosedDeliveryListWindow.xaml
+/.gitignore
