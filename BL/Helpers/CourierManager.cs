@@ -205,7 +205,7 @@ internal static class CourierManager
                 VehicleType = (DO.VehicleType)boCourier.Vehicle,
                 IsActive = true, // Default to active upon creation
                 Distance = boCourier.MaxDistance,
-                Date = AdminManager.Now
+                Date = boCourier.StartWorkDate
             };
 
             // 4. Save to DAL

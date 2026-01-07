@@ -122,8 +122,37 @@ static class XMLTools
     public static DateTime GetConfigDateVal(string xmlFileName, string elemName)
     {
         XElement root = XMLTools.LoadListFromXMLElement(xmlFileName);
-        DateTime dt = root.ToDateTimeNullable(elemName) ?? throw new FormatException($"can't convert:  {xmlFileName}, {elemName}");
-        return dt;
+        XElement elem = EnsureElement(root, elemName);
+        string? value = elem.Value;
+
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            DateTime now = DateTime.Now;
+            elem.SetValue(now.ToString("o", CultureInfo.InvariantCulture));
+            XMLTools.SaveListToXMLElement(root, xmlFileName);
+            return now;
+        }
+
+        string[] formats =
+        [
+            "o",
+            "yyyy-MM-ddTHH:mm:ss.fffffffK",
+            "dd/MM/yyyy HH:mm:ss",
+            "dd/MM/yyyy H:mm:ss"
+        ];
+
+        if (DateTime.TryParseExact(value, formats, CultureInfo.InvariantCulture,
+                DateTimeStyles.None, out DateTime exactResult))
+        {
+            return exactResult;
+        }
+
+        if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime fallbackResult))
+        {
+            return fallbackResult;
+        }
+
+        throw new FormatException($"can't convert: {xmlFileName}, {elemName}, value: '{value}'");
     }
     public static string GetConfigStrVal(string xmlFileName, string elemName)
     {
@@ -140,7 +169,7 @@ static class XMLTools
     public static void SetConfigDateVal(string xmlFileName, string elemName, DateTime elemVal)
     {
         XElement root = XMLTools.LoadListFromXMLElement(xmlFileName);
-        root.Element(elemName)?.SetValue((elemVal).ToString());
+        root.Element(elemName)?.SetValue(elemVal.ToString("o", CultureInfo.InvariantCulture));
         XMLTools.SaveListToXMLElement(root, xmlFileName);
     }
     public static void SetConfigStrVal(string xmlFileName, string elemName, string elemVal)
@@ -164,7 +193,7 @@ static class XMLTools
     public static void SetConfigTimeSpanVal(string xmlFileName, string elemName, TimeSpan elemVal)
     {
         XElement root = XMLTools.LoadListFromXMLElement(xmlFileName);
-        root.Element(elemName)?.SetValue((elemVal).ToString());
+        root.Element(elemName)?.SetValue(elemVal.ToString(null, CultureInfo.InvariantCulture));
         XMLTools.SaveListToXMLElement(root, xmlFileName);
     }
     public static TimeSpan GetConfigTimeSpanVal(string xmlFileName, string elemName)
@@ -201,5 +230,17 @@ static class XMLTools
         return int.TryParse(v, NumberStyles.Integer, CultureInfo.InvariantCulture, out var result) ? (int?)result : null;
     }
     #endregion
+
+    // Add this private helper method inside the XMLTools class to fix CS0103
+    private static XElement EnsureElement(XElement root, string elemName)
+    {
+        XElement? elem = root.Element(elemName);
+        if (elem == null)
+        {
+            elem = new XElement(elemName);
+            root.Add(elem);
+        }
+        return elem;
+    }
 
 }
