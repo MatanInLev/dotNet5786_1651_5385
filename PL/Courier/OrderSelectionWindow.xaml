@@ -2,86 +2,464 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:bo="clr-namespace:BO;assembly=BL"
-        Title="Select Order for Delivery" Height="700" Width="1100"
+        Title="Select Order for Delivery" 
+        Height="750" 
+        Width="1200"
         WindowStartupLocation="CenterOwner"
+        Background="#F0F2F5"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
-    <Grid Margin="8">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="250"/>
-        </Grid.RowDefinitions>
+    
+    <Window.Resources>
+        <!-- Modern Button Template -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                BorderThickness="0"
+                                Padding="16,10">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"/>
+                            <Border.Effect>
+                                <DropShadowEffect Color="#000000" BlurRadius="8" ShadowDepth="2" Opacity="0.15"/>
+                            </Border.Effect>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.98" ScaleY="0.98"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,8">
-            <Label Content="Filter by Type:" VerticalAlignment="Center"/>
-            <ComboBox x:Name="cmbTypeFilter" Width="180" Margin="6,0,12,0"
-                      ItemsSource="{Binding OrderTypes}"
-                      SelectedItem="{Binding SelectedOrderType, Mode=TwoWay}"/>
+        <!-- Small Button Style -->
+        <Style x:Key="SmallButton" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                BorderThickness="0"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.85"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" Value="0.7"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
 
-            <Label Content="Sort by:" VerticalAlignment="Center"/>
-            <ComboBox x:Name="cmbSort" Width="180" Margin="6,0,12,0" SelectedIndex="0">
-                <ComboBoxItem Content="ScheduleStatus"/>
-                <ComboBoxItem Content="Distance"/>
-                <ComboBoxItem Content="TimeLeft"/>
-            </ComboBox>
+        <!-- Card Style -->
+        <Style x:Key="CardPanel" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#000000" BlurRadius="16" ShadowDepth="3" Opacity="0.08"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-            <Button Content="Apply" Width="80" Click="ApplyFilters_Click"/>
-            <Button Content="Clear" Width="80" Margin="6,0,0,0" Click="ClearFilters_Click"/>
+        <!-- Modern ComboBox Style -->
+        <Style x:Key="ModernComboBox" TargetType="ComboBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <Border x:Name="border"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="8">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ContentPresenter Grid.Column="0"
+                                                      Content="{TemplateBinding SelectionBoxItem}"
+                                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                      Margin="{TemplateBinding Padding}"
+                                                      VerticalAlignment="Center"
+                                                      HorizontalAlignment="Left"
+                                                      IsHitTestVisible="False"/>
+                                    <ToggleButton Grid.Column="1"
+                                                  IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                  Focusable="False"
+                                                  Background="Transparent"
+                                                  BorderThickness="0"
+                                                  Width="30">
+                                        <Path Data="M 0 0 L 4 4 L 8 0 Z" Fill="#666" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </ToggleButton>
+                                </Grid>
+                            </Border>
+                            <Popup IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   Placement="Bottom"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   PopupAnimation="Slide">
+                                <Border Background="White"
+                                        BorderBrush="#E0E0E0"
+                                        BorderThickness="1"
+                                        CornerRadius="8"
+                                        Margin="0,4,0,0">
+                                    <Border.Effect>
+                                        <DropShadowEffect Color="#000000" BlurRadius="16" ShadowDepth="2" Opacity="0.12"/>
+                                    </Border.Effect>
+                                    <ScrollViewer MaxHeight="200" Margin="0,4">
+                                        <ItemsPresenter/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#8E44AD"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-            <TextBlock Text="" HorizontalAlignment="Right" Margin="20,0,0,0"/>
-        </StackPanel>
+        <!-- Modern DataGrid Style -->
+        <Style x:Key="ModernDataGrid" TargetType="DataGrid">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+            <Setter Property="AlternatingRowBackground" Value="#FAFBFC"/>
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="CanUserDeleteRows" Value="False"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="RowHeight" Value="42"/>
+        </Style>
 
-        <DataGrid x:Name="dgOrders" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single"
-                  MouseLeftButtonUp="DgOrders_MouseLeftButtonUp">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Order ID" Binding="{Binding Id}" Width="80"/>
-                <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="120"/>
-                <DataGridTextColumn Header="Distance (km)" Binding="{Binding DistanceFromCompany, StringFormat=N2}" Width="120"/>
-                <DataGridTextColumn Header="Schedule" Binding="{Binding ScheduleStatus}" Width="120"/>
-                <DataGridTextColumn Header="Time Left" Binding="{Binding TimeLeft, StringFormat=hh\:mm\:ss}" Width="120"/>
-                <DataGridTextColumn Header="Max Delivery" Binding="{Binding MaxDeliveryDate}" Width="160"/>
-                <DataGridTemplateColumn Header="Action" Width="120">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button Content="Collect" Width="90" Click="Collect_Click" Tag="{Binding Id}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+        <!-- DataGrid Column Header Style -->
+        <Style x:Key="ModernColumnHeader" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#F8F9FA"/>
+            <Setter Property="Foreground" Value="#495057"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="BorderThickness" Value="0,0,0,2"/>
+            <Setter Property="BorderBrush" Value="#E9ECEF"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
 
-        <Grid Grid.Row="2" Margin="0,8,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="400"/>
-            </Grid.ColumnDefinitions>
+        <!-- DataGrid Cell Style -->
+        <Style x:Key="ModernCell" TargetType="DataGridCell">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="12,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridCell">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#F3E5F5"/>
+                    <Setter Property="Foreground" Value="#6A1B9A"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
-            <!-- Left: map / details -->
-            <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="1" CornerRadius="6" Padding="6">
-                <DockPanel>
-                    <TextBlock Text="Selected order map / route" FontWeight="Bold" Margin="0,0,0,6"/>
-                    <WebBrowser x:Name="wbMap" />
-                </DockPanel>
-            </Border>
+        <!-- DataGrid Row Style -->
+        <Style x:Key="ModernRow" TargetType="DataGridRow">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F8F3FC"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#F3E5F5"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
 
-            <!-- Right: details -->
-            <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="1" CornerRadius="6" Padding="8" Margin="8,0,0,0">
-                <StackPanel>
-                    <TextBlock Text="Order Preview" FontWeight="Bold" Margin="0,0,0,8"/>
-                    <TextBlock Text="Order ID:" FontWeight="SemiBold"/>
-                    <TextBlock x:Name="tbOrderId" />
-                    <TextBlock Text="Customer:" FontWeight="SemiBold" Margin="0,8,0,0"/>
-                    <TextBlock x:Name="tbCustomer" />
-                    <TextBlock Text="Address:" FontWeight="SemiBold" Margin="0,8,0,0"/>
-                    <TextBlock x:Name="tbAddress" TextWrapping="Wrap"/>
-                    <TextBlock Text="Distance:" FontWeight="SemiBold" Margin="0,8,0,0"/>
-                    <TextBlock x:Name="tbDistance" />
-                    <TextBlock Text="Schedule Status:" FontWeight="SemiBold" Margin="0,8,0,0"/>
-                    <TextBlock x:Name="tbSched" />
-                    <TextBlock Text="Time Left:" FontWeight="SemiBold" Margin="0,8,0,0"/>
-                    <TextBlock x:Name="tbTimeLeft" />
-                </StackPanel>
-            </Border>
-        </Grid>
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="16"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Left Panel - Orders List -->
+        <Border Grid.Column="0" Style="{StaticResource CardPanel}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Header -->
+                <TextBlock Grid.Row="0" 
+                           Text="?? Available Orders" 
+                           FontSize="24" 
+                           FontWeight="Bold" 
+                           Foreground="#2C3E50"
+                           Margin="0,0,0,20"/>
+
+                <!-- Filter Controls -->
+                <Border Grid.Row="1" 
+                        Background="#F8F9FA" 
+                        CornerRadius="8" 
+                        Padding="16" 
+                        Margin="0,0,0,16">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="180"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="180"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" 
+                                   Text="Type:" 
+                                   VerticalAlignment="Center"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="#495057"
+                                   Margin="0,0,8,0"/>
+                        
+                        <ComboBox Grid.Column="1"
+                                  x:Name="cmbTypeFilter"
+                                  Style="{StaticResource ModernComboBox}"
+                                  ItemsSource="{Binding OrderTypes}"
+                                  SelectedItem="{Binding SelectedOrderType, Mode=TwoWay}"/>
+
+                        <TextBlock Grid.Column="3" 
+                                   Text="Sort:" 
+                                   VerticalAlignment="Center"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="#495057"
+                                   Margin="0,0,8,0"/>
+                        
+                        <ComboBox Grid.Column="4"
+                                  x:Name="cmbSort" 
+                                  Style="{StaticResource ModernComboBox}"
+                                  SelectedIndex="0">
+                            <ComboBoxItem Content="Schedule Status"/>
+                            <ComboBoxItem Content="Distance"/>
+                            <ComboBoxItem Content="Time Left"/>
+                        </ComboBox>
+
+                        <Button Grid.Column="6"
+                                Content="Apply" 
+                                Click="ApplyFilters_Click"
+                                Style="{StaticResource ModernButton}"
+                                Background="#8E44AD"
+                                MinWidth="90"
+                                Margin="0,0,8,0"/>
+                        
+                        <Button Grid.Column="7"
+                                Content="Clear" 
+                                Click="ClearFilters_Click"
+                                Style="{StaticResource ModernButton}"
+                                Background="#95A5A6"
+                                MinWidth="90"/>
+                    </Grid>
+                </Border>
+
+                <!-- Orders DataGrid -->
+                <Border Grid.Row="2" 
+                        Background="White" 
+                        CornerRadius="10" 
+                        BorderBrush="#E9ECEF" 
+                        BorderThickness="1">
+                    <DataGrid x:Name="dgOrders"
+                              Style="{StaticResource ModernDataGrid}"
+                              ColumnHeaderStyle="{StaticResource ModernColumnHeader}"
+                              CellStyle="{StaticResource ModernCell}"
+                              RowStyle="{StaticResource ModernRow}"
+                              IsReadOnly="True"
+                              MouseLeftButtonUp="DgOrders_MouseLeftButtonUp"
+                              HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Auto">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="70"/>
+                            <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="90"/>
+                            <DataGridTextColumn Header="Distance" Binding="{Binding DistanceFromCompany, StringFormat={}{0:F2} km}" Width="90"/>
+                            <DataGridTextColumn Header="Schedule" Binding="{Binding ScheduleStatus}" Width="90"/>
+                            <DataGridTextColumn Header="Time Left" Binding="{Binding TimeLeft, StringFormat={}{0:hh\\:mm\\:ss}}" Width="100"/>
+                            <DataGridTextColumn Header="Max Delivery" Binding="{Binding MaxDeliveryDate, StringFormat={}{0:MMM dd, HH:mm}}" Width="120"/>
+                            <DataGridTemplateColumn Header="Action" Width="100">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Collect" 
+                                                Click="Collect_Click" 
+                                                Tag="{Binding Id}"
+                                                Style="{StaticResource SmallButton}"
+                                                Background="#28A745"
+                                                Padding="12,6"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Right Panel - Order Details and Map -->
+        <Border Grid.Column="2" Style="{StaticResource CardPanel}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="16"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Header -->
+                <TextBlock Grid.Row="0" 
+                           Text="?? Order Preview" 
+                           FontSize="20" 
+                           FontWeight="Bold" 
+                           Foreground="#2C3E50"
+                           Margin="0,0,0,16"/>
+
+                <!-- Order Details -->
+                <Border Grid.Row="1"
+                        Background="#F8F9FA" 
+                        CornerRadius="10" 
+                        Padding="16">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <TextBlock Text="Order ID" 
+                                       FontSize="11" 
+                                       FontWeight="SemiBold" 
+                                       Foreground="#7F8C8D"
+                                       Margin="0,0,0,4"/>
+                            <TextBlock x:Name="tbOrderId" 
+                                       FontSize="14" 
+                                       Foreground="#2C3E50"
+                                       Margin="0,0,0,12"/>
+
+                            <TextBlock Text="Customer" 
+                                       FontSize="11" 
+                                       FontWeight="SemiBold" 
+                                       Foreground="#7F8C8D"
+                                       Margin="0,0,0,4"/>
+                            <TextBlock x:Name="tbCustomer" 
+                                       FontSize="14" 
+                                       Foreground="#2C3E50"
+                                       Margin="0,0,0,12"/>
+
+                            <TextBlock Text="Address" 
+                                       FontSize="11" 
+                                       FontWeight="SemiBold" 
+                                       Foreground="#7F8C8D"
+                                       Margin="0,0,0,4"/>
+                            <TextBlock x:Name="tbAddress" 
+                                       FontSize="14" 
+                                       Foreground="#2C3E50"
+                                       TextWrapping="Wrap"
+                                       Margin="0,0,0,12"/>
+
+                            <TextBlock Text="Distance from Company" 
+                                       FontSize="11" 
+                                       FontWeight="SemiBold" 
+                                       Foreground="#7F8C8D"
+                                       Margin="0,0,0,4"/>
+                            <TextBlock x:Name="tbDistance" 
+                                       FontSize="14" 
+                                       Foreground="#2C3E50"
+                                       Margin="0,0,0,12"/>
+
+                            <TextBlock Text="Schedule Status" 
+                                       FontSize="11" 
+                                       FontWeight="SemiBold" 
+                                       Foreground="#7F8C8D"
+                                       Margin="0,0,0,4"/>
+                            <TextBlock x:Name="tbSched" 
+                                       FontSize="14" 
+                                       Foreground="#2C3E50"
+                                       Margin="0,0,0,12"/>
+
+                            <TextBlock Text="Time Remaining" 
+                                       FontSize="11" 
+                                       FontWeight="SemiBold" 
+                                       Foreground="#7F8C8D"
+                                       Margin="0,0,0,4"/>
+                            <TextBlock x:Name="tbTimeLeft" 
+                                       FontSize="14" 
+                                       Foreground="#2C3E50"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+
+                <!-- Map -->
+                <Border Grid.Row="3"
+                        Background="White" 
+                        CornerRadius="10" 
+                        BorderBrush="#E9ECEF" 
+                        BorderThickness="1"
+                        ClipToBounds="True">
+                    <Grid>
+                        <WebBrowser x:Name="wbMap" 
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"/>
+                        <TextBlock Text="??? Route Map" 
+                                   FontSize="12" 
+                                   Foreground="#95A5A6"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   IsHitTestVisible="False"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
     </Grid>
 </Window>

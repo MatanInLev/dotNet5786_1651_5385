@@ -5,60 +5,418 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:bo="clr-namespace:BO;assembly=BL"
         mc:Ignorable="d"
-        Title="Open Orders" Height="500" Width="800"
+        Title="Open Orders for Courier" 
+        Height="750" 
+        Width="1200"
         WindowStartupLocation="CenterOwner"
-        Background="#F5F7FA"
+        Background="#F0F2F5"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
-    <Grid Margin="12">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-            <TextBlock Text="Filter by type:" VerticalAlignment="Center"/>
-            <ComboBox Width="160"
-                      ItemsSource="{Binding OrderTypeOptions}"
-                      SelectedValue="{Binding SelectedType, Mode=TwoWay}"
-                      SelectedValuePath="Value"
-                      DisplayMemberPath="Label"
-                      Margin="8,0,0,0"/>
-            <Button Content="Refresh" Width="100" Click="Refresh_Click" Margin="8,0,0,0"/>
-        </StackPanel>
+    <Window.Resources>
+        <!-- Modern Button Template -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="10"
+                                BorderThickness="0"
+                                Padding="16,10">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"/>
+                            <Border.Effect>
+                                <DropShadowEffect Color="#000000" BlurRadius="8" ShadowDepth="2" Opacity="0.15"/>
+                            </Border.Effect>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="#000000" BlurRadius="12" ShadowDepth="3" Opacity="0.25"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.98" ScaleY="0.98"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
 
-        <DataGrid Grid.Row="1" Margin="0,10,0,10" ItemsSource="{Binding Orders}" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="Orders_SelectionChanged" SelectedItem="{Binding SelectedOrder}">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="60"/>
-                <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="100"/>
-                <DataGridTextColumn Header="Address" Binding="{Binding CustomerAddress}" Width="200"/>
-                <DataGridTextColumn Header="Distance (km)" Binding="{Binding DistanceFromCompany, StringFormat={}{0:F2}}" Width="110"/>
-                <DataGridTextColumn Header="Schedule Status" Binding="{Binding ScheduleStatus}" Width="110"/>
-                <DataGridTemplateColumn Header="Action" Width="120">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button Content="Collect" Click="Collect_Click" Tag="{Binding Id}" Padding="6,2"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+        <!-- Small Button Style -->
+        <Style x:Key="SmallButton" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                BorderThickness="0"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.85"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" Value="0.7"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
 
-        <Border Grid.Row="2" BorderBrush="#DDD" BorderThickness="1" Padding="6" Margin="0,0,0,8">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                <TextBlock Text="Selection:" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                <TextBlock Text="{Binding SelectedOrder.CustomerAddress}" VerticalAlignment="Center" Width="250" TextWrapping="Wrap"/>
-                <TextBlock Text="Coords:" VerticalAlignment="Center" Margin="12,0,4,0"/>
-                <TextBlock VerticalAlignment="Center" Text="{Binding SelectedOrder.Latitude, StringFormat={}{0:F4}}"/>
-                <TextBlock VerticalAlignment="Center" Text="," Margin="2,0"/>
-                <TextBlock VerticalAlignment="Center" Text="{Binding SelectedOrder.Longitude, StringFormat={}{0:F4}}"/>
-                <Button Content="Close" Width="90" Click="Close_Click" Margin="12,0,0,0" HorizontalAlignment="Right"/>
-            </StackPanel>
+        <!-- Card Style -->
+        <Style x:Key="CardPanel" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="24"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#000000" BlurRadius="20" ShadowDepth="4" Opacity="0.08"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Modern ComboBox Style -->
+        <Style x:Key="ModernComboBox" TargetType="ComboBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <Border x:Name="border"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="8">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ContentPresenter Grid.Column="0"
+                                                      Content="{TemplateBinding SelectionBoxItem}"
+                                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                      Margin="{TemplateBinding Padding}"
+                                                      VerticalAlignment="Center"
+                                                      HorizontalAlignment="Left"
+                                                      IsHitTestVisible="False"/>
+                                    <ToggleButton Grid.Column="1"
+                                                  IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                  Focusable="False"
+                                                  Background="Transparent"
+                                                  BorderThickness="0"
+                                                  Width="30">
+                                        <Path Data="M 0 0 L 4 4 L 8 0 Z" Fill="#666" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </ToggleButton>
+                                </Grid>
+                            </Border>
+                            <Popup IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   Placement="Bottom"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   PopupAnimation="Slide">
+                                <Border Background="White"
+                                        BorderBrush="#E0E0E0"
+                                        BorderThickness="1"
+                                        CornerRadius="8"
+                                        Margin="0,4,0,0">
+                                    <Border.Effect>
+                                        <DropShadowEffect Color="#000000" BlurRadius="16" ShadowDepth="2" Opacity="0.12"/>
+                                    </Border.Effect>
+                                    <ScrollViewer MaxHeight="200" Margin="0,4">
+                                        <ItemsPresenter/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#FF5722"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Modern DataGrid Style -->
+        <Style x:Key="ModernDataGrid" TargetType="DataGrid">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+            <Setter Property="AlternatingRowBackground" Value="#FAFBFC"/>
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="CanUserDeleteRows" Value="False"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="RowHeight" Value="44"/>
+        </Style>
+
+        <!-- DataGrid Column Header Style -->
+        <Style x:Key="ModernColumnHeader" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#F8F9FA"/>
+            <Setter Property="Foreground" Value="#495057"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="5,8"/>
+            <Setter Property="BorderThickness" Value="0,0,0,2"/>
+            <Setter Property="BorderBrush" Value="#E9ECEF"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+
+        <!-- DataGrid Cell Style -->
+        <Style x:Key="ModernCell" TargetType="DataGridCell">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="5,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridCell">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#FFE5E0"/>
+                    <Setter Property="Foreground" Value="#D84315"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- DataGrid Row Style -->
+        <Style x:Key="ModernRow" TargetType="DataGridRow">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FFF3F0"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#FFE5E0"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" MinWidth="500"/>
+            <ColumnDefinition Width="12"/>
+            <ColumnDefinition Width="3*" MinWidth="500"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Left Panel - Orders List -->
+        <Border Grid.Column="0" Style="{StaticResource CardPanel}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Header -->
+                <TextBlock Grid.Row="0" 
+                           Text="Open Orders" 
+                           FontSize="24" 
+                           FontWeight="Bold" 
+                           Foreground="#2C3E50"
+                           Margin="0,0,0,20"/>
+
+                <!-- Filter Controls -->
+                <Border Grid.Row="1" 
+                        Background="#F8F9FA" 
+                        CornerRadius="10" 
+                        Padding="16" 
+                        Margin="0,0,0,16">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" 
+                                   Text="Filter by type:" 
+                                   VerticalAlignment="Center"
+                                   FontSize="13"
+                                   Foreground="#495057"
+                                   Margin="0,0,12,0"/>
+                        
+                        <ComboBox Grid.Column="1"
+                                  Style="{StaticResource ModernComboBox}"
+                                  ItemsSource="{Binding OrderTypeOptions}"
+                                  SelectedValue="{Binding SelectedType, Mode=TwoWay}"
+                                  SelectedValuePath="Value"
+                                  DisplayMemberPath="Label"
+                                  SelectedIndex="-1"
+                                  MinWidth="150"/>
+                        
+                        <Button Grid.Column="2"
+                                Content="Refresh" 
+                                Click="Refresh_Click"
+                                Style="{StaticResource ModernButton}"
+                                Background="#FF5722"
+                                Margin="12,0,0,0"
+                                MinWidth="100"/>
+                    </Grid>
+                </Border>
+
+                <!-- Orders DataGrid -->
+                <Border Grid.Row="2" 
+                        Background="White" 
+                        CornerRadius="12" 
+                        BorderBrush="#E9ECEF" 
+                        BorderThickness="1">
+                    <DataGrid ItemsSource="{Binding Orders}" 
+                              SelectedItem="{Binding SelectedOrder}"
+                              SelectionChanged="Orders_SelectionChanged"
+                              Style="{StaticResource ModernDataGrid}"
+                              ColumnHeaderStyle="{StaticResource ModernColumnHeader}"
+                              CellStyle="{StaticResource ModernCell}"
+                              RowStyle="{StaticResource ModernRow}"
+                              IsReadOnly="True"
+                              HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Auto">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="Auto" MinWidth="60"/>
+                            <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="60"/>
+                            <DataGridTextColumn Header="Address" Binding="{Binding CustomerAddress}" Width="*" MinWidth="120"/>
+                            <DataGridTextColumn Header="Distance" Binding="{Binding DistanceFromCompany, StringFormat={}{0:F2} km}" Width="60"/>
+                            <DataGridTextColumn Header="Status" Binding="{Binding ScheduleStatus}" Width="85"/>
+                            <DataGridTemplateColumn Header="Action" Width="85">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Collect" 
+                                                Click="Collect_Click" 
+                                                Tag="{Binding Id}"
+                                                Style="{StaticResource SmallButton}"
+                                                Background="#28A745"
+                                                Padding="12,6"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
+
+                <!-- Close Button -->
+                <Button Grid.Row="3"
+                        Content="Close" 
+                        Click="Close_Click"
+                        Style="{StaticResource ModernButton}"
+                        Background="#6C757D"
+                        HorizontalAlignment="Right"
+                        MinWidth="120"
+                        Margin="0,16,0,0"/>
+            </Grid>
         </Border>
 
-        <Border Grid.Row="3" BorderBrush="#DDD" BorderThickness="1" Padding="4" Height="240">
-            <WebBrowser Name="wbMap" />
+        <!-- Right Panel - Map and Details -->
+        <Border Grid.Column="2" Style="{StaticResource CardPanel}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*" MinHeight="500"/>
+                </Grid.RowDefinitions>
+
+                <!-- Map Header -->
+                <TextBlock Grid.Row="0" 
+                           Text="Location Map" 
+                           FontSize="32" 
+                           FontWeight="Bold" 
+                           Foreground="#2C3E50"
+                           Margin="0,0,0,16"/>
+
+                <!-- Selection Details -->
+                <Border Grid.Row="1" 
+                        Background="#F8F9FA" 
+                        CornerRadius="10" 
+                        Padding="12" 
+                        Margin="0,0,0,12">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
+                            <TextBlock Text="Selected Address:" 
+                                       FontWeight="SemiBold"
+                                       FontSize="16"
+                                       Foreground="#495057"
+                                       Margin="0,0,8,0"/>
+                            <TextBlock Text="{Binding SelectedOrder.CustomerAddress, FallbackValue='(No order selected)'}" 
+                                       FontSize="16"
+                                       Foreground="#212529"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                            <TextBlock Text="Coordinates:" 
+                                       FontWeight="SemiBold"
+                                       FontSize="16"
+                                       Foreground="#495057"
+                                       Margin="0,0,8,0"/>
+                            <TextBlock Text="{Binding SelectedOrder.Latitude, StringFormat={}{0:F4}, FallbackValue='-'}" 
+                                       FontSize="16"
+                                       Foreground="#212529"/>
+                            <TextBlock Text=", " 
+                                       FontSize="16"
+                                       Foreground="#212529"
+                                       Margin="2,0"/>
+                            <TextBlock Text="{Binding SelectedOrder.Longitude, StringFormat={}{0:F4}, FallbackValue='-'}" 
+                                       FontSize="16"
+                                       Foreground="#212529"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Map -->
+                <Border Grid.Row="2" 
+                        Background="White" 
+                        CornerRadius="12" 
+                        BorderBrush="#E9ECEF" 
+                        BorderThickness="1"
+                        ClipToBounds="True">
+                    <WebBrowser Name="wbMap" 
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"/>
+                </Border>
+            </Grid>
         </Border>
     </Grid>
 </Window>

@@ -411,7 +411,7 @@
 
         <!-- Add Order Button -->
         <Button Grid.Row="3" 
-                Content="➕  Add New Order" 
+                Content="Add New Order" 
                 Click="AddOrder_Click"
                 Style="{StaticResource ModernButton}"
                 HorizontalAlignment="Center"

@@ -88,7 +88,7 @@ namespace PL.Order
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading orders: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernMessageBox.Show($"Error loading orders: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
             }
         }
 
@@ -147,7 +147,7 @@ namespace PL.Order
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error opening order window: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    ModernMessageBox.Show($"Error opening order window: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
                 }
             }));
         }
@@ -163,7 +163,7 @@ namespace PL.Order
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernMessageBox.Show($"Error: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
             }
         }
 

@@ -147,7 +147,7 @@ namespace PL.Courier
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error opening history: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernMessageBox.Show($"Error opening history: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
             }
         }
 
@@ -159,7 +159,7 @@ namespace PL.Courier
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error opening orders: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernMessageBox.Show($"Error opening orders: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
             }
         }
 
@@ -169,7 +169,7 @@ namespace PL.Courier
             {
                 if (!CanPickOrder)
                 {
-                    MessageBox.Show("You cannot pick an order now (inactive or already delivering).", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    ModernMessageBox.Show("You cannot pick an order now (inactive or already delivering).", "Info", ModernMessageBox.MessageBoxType.Information, ModernMessageBox.MessageBoxButtons.OK, this);
                     return;
                 }
 
@@ -179,7 +179,7 @@ namespace PL.Courier
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error opening orders: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernMessageBox.Show($"Error opening orders: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
             }
         }
 
@@ -189,7 +189,7 @@ namespace PL.Courier
             {
                 if (CurrentOrderInProgress == null)
                 {
-                    MessageBox.Show("No delivery in progress.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                    ModernMessageBox.Show("No delivery in progress.", "Info", ModernMessageBox.MessageBoxType.Information, ModernMessageBox.MessageBoxButtons.OK, this);
                     return;
                 }
 
@@ -201,12 +201,12 @@ namespace PL.Courier
 
                 var status = dialog.SelectedStatus;
                 s_bl.Order.CompleteOrderDelivery(_adminId, CurrentOrderInProgress.DeliveryId, status);
-                MessageBox.Show("Delivery completed.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                ModernMessageBox.Show("Delivery completed.", "Success", ModernMessageBox.MessageBoxType.Success, ModernMessageBox.MessageBoxButtons.OK, this);
                 Refresh();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error while finishing: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernMessageBox.Show($"Error while finishing: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
             }
         }
 
@@ -216,14 +216,14 @@ namespace PL.Courier
             {
                 if (CurrentCourier == null)
                 {
-                    MessageBox.Show("No courier loaded.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    ModernMessageBox.Show("No courier loaded.", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
                     return;
                 }
 
                 // Validate vehicle change when delivery in progress
                 if (CurrentOrderInProgress != null && EditableVehicle != CurrentCourier.Vehicle)
                 {
-                    MessageBox.Show("Cannot change vehicle while a delivery is in progress.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    ModernMessageBox.Show("Cannot change vehicle while a delivery is in progress.", "Validation", ModernMessageBox.MessageBoxType.Warning, ModernMessageBox.MessageBoxButtons.OK, this);
                     return;
                 }
 
@@ -231,7 +231,7 @@ namespace PL.Courier
                 var cfg = s_bl.Admin.GetConfig();
                 if (cfg.MaxRange > 0 && EditableMaxDistance.HasValue && EditableMaxDistance.Value > cfg.MaxRange)
                 {
-                    MessageBox.Show($"Max distance cannot exceed company limit ({cfg.MaxRange:F2} km).", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    ModernMessageBox.Show($"Max distance cannot exceed company limit ({cfg.MaxRange:F2} km).", "Validation", ModernMessageBox.MessageBoxType.Warning, ModernMessageBox.MessageBoxButtons.OK, this);
                     return;
                 }
 
@@ -251,12 +251,12 @@ namespace PL.Courier
                 };
 
                 s_bl.Courier.Update(_adminId, updated);
-                MessageBox.Show("Profile updated.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                ModernMessageBox.Show("Profile updated.", "Success", ModernMessageBox.MessageBoxType.Success, ModernMessageBox.MessageBoxButtons.OK, this);
                 Refresh();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Update failed: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernMessageBox.Show($"Update failed: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
             }
         }
     }

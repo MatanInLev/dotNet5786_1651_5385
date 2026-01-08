@@ -1,5 +1,6 @@
 ﻿using DalApi;
 using System.Linq;
+using BO;
 
 namespace Helpers;
 
@@ -260,14 +261,62 @@ internal static class CourierManager
             DO.Order? order = s_dal.Order.Read(activeDelivery.OrderId);
             if (order != null)
             {
+                // Get configuration for distance and time calculations
+                var config = s_dal.Config;
+                
+                // Calculate distance from company to order location
+                double distance = Tools.CalculateAerialDistance(
+                    config.Latitude ?? 0.0,
+                    config.Longitude ?? 0.0,
+                    order.Latitude,
+                    order.Longitude);
+                
+                // Try to calculate actual route distance based on vehicle
+                double? actualDistance = null;
+                try
+                {
+                    actualDistance = Tools.CalculateRouteDistance(
+                        config.Latitude ?? 0.0,
+                        config.Longitude ?? 0.0,
+                        order.Latitude,
+                        order.Longitude,
+                        (BO.Vehicle)doCourier.VehicleType);
+                }
+                catch
+                {
+                    // If routing fails, use aerial distance as actual
+                    actualDistance = distance;
+                }
+                
+                // Calculate status and time information
+                BO.OrderStatus status = OrderManager.CalculateOrderStatus(order.Id);
+                BO.ScheduleStatus scheduleStatus = OrderManager.CalculateScheduleStatus(order.Id);
+                
+                TimeSpan maxTime = config.MaxDeliveryTime;
+                DateTime maxDeadline = order.OrderTime.Add(maxTime);
+                DateTime expectedDelivery = order.OrderTime.Add(maxTime / 2);
+                
+                TimeSpan timeLeft = maxDeadline - AdminManager.Now;
+                if (timeLeft < TimeSpan.Zero) timeLeft = TimeSpan.Zero;
+                
                 orderInProgress = new BO.OrderInProgress
                 {
                     OrderId = order.Id,
                     DeliveryId = activeDelivery.Id,
+                    Type = (BO.OrderType)order.OrderType,
+                    Description = order.Description,
                     CustomerName = order.CustomerName,
                     CustomerAddress = order.Address,
-                    // Calculate status and other details via OrderManager logic if needed
-                    // Status = OrderManager.CalculateOrderStatus(order.Id) 
+                    CustomerPhone = order.CustomerPhone,
+                    Distance = distance,
+                    ActualDistance = actualDistance,
+                    OrderDate = order.OrderTime,
+                    StartDeliveryDate = activeDelivery.StartTime,
+                    ExpectedDelivery = expectedDelivery,
+                    MaxDelivery = maxDeadline,
+                    Status = status,
+                    ScheduleStatus = scheduleStatus,
+                    TimeLeft = timeLeft
                 };
             }
         }

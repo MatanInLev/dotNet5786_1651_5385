@@ -15,8 +15,9 @@
         ShowInTaskbar="False">
 
     <Border Background="White" 
-            CornerRadius="15" 
-            BorderThickness="0"
+            CornerRadius="5" 
+            BorderThickness="2"
+            BorderBrush="#95a5a6"
             Margin="10">
         <Border.Effect>
             <DropShadowEffect Color="#000000" BlurRadius="20" ShadowDepth="5" Opacity="0.3"/>
@@ -68,7 +69,9 @@
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border Background="#27AE60"
-                                    CornerRadius="8"
+                                    CornerRadius="3"
+                                    BorderThickness="1"
+                                    BorderBrush="#229954"
                                     Padding="15,8">
                                 <ContentPresenter HorizontalAlignment="Center" 
                                                   VerticalAlignment="Center"/>
@@ -98,7 +101,9 @@
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border Background="#E74C3C"
-                                    CornerRadius="8"
+                                    CornerRadius="3"
+                                    BorderThickness="1"
+                                    BorderBrush="#C0392B"
                                     Padding="15,8">
                                 <ContentPresenter HorizontalAlignment="Center" 
                                                   VerticalAlignment="Center"/>
@@ -128,7 +133,9 @@
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border Background="#3498DB"
-                                    CornerRadius="8"
+                                    CornerRadius="3"
+                                    BorderThickness="1"
+                                    BorderBrush="#2980B9"
                                     Padding="15,8">
                                 <ContentPresenter HorizontalAlignment="Center" 
                                                   VerticalAlignment="Center"/>

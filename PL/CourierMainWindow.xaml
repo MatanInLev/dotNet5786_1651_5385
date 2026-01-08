@@ -298,7 +298,7 @@
                     Orientation="Horizontal" 
                     HorizontalAlignment="Center" 
                     Margin="0,15,0,0">
-            <Button Content="📦 Pick an Order" 
+            <Button Content="Pick an Order" 
                     Width="200" 
                     Height="45" 
                     Margin="0,0,10,0"
@@ -307,7 +307,7 @@
                     Click="BtnSelectOrder_Click"
                     IsEnabled="{Binding CanPickOrder}"
                     Visibility="{Binding CanPickOrder, Converter={StaticResource BoolToVis}}"/>
-            <Button Content="✅ Complete Delivery" 
+            <Button Content="Complete Delivery" 
                     Width="200" 
                     Height="45" 
                     Margin="10,0,10,0"
@@ -316,7 +316,7 @@
                     Click="BtnFinish_Click"
                     IsEnabled="{Binding CanFinishDelivery}"
                     Visibility="{Binding CanFinishDelivery, Converter={StaticResource BoolToVis}}"/>
-            <Button Content="📋 History" 
+            <Button Content="History" 
                     Width="180" 
                     Height="45" 
                     Margin="10,0,0,0"

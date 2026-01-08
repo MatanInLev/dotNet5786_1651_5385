@@ -60,16 +60,16 @@ namespace PL
                 // Validate input
                 if (string.IsNullOrEmpty(idText) || idText == PlaceholderText)
                 {
-                    MessageBox.Show("Please enter your ID.", "Invalid Input", 
-                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                    ModernMessageBox.Show("Please enter your ID.", "Invalid Input", 
+                        ModernMessageBox.MessageBoxType.Warning, ModernMessageBox.MessageBoxButtons.OK, this);
                     return;
                 }
 
                 // Try to parse the ID
                 if (!int.TryParse(idText, out int userId))
                 {
-                    MessageBox.Show("ID must be a valid number.", "Invalid Input", 
-                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                    ModernMessageBox.Show("ID must be a valid number.", "Invalid Input", 
+                        ModernMessageBox.MessageBoxType.Warning, ModernMessageBox.MessageBoxButtons.OK, this);
                     return;
                 }
 
@@ -103,21 +103,21 @@ namespace PL
                 catch (BlDoesNotExistException)
                 {
                     // Courier not found - show error message
-                    MessageBox.Show($"No account found with ID: {userId}\n\nPlease check your ID and try again.", 
+                    ModernMessageBox.Show($"No account found with ID: {userId}\n\nPlease check your ID and try again.", 
                         "Login Failed", 
-                        MessageBoxButton.OK, 
-                        MessageBoxImage.Error);
+                        ModernMessageBox.MessageBoxType.Error, 
+                        ModernMessageBox.MessageBoxButtons.OK, this);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"An error occurred: {ex.Message}", "Error", 
-                        MessageBoxButton.OK, MessageBoxImage.Error);
+                    ModernMessageBox.Show($"An error occurred: {ex.Message}", "Error", 
+                        ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Login error: {ex.Message}", "Error", 
-                    MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernMessageBox.Show($"Login error: {ex.Message}", "Error", 
+                    ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
             }
         }
     }

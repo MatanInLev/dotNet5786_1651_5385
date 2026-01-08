@@ -3,66 +3,332 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:bo="clr-namespace:BO;assembly=BL"
         xmlns:sys="clr-namespace:System;assembly=System.Runtime"
-        Title="Closed Deliveries" Height="600" Width="900"
+        Title="Delivery History" 
+        Height="700" 
+        Width="1100"
         WindowStartupLocation="CenterOwner"
+        Background="#F0F2F5"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+    
     <Window.Resources>
         <ObjectDataProvider x:Key="OrderTypeCollection" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="bo:OrderType" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+
+        <!-- Modern Button Template -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                BorderThickness="0"
+                                Padding="16,10">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"/>
+                            <Border.Effect>
+                                <DropShadowEffect Color="#000000" BlurRadius="8" ShadowDepth="2" Opacity="0.15"/>
+                            </Border.Effect>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.98" ScaleY="0.98"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+
+        <!-- Card Style -->
+        <Style x:Key="CardPanel" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#000000" BlurRadius="16" ShadowDepth="3" Opacity="0.08"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Modern ComboBox Style -->
+        <Style x:Key="ModernComboBox" TargetType="ComboBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <Border x:Name="border"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="6">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ContentPresenter Grid.Column="0"
+                                                      Content="{TemplateBinding SelectionBoxItem}"
+                                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                      Margin="{TemplateBinding Padding}"
+                                                      VerticalAlignment="Center"
+                                                      HorizontalAlignment="Left"
+                                                      IsHitTestVisible="False"/>
+                                    <ToggleButton Grid.Column="1"
+                                                  IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                  Focusable="False"
+                                                  Background="Transparent"
+                                                  BorderThickness="0"
+                                                  Width="30">
+                                        <Path Data="M 0 0 L 4 4 L 8 0 Z" Fill="#666" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </ToggleButton>
+                                </Grid>
+                            </Border>
+                            <Popup IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   Placement="Bottom"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   PopupAnimation="Slide">
+                                <Border Background="White"
+                                        BorderBrush="#E0E0E0"
+                                        BorderThickness="1"
+                                        CornerRadius="6"
+                                        Margin="0,4,0,0">
+                                    <Border.Effect>
+                                        <DropShadowEffect Color="#000000" BlurRadius="16" ShadowDepth="2" Opacity="0.12"/>
+                                    </Border.Effect>
+                                    <ScrollViewer MaxHeight="200" Margin="0,4">
+                                        <ItemsPresenter/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#3498DB"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Modern DataGrid Style -->
+        <Style x:Key="ModernDataGrid" TargetType="DataGrid">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="GridLinesVisibility" Value="None"/>
+            <Setter Property="AlternatingRowBackground" Value="#FAFBFC"/>
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="CanUserDeleteRows" Value="False"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="RowHeight" Value="42"/>
+        </Style>
+
+        <!-- DataGrid Column Header Style -->
+        <Style x:Key="ModernColumnHeader" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#F8F9FA"/>
+            <Setter Property="Foreground" Value="#495057"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="BorderThickness" Value="0,0,0,2"/>
+            <Setter Property="BorderBrush" Value="#E9ECEF"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+
+        <!-- DataGrid Cell Style -->
+        <Style x:Key="ModernCell" TargetType="DataGridCell">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="12,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridCell">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#E3F2FD"/>
+                    <Setter Property="Foreground" Value="#1976D2"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- DataGrid Row Style -->
+        <Style x:Key="ModernRow" TargetType="DataGridRow">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F5F5F5"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#E3F2FD"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
 
-    <Grid Margin="12">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <Grid Margin="20">
+        <Border Style="{StaticResource CardPanel}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-        <TextBlock Text="Closed Deliveries History" FontSize="18" FontWeight="Bold" Margin="0,0,0,8"/>
+                <!-- Header -->
+                <TextBlock Grid.Row="0" 
+                           Text="Delivery History" 
+                           FontSize="26" 
+                           FontWeight="Bold" 
+                           Foreground="#2C3E50"
+                           Margin="0,0,0,20"/>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,6,0,12">
-            <TextBlock Text="Type:" VerticalAlignment="Center" Margin="0,0,6,0" />
-            <ComboBox Name="cmbType" Width="160" Margin="0,0,12,0" SelectionChanged="Filter_SelectionChanged">
-                <ComboBox.ItemsSource>
-                    <CompositeCollection>
-                        <ComboBoxItem Content="All" />
-                        <CollectionContainer Collection="{Binding Source={StaticResource OrderTypeCollection}}" />
-                    </CompositeCollection>
-                </ComboBox.ItemsSource>
-            </ComboBox>
+                <!-- Filters -->
+                <Border Grid.Row="1" 
+                        Background="#F8F9FA" 
+                        CornerRadius="8" 
+                        Padding="16" 
+                        Margin="0,0,0,16">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-            <TextBlock Text="End Status:" VerticalAlignment="Center" Margin="0,0,6,0" />
-            <ComboBox Name="cmbEndStatus" Width="160" Margin="0,0,12,0" SelectionChanged="Filter_SelectionChanged">
-                <ComboBoxItem Content="All" IsSelected="True"/>
-                <ComboBoxItem Content="Delivered" />
-                <ComboBoxItem Content="Refused" />
-                <ComboBoxItem Content="Canceled" />
-            </ComboBox>
+                        <!-- Type Filter -->
+                        <TextBlock Grid.Column="0" 
+                                   Text="Type:" 
+                                   VerticalAlignment="Center"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="#495057"
+                                   Margin="0,0,8,0"/>
+                        <ComboBox Grid.Column="1"
+                                  Name="cmbType" 
+                                  Style="{StaticResource ModernComboBox}"
+                                  SelectionChanged="Filter_SelectionChanged">
+                            <ComboBox.ItemsSource>
+                                <CompositeCollection>
+                                    <ComboBoxItem Content="All" />
+                                    <CollectionContainer Collection="{Binding Source={StaticResource OrderTypeCollection}}" />
+                                </CompositeCollection>
+                            </ComboBox.ItemsSource>
+                        </ComboBox>
 
-            <TextBlock Text="Sort:" VerticalAlignment="Center" Margin="0,0,6,0" />
-            <ComboBox Name="cmbSort" Width="160" Margin="0,0,12,0" SelectionChanged="Filter_SelectionChanged">
-                <ComboBoxItem Content="End Status" Tag="status" IsSelected="True"/>
-                <ComboBoxItem Content="Distance" Tag="distance"/>
-                <ComboBoxItem Content="Processing Time" Tag="processing"/>
-            </ComboBox>
+                        <!-- End Status Filter -->
+                        <TextBlock Grid.Column="3" 
+                                   Text="Status:" 
+                                   VerticalAlignment="Center"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="#495057"
+                                   Margin="0,0,8,0"/>
+                        <ComboBox Grid.Column="4"
+                                  Name="cmbEndStatus" 
+                                  Style="{StaticResource ModernComboBox}"
+                                  SelectionChanged="Filter_SelectionChanged">
+                            <ComboBoxItem Content="All" IsSelected="True"/>
+                            <ComboBoxItem Content="Delivered" />
+                            <ComboBoxItem Content="Refused" />
+                            <ComboBoxItem Content="Canceled" />
+                        </ComboBox>
 
-            <Button Content="Refresh" Width="100" Click="Refresh_Click"/>
-        </StackPanel>
+                        <!-- Sort By -->
+                        <TextBlock Grid.Column="6" 
+                                   Text="Sort:" 
+                                   VerticalAlignment="Center"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="#495057"
+                                   Margin="0,0,8,0"/>
+                        <ComboBox Grid.Column="7"
+                                  Name="cmbSort" 
+                                  Style="{StaticResource ModernComboBox}"
+                                  SelectionChanged="Filter_SelectionChanged">
+                            <ComboBoxItem Content="End Status" Tag="status" IsSelected="True"/>
+                            <ComboBoxItem Content="Distance" Tag="distance"/>
+                            <ComboBoxItem Content="Processing Time" Tag="processing"/>
+                        </ComboBox>
 
-        <DataGrid Grid.Row="2" ItemsSource="{Binding ClosedDeliveries}" AutoGenerateColumns="False" IsReadOnly="True">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Delivery ID" Binding="{Binding DeliveryId}" Width="80"/>
-                <DataGridTextColumn Header="Order ID" Binding="{Binding OrderId}" Width="80"/>
-                <DataGridTextColumn Header="Type" Binding="{Binding OrderType}" Width="110"/>
-                <DataGridTextColumn Header="Customer Address" Binding="{Binding CustomerAddress}" Width="220"/>
-                <DataGridTextColumn Header="Vehicle" Binding="{Binding Vehicle}" Width="100"/>
-                <DataGridTextColumn Header="Distance (km)" Binding="{Binding ActualDistance, StringFormat=N2}" Width="100"/>
-                <DataGridTextColumn Header="Processing Time" Binding="{Binding ProcessingTime, StringFormat=hh\:mm\:ss}" Width="120"/>
-                <DataGridTextColumn Header="End Status" Binding="{Binding DeliveryEndStatus}" Width="110"/>
-            </DataGrid.Columns>
-        </DataGrid>
+                        <!-- Refresh Button -->
+                        <Button Grid.Column="9"
+                                Content="Refresh" 
+                                Click="Refresh_Click"
+                                Style="{StaticResource ModernButton}"
+                                Background="#3498DB"
+                                MinWidth="110"/>
+                    </Grid>
+                </Border>
+
+                <!-- Data Grid -->
+                <Border Grid.Row="2" 
+                        Background="White" 
+                        CornerRadius="10" 
+                        BorderBrush="#E9ECEF" 
+                        BorderThickness="1">
+                    <DataGrid ItemsSource="{Binding ClosedDeliveries}" 
+                              Style="{StaticResource ModernDataGrid}"
+                              ColumnHeaderStyle="{StaticResource ModernColumnHeader}"
+                              CellStyle="{StaticResource ModernCell}"
+                              RowStyle="{StaticResource ModernRow}"
+                              IsReadOnly="True"
+                              HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Auto">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Delivery #" Binding="{Binding DeliveryId}" Width="90"/>
+                            <DataGridTextColumn Header="Order #" Binding="{Binding OrderId}" Width="80"/>
+                            <DataGridTextColumn Header="Type" Binding="{Binding OrderType}" Width="90"/>
+                            <DataGridTextColumn Header="Customer Address" Binding="{Binding CustomerAddress}" Width="*" MinWidth="180"/>
+                            <DataGridTextColumn Header="Vehicle" Binding="{Binding Vehicle}" Width="90"/>
+                            <DataGridTextColumn Header="Distance" Binding="{Binding ActualDistance, StringFormat={}{0:F2} km}" Width="90"/>
+                            <DataGridTextColumn Header="Duration" Binding="{Binding ProcessingTime, StringFormat={}{0:hh\\:mm\\:ss}}" Width="90"/>
+                            <DataGridTextColumn Header="Status" Binding="{Binding DeliveryEndStatus}" Width="95"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Border>
+            </Grid>
+        </Border>
     </Grid>
 </Window>

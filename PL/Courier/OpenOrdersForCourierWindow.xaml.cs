@@ -2,12 +2,14 @@ using BlApi;
 using BO;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 
 namespace PL.Courier
 {
-    public partial class OpenOrdersForCourierWindow : Window
+    public partial class OpenOrdersForCourierWindow : Window, INotifyPropertyChanged
     {
         private readonly IBl _bl = Factory.Get();
         private readonly int _adminId;
@@ -17,13 +19,32 @@ namespace PL.Courier
 
         public OrderType? SelectedType { get; set; } = null;
 
-        public OpenOrderInList? SelectedOrder { get; set; }
+        private OpenOrderInList? _selectedOrder;
+        public OpenOrderInList? SelectedOrder
+        {
+            get => _selectedOrder;
+            set
+            {
+                if (_selectedOrder != value)
+                {
+                    _selectedOrder = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public record OrderTypeOption(OrderType? Value, string Label);
 
         public System.Collections.Generic.IEnumerable<OrderTypeOption> OrderTypeOptions { get; private set; }
 
         private readonly BO.Vehicle _vehicle;
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public OpenOrdersForCourierWindow(int adminId, int courierId)
         {
@@ -52,7 +73,7 @@ namespace PL.Courier
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernMessageBox.Show($"Error loading: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
             }
         }
 
@@ -68,14 +89,14 @@ namespace PL.Courier
                 if (sender is FrameworkElement fe && fe.Tag is int orderId)
                 {
                     _bl.Order.AssignOrder(_adminId, orderId, _courierId);
-                    MessageBox.Show($"Order {orderId} assigned.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    ModernMessageBox.Show($"Order {orderId} assigned.", "Success", ModernMessageBox.MessageBoxType.Success, ModernMessageBox.MessageBoxButtons.OK, this);
                     DialogResult = true;
                     Close();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Unable to assign: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernMessageBox.Show($"Unable to assign: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
             }
         }
 
@@ -91,8 +112,6 @@ namespace PL.Courier
             {
                 SelectedOrder = dg.SelectedItem as OpenOrderInList;
                 ShowMapForSelection(SelectedOrder);
-                DataContext = null;
-                DataContext = this;
             }
         }
 
@@ -141,26 +160,64 @@ namespace PL.Courier
   <head>
     <meta http-equiv='X-UA-Compatible' content='IE=Edge'/>
     <style>
-      body {{ font-family: Segoe UI, Arial; }}
-      .label{{font-size:12px;}}
+      html, body {{
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        font-family: Segoe UI, Arial;
+      }}
+      .container {{
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+      }}
+      h4 {{
+        margin: 0 0 8px 0;
+        font-size: 60px;
+        color: #2C3E50;
+      }}
+      .label {{
+        font-size: 50px;
+        color: #495057;
+        margin-bottom: 10px;
+      }}
+      .map-container {{
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 0;
+      }}
+      svg {{
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
+      }}
     </style>
   </head>
   <body>
-    <h4>Map (demo)</h4>
-    <div class='label'>{summary}</div>
-    <div>
-      <svg width='900' height='260' xmlns='http://www.w3.org/2000/svg'>
-        <!-- Aerial line -->
-        <line x1='80' y1='180' x2='820' y2='60' stroke='gray' stroke-width='1.5' stroke-dasharray='4'/>
-        <!-- Simulated route polyline -->
-        <polyline points='80,180 450,200 820,60' fill='none' stroke='{vehicleColor}' stroke-width='3' stroke-linejoin='round' stroke-linecap='round' />
-        <circle cx='80' cy='180' r='7' fill='green' />
-        <text x='95' y='175' class='label'>Company ({compLat:F4},{compLon:F4})</text>
-        <circle cx='820' cy='60' r='7' fill='red' />
-        <text x='640' y='55' class='label'>Order ({ordLat:F4},{ordLon:F4})</text>
-        <text x='360' y='225' class='label'>Aerial distance: {sel.DistanceFromCompany:F2} km</text>
-        <text x='360' y='245' class='label'>Route distance: {routeDistanceKm:F2} km (mode: {_vehicle})</text>
-      </svg>
+    <div class='container'>
+      <h4>Map (demo)</h4>
+      <div class='label'>{summary}</div>
+      <div class='map-container'>
+        <svg viewBox='0 0 900 260' preserveAspectRatio='xMidYMid meet' xmlns='http://www.w3.org/2000/svg'>
+          <!-- Aerial line -->
+          <line x1='80' y1='180' x2='820' y2='60' stroke='gray' stroke-width='1.5' stroke-dasharray='4'/>
+          <!-- Simulated route polyline -->
+          <polyline points='80,180 450,200 820,60' fill='none' stroke='{vehicleColor}' stroke-width='3' stroke-linejoin='round' stroke-linecap='round' />
+          <circle cx='80' cy='180' r='7' fill='green' />
+          <text x='85' y='165' font-size='30'>Company ({compLat:F4},{compLon:F4})</text>
+          <circle cx='820' cy='60' r='7' fill='red' />
+          <text x='640' y='45' font-size='30'>Order ({ordLat:F4},{ordLon:F4})</text>
+          <text x='360' y='225' font-size='30'>Aerial distance: {sel.DistanceFromCompany:F2} km</text>
+          <text x='360' y='255' font-size='30'>Route distance: {routeDistanceKm:F2} km</text>
+          <text x='360' y='285' font-size='30'>(mode: {_vehicle})</text>
+        </svg>
+      </div>
     </div>
   </body>
 </html>

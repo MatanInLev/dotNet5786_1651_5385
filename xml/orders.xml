@@ -1,1403 +1,1403 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfOrder xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Order>
-    <Id>5501</Id>
-    <OrderType>Burger</OrderType>
-    <Description>Burger order for Rivkah Avram</Description>
-    <Address>Mount Zion, Jerusalem</Address>
-    <Latitude>31.771432755523676</Latitude>
-    <Longitude>35.228548482787225</Longitude>
-    <CustomerName>Rivkah Avram</CustomerName>
-    <CustomerPhone>0577027219</CustomerPhone>
-    <Weight>9</Weight>
-    <Volume>4</Volume>
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T13:50:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5502</Id>
-    <OrderType>Indian</OrderType>
-    <Description>Indian order for Yosef Kaplan</Description>
-    <Address>10 Ben Yehuda Street, Jerusalem</Address>
-    <Latitude>31.781659548628657</Latitude>
-    <Longitude>35.21768334183865</Longitude>
-    <CustomerName>Yosef Kaplan</CustomerName>
-    <CustomerPhone>0511047340</CustomerPhone>
-    <Weight>4</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T13:22:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5503</Id>
-    <OrderType>Sandwich</OrderType>
-    <Description>Sandwich order for Moshe Cohen</Description>
-    <Address>50 Agrippas Street, Jerusalem</Address>
-    <Latitude>31.7839517488835</Latitude>
-    <Longitude>35.2134290577043</Longitude>
-    <CustomerName>Moshe Cohen</CustomerName>
-    <CustomerPhone>0517847933</CustomerPhone>
-    <Weight>2</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T15:05:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5504</Id>
-    <OrderType>French</OrderType>
-    <Description>French order for Shlomo Friedman</Description>
-    <Address>12 Hillel Street, Jerusalem</Address>
-    <Latitude>31.780187091786093</Latitude>
-    <Longitude>35.21726342807211</Longitude>
-    <CustomerName>Shlomo Friedman</CustomerName>
-    <CustomerPhone>0586376887</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T14:45:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5505</Id>
-    <OrderType>Italian</OrderType>
-    <Description>Italian order for Yosef Kaplan</Description>
-    <Address>Mahane Yehuda Market, Jerusalem</Address>
-    <Latitude>31.784926645982097</Latitude>
-    <Longitude>35.21267841766886</Longitude>
-    <CustomerName>Yosef Kaplan</CustomerName>
-    <CustomerPhone>0530891394</CustomerPhone>
-    <Weight>3</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T13:33:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5506</Id>
-    <OrderType>Salad</OrderType>
-    <Description>Salad order for Miriam Hadad</Description>
-    <Address>Old City, Damascus Gate, Jerusalem</Address>
-    <Latitude>31.781633499405633</Latitude>
-    <Longitude>35.230407836095296</Longitude>
-    <CustomerName>Miriam Hadad</CustomerName>
-    <CustomerPhone>0536745046</CustomerPhone>
-    <Weight>1</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T15:20:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5507</Id>
-    <OrderType>Pizza</OrderType>
-    <Description>Pizza order for David Biton</Description>
-    <Address>The Knesset, Jerusalem</Address>
-    <Latitude>31.776836273440203</Latitude>
-    <Longitude>35.20543532782223</Longitude>
-    <CustomerName>David Biton</CustomerName>
-    <CustomerPhone>0542641735</CustomerPhone>
-    <Weight>8</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T15:08:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5508</Id>
-    <OrderType>Thai</OrderType>
-    <Description>Thai order for Shlomo Friedman</Description>
-    <Address>Yad Vashem, Har Hazikaron, Jerusalem</Address>
-    <Latitude>31.774339477464142</Latitude>
-    <Longitude>35.17555929720624</Longitude>
-    <CustomerName>Shlomo Friedman</CustomerName>
-    <CustomerPhone>0521177005</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume>2</Volume>
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T14:21:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5509</Id>
-    <OrderType>Sushi</OrderType>
-    <Description>Sushi order for Moshe Cohen</Description>
-    <Address>97 Jaffa Road, Jerusalem</Address>
-    <Latitude>31.784321307301173</Latitude>
-    <Longitude>35.21492818699034</Longitude>
-    <CustomerName>Moshe Cohen</CustomerName>
-    <CustomerPhone>0564355958</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume xsi:nil="true" />
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T13:45:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5510</Id>
-    <OrderType>Sushi</OrderType>
-    <Description>Sushi order for Sarah Schwartz</Description>
-    <Address>Givat Ram Campus, Hebrew University, Jerusalem</Address>
-    <Latitude>31.778454610245173</Latitude>
-    <Longitude>35.19735586158905</Longitude>
-    <CustomerName>Sarah Schwartz</CustomerName>
-    <CustomerPhone>0539510199</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume>2</Volume>
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T13:17:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5511</Id>
-    <OrderType>Italian</OrderType>
-    <Description>Italian order for Moshe Cohen</Description>
-    <Address>Mount Zion, Jerusalem</Address>
-    <Latitude>31.771432755523676</Latitude>
-    <Longitude>35.228548482787225</Longitude>
-    <CustomerName>Moshe Cohen</CustomerName>
-    <CustomerPhone>0531407532</CustomerPhone>
-    <Weight>9</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T13:28:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5512</Id>
-    <OrderType>Sushi</OrderType>
-    <Description>Sushi order for Miriam Hadad</Description>
-    <Address>30 Gaza Street, Jerusalem</Address>
-    <Latitude>31.772801469039326</Latitude>
-    <Longitude>35.21429702871634</Longitude>
-    <CustomerName>Miriam Hadad</CustomerName>
-    <CustomerPhone>0551194919</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T15:45:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5513</Id>
-    <OrderType>Thai</OrderType>
-    <Description>Thai order for Rivkah Avram</Description>
-    <Address>100 Derech Hebron, Jerusalem</Address>
-    <Latitude>31.75372877114649</Latitude>
-    <Longitude>35.220093699825775</Longitude>
-    <CustomerName>Rivkah Avram</CustomerName>
-    <CustomerPhone>0555595137</CustomerPhone>
-    <Weight>1</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T14:32:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5514</Id>
-    <OrderType>Sandwich</OrderType>
-    <Description>Sandwich order for Miriam Hadad</Description>
-    <Address>Givat Ram Campus, Hebrew University, Jerusalem</Address>
-    <Latitude>31.778454610245173</Latitude>
-    <Longitude>35.19735586158905</Longitude>
-    <CustomerName>Miriam Hadad</CustomerName>
-    <CustomerPhone>0572352959</CustomerPhone>
-    <Weight>3</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T13:08:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5515</Id>
-    <OrderType>Sandwich</OrderType>
-    <Description>Sandwich order for Israel Israeli</Description>
-    <Address>Givat Ram Campus, Hebrew University, Jerusalem</Address>
-    <Latitude>31.778454610245173</Latitude>
-    <Longitude>35.19735586158905</Longitude>
-    <CustomerName>Israel Israeli</CustomerName>
-    <CustomerPhone>0541221108</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T15:23:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5516</Id>
-    <OrderType>Italian</OrderType>
-    <Description>Italian order for Miriam Hadad</Description>
-    <Address>100 Derech Hebron, Jerusalem</Address>
-    <Latitude>31.75372877114649</Latitude>
-    <Longitude>35.220093699825775</Longitude>
-    <CustomerName>Miriam Hadad</CustomerName>
-    <CustomerPhone>0519836691</CustomerPhone>
-    <Weight>3</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile>false</Fragile>
-    <OrderTime>2026-07-01T14:07:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5517</Id>
-    <OrderType>Sandwich</OrderType>
-    <Description>Sandwich order for Israel Israeli</Description>
-    <Address>97 Jaffa Road, Jerusalem</Address>
-    <Latitude>31.784321307301173</Latitude>
-    <Longitude>35.21492818699034</Longitude>
-    <CustomerName>Israel Israeli</CustomerName>
-    <CustomerPhone>0583131823</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T13:09:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5518</Id>
-    <OrderType>Pizza</OrderType>
-    <Description>Pizza order for Sarah Schwartz</Description>
-    <Address>7 Bezalel Street, Jerusalem</Address>
-    <Latitude>31.780426988150147</Latitude>
-    <Longitude>35.21376028332093</Longitude>
-    <CustomerName>Sarah Schwartz</CustomerName>
-    <CustomerPhone>0523797137</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume>3</Volume>
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T14:02:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5519</Id>
-    <OrderType>French</OrderType>
-    <Description>French order for Miriam Hadad</Description>
-    <Address>50 Agrippas Street, Jerusalem</Address>
-    <Latitude>31.7839517488835</Latitude>
-    <Longitude>35.2134290577043</Longitude>
-    <CustomerName>Miriam Hadad</CustomerName>
-    <CustomerPhone>0572581157</CustomerPhone>
-    <Weight>8</Weight>
-    <Volume>4</Volume>
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T15:11:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5520</Id>
-    <OrderType>Burger</OrderType>
-    <Description>Burger order for Sarah Schwartz</Description>
-    <Address>Mahane Yehuda Market, Jerusalem</Address>
-    <Latitude>31.784926645982097</Latitude>
-    <Longitude>35.21267841766886</Longitude>
-    <CustomerName>Sarah Schwartz</CustomerName>
-    <CustomerPhone>0533288601</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume xsi:nil="true" />
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T14:56:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5521</Id>
-    <OrderType>Pizza</OrderType>
-    <Description>Pizza order for Avi Levi</Description>
-    <Address>Old City, Jaffa Gate, Jerusalem</Address>
-    <Latitude>31.77672720366729</Latitude>
-    <Longitude>35.227629940170196</Longitude>
-    <CustomerName>Avi Levi</CustomerName>
-    <CustomerPhone>0536164746</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume>3</Volume>
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T14:30:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5522</Id>
-    <OrderType>Burger</OrderType>
-    <Description>Burger order for David Biton</Description>
-    <Address>97 Jaffa Road, Jerusalem</Address>
-    <Latitude>31.784321307301173</Latitude>
-    <Longitude>35.21492818699034</Longitude>
-    <CustomerName>David Biton</CustomerName>
-    <CustomerPhone>0571839956</CustomerPhone>
-    <Weight>6</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T15:41:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5523</Id>
-    <OrderType>Salad</OrderType>
-    <Description>Salad order for Miriam Hadad</Description>
-    <Address>30 Gaza Street, Jerusalem</Address>
-    <Latitude>31.772801469039326</Latitude>
-    <Longitude>35.21429702871634</Longitude>
-    <CustomerName>Miriam Hadad</CustomerName>
-    <CustomerPhone>0553756692</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume>1</Volume>
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T14:59:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5524</Id>
-    <OrderType>Italian</OrderType>
-    <Description>Italian order for David Biton</Description>
-    <Address>50 Agrippas Street, Jerusalem</Address>
-    <Latitude>31.7839517488835</Latitude>
-    <Longitude>35.2134290577043</Longitude>
-    <CustomerName>David Biton</CustomerName>
-    <CustomerPhone>0573887144</CustomerPhone>
-    <Weight>9</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile>false</Fragile>
-    <OrderTime>2026-07-01T14:25:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5525</Id>
-    <OrderType>Salad</OrderType>
-    <Description>Salad order for Chana Berkovich</Description>
-    <Address>Givat Ram Campus, Hebrew University, Jerusalem</Address>
-    <Latitude>31.778454610245173</Latitude>
-    <Longitude>35.19735586158905</Longitude>
-    <CustomerName>Chana Berkovich</CustomerName>
-    <CustomerPhone>0536113782</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume>2</Volume>
-    <Fragile>false</Fragile>
-    <OrderTime>2026-07-01T13:00:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5526</Id>
-    <OrderType>Burger</OrderType>
-    <Description>Burger order for Shlomo Friedman</Description>
-    <Address>30 Gaza Street, Jerusalem</Address>
-    <Latitude>31.772801469039326</Latitude>
-    <Longitude>35.21429702871634</Longitude>
-    <CustomerName>Shlomo Friedman</CustomerName>
-    <CustomerPhone>0510704035</CustomerPhone>
-    <Weight>7</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T13:17:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5527</Id>
-    <OrderType>Burger</OrderType>
-    <Description>Burger order for Israel Israeli</Description>
-    <Address>Old City, Damascus Gate, Jerusalem</Address>
-    <Latitude>31.781633499405633</Latitude>
-    <Longitude>35.230407836095296</Longitude>
-    <CustomerName>Israel Israeli</CustomerName>
-    <CustomerPhone>0511850668</CustomerPhone>
-    <Weight>1</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T14:01:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5528</Id>
-    <OrderType>French</OrderType>
-    <Description>French order for Sarah Schwartz</Description>
-    <Address>97 Jaffa Road, Jerusalem</Address>
-    <Latitude>31.784321307301173</Latitude>
-    <Longitude>35.21492818699034</Longitude>
-    <CustomerName>Sarah Schwartz</CustomerName>
-    <CustomerPhone>0557678228</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T13:31:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5529</Id>
-    <OrderType>Italian</OrderType>
-    <Description>Italian order for Shlomo Friedman</Description>
-    <Address>97 Jaffa Road, Jerusalem</Address>
-    <Latitude>31.784321307301173</Latitude>
-    <Longitude>35.21492818699034</Longitude>
-    <CustomerName>Shlomo Friedman</CustomerName>
-    <CustomerPhone>0578470644</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume>1</Volume>
-    <Fragile>false</Fragile>
-    <OrderTime>2026-07-01T13:36:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5530</Id>
-    <OrderType>Sandwich</OrderType>
-    <Description>Sandwich order for Moshe Cohen</Description>
-    <Address>40 Emek Refaim Street, Jerusalem</Address>
-    <Latitude>31.76330771836013</Latitude>
-    <Longitude>35.21897174033168</Longitude>
-    <CustomerName>Moshe Cohen</CustomerName>
-    <CustomerPhone>0588465615</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume>2</Volume>
-    <Fragile>false</Fragile>
-    <OrderTime>2026-07-01T14:20:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5531</Id>
-    <OrderType>French</OrderType>
-    <Description>French order for Avi Levi</Description>
-    <Address>19 King David Street, Jerusalem</Address>
-    <Latitude>31.775532039347635</Latitude>
-    <Longitude>35.22215210314104</Longitude>
-    <CustomerName>Avi Levi</CustomerName>
-    <CustomerPhone>0548647436</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume xsi:nil="true" />
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T14:12:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5532</Id>
-    <OrderType>Thai</OrderType>
-    <Description>Thai order for Miriam Hadad</Description>
-    <Address>10 Ben Yehuda Street, Jerusalem</Address>
-    <Latitude>31.781659548628657</Latitude>
-    <Longitude>35.21768334183865</Longitude>
-    <CustomerName>Miriam Hadad</CustomerName>
-    <CustomerPhone>0540938426</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume xsi:nil="true" />
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T13:38:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5533</Id>
-    <OrderType>Sandwich</OrderType>
-    <Description>Sandwich order for Moshe Cohen</Description>
-    <Address>10 Ben Yehuda Street, Jerusalem</Address>
-    <Latitude>31.781659548628657</Latitude>
-    <Longitude>35.21768334183865</Longitude>
-    <CustomerName>Moshe Cohen</CustomerName>
-    <CustomerPhone>0511302593</CustomerPhone>
-    <Weight>6</Weight>
-    <Volume>4</Volume>
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T15:37:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5534</Id>
-    <OrderType>Salad</OrderType>
-    <Description>Salad order for Israel Israeli</Description>
-    <Address>50 Agrippas Street, Jerusalem</Address>
-    <Latitude>31.7839517488835</Latitude>
-    <Longitude>35.2134290577043</Longitude>
-    <CustomerName>Israel Israeli</CustomerName>
-    <CustomerPhone>0558742758</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T13:50:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5535</Id>
-    <OrderType>Sushi</OrderType>
-    <Description>Sushi order for Yosef Kaplan</Description>
-    <Address>Mahane Yehuda Market, Jerusalem</Address>
-    <Latitude>31.784926645982097</Latitude>
-    <Longitude>35.21267841766886</Longitude>
-    <CustomerName>Yosef Kaplan</CustomerName>
-    <CustomerPhone>0541168949</CustomerPhone>
-    <Weight>1</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T14:18:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5536</Id>
-    <OrderType>Burger</OrderType>
-    <Description>Burger order for Sarah Schwartz</Description>
-    <Address>40 Emek Refaim Street, Jerusalem</Address>
-    <Latitude>31.76330771836013</Latitude>
-    <Longitude>35.21897174033168</Longitude>
-    <CustomerName>Sarah Schwartz</CustomerName>
-    <CustomerPhone>0546731035</CustomerPhone>
-    <Weight>7</Weight>
-    <Volume>3</Volume>
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T15:03:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5537</Id>
-    <OrderType>Sandwich</OrderType>
-    <Description>Sandwich order for Yosef Kaplan</Description>
-    <Address>Mahane Yehuda Market, Jerusalem</Address>
-    <Latitude>31.784926645982097</Latitude>
-    <Longitude>35.21267841766886</Longitude>
-    <CustomerName>Yosef Kaplan</CustomerName>
-    <CustomerPhone>0523073453</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume>4</Volume>
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T13:34:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5538</Id>
-    <OrderType>Burger</OrderType>
-    <Description>Burger order for Israel Israeli</Description>
-    <Address>10 Ben Yehuda Street, Jerusalem</Address>
-    <Latitude>31.781659548628657</Latitude>
-    <Longitude>35.21768334183865</Longitude>
-    <CustomerName>Israel Israeli</CustomerName>
-    <CustomerPhone>0579626285</CustomerPhone>
-    <Weight>1</Weight>
-    <Volume>2</Volume>
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T12:59:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5539</Id>
-    <OrderType>Burger</OrderType>
-    <Description>Burger order for Yosef Kaplan</Description>
-    <Address>97 Jaffa Road, Jerusalem</Address>
-    <Latitude>31.784321307301173</Latitude>
-    <Longitude>35.21492818699034</Longitude>
-    <CustomerName>Yosef Kaplan</CustomerName>
-    <CustomerPhone>0532543815</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T13:20:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5540</Id>
-    <OrderType>Salad</OrderType>
-    <Description>Salad order for Yosef Kaplan</Description>
-    <Address>20 King George Street, Jerusalem</Address>
-    <Latitude>31.781445067611205</Latitude>
-    <Longitude>35.21603646969099</Longitude>
-    <CustomerName>Yosef Kaplan</CustomerName>
-    <CustomerPhone>0532326709</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume>4</Volume>
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T14:40:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5541</Id>
-    <OrderType>Italian</OrderType>
-    <Description>Italian order for David Biton</Description>
-    <Address>Mount Zion, Jerusalem</Address>
-    <Latitude>31.771432755523676</Latitude>
-    <Longitude>35.228548482787225</Longitude>
-    <CustomerName>David Biton</CustomerName>
-    <CustomerPhone>0574660175</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume xsi:nil="true" />
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T15:23:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5542</Id>
-    <OrderType>Indian</OrderType>
-    <Description>Indian order for Miriam Hadad</Description>
-    <Address>20 King George Street, Jerusalem</Address>
-    <Latitude>31.781445067611205</Latitude>
-    <Longitude>35.21603646969099</Longitude>
-    <CustomerName>Miriam Hadad</CustomerName>
-    <CustomerPhone>0551347968</CustomerPhone>
-    <Weight>3</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile>false</Fragile>
-    <OrderTime>2026-07-01T15:44:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5543</Id>
-    <OrderType>Pizza</OrderType>
-    <Description>Pizza order for Yosef Kaplan</Description>
-    <Address>40 Emek Refaim Street, Jerusalem</Address>
-    <Latitude>31.76330771836013</Latitude>
-    <Longitude>35.21897174033168</Longitude>
-    <CustomerName>Yosef Kaplan</CustomerName>
-    <CustomerPhone>0565907821</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume>3</Volume>
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T13:46:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5544</Id>
-    <OrderType>Indian</OrderType>
-    <Description>Indian order for Israel Israeli</Description>
-    <Address>10 Ben Yehuda Street, Jerusalem</Address>
-    <Latitude>31.781659548628657</Latitude>
-    <Longitude>35.21768334183865</Longitude>
-    <CustomerName>Israel Israeli</CustomerName>
-    <CustomerPhone>0550468840</CustomerPhone>
-    <Weight>3</Weight>
-    <Volume>2</Volume>
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T13:15:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5545</Id>
-    <OrderType>Thai</OrderType>
-    <Description>Thai order for Shlomo Friedman</Description>
-    <Address>30 Gaza Street, Jerusalem</Address>
-    <Latitude>31.772801469039326</Latitude>
-    <Longitude>35.21429702871634</Longitude>
-    <CustomerName>Shlomo Friedman</CustomerName>
-    <CustomerPhone>0574081822</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume>1</Volume>
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T15:23:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5546</Id>
-    <OrderType>Thai</OrderType>
-    <Description>Thai order for Avi Levi</Description>
-    <Address>Old City, Jaffa Gate, Jerusalem</Address>
-    <Latitude>31.77672720366729</Latitude>
-    <Longitude>35.227629940170196</Longitude>
-    <CustomerName>Avi Levi</CustomerName>
-    <CustomerPhone>0524896579</CustomerPhone>
-    <Weight>1</Weight>
-    <Volume>1</Volume>
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T14:56:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5547</Id>
-    <OrderType>Italian</OrderType>
-    <Description>Italian order for Yosef Kaplan</Description>
-    <Address>50 Agrippas Street, Jerusalem</Address>
-    <Latitude>31.7839517488835</Latitude>
-    <Longitude>35.2134290577043</Longitude>
-    <CustomerName>Yosef Kaplan</CustomerName>
-    <CustomerPhone>0585191137</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T13:56:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5548</Id>
-    <OrderType>Sandwich</OrderType>
-    <Description>Sandwich order for Sarah Schwartz</Description>
-    <Address>30 Gaza Street, Jerusalem</Address>
-    <Latitude>31.772801469039326</Latitude>
-    <Longitude>35.21429702871634</Longitude>
-    <CustomerName>Sarah Schwartz</CustomerName>
-    <CustomerPhone>0564840134</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T15:40:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5549</Id>
+    <Id>6001</Id>
     <OrderType>Indian</OrderType>
     <Description>Indian order for David Biton</Description>
-    <Address>Old City, Jaffa Gate, Jerusalem</Address>
-    <Latitude>31.77672720366729</Latitude>
-    <Longitude>35.227629940170196</Longitude>
+    <Address>100 Derech Hebron, Jerusalem</Address>
+    <Latitude>31.75372877114649</Latitude>
+    <Longitude>35.220093699825775</Longitude>
     <CustomerName>David Biton</CustomerName>
-    <CustomerPhone>0575749024</CustomerPhone>
+    <CustomerPhone>0569321065</CustomerPhone>
     <Weight xsi:nil="true" />
-    <Volume>3</Volume>
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T13:35:25</OrderTime>
+    <Volume xsi:nil="true" />
+    <Fragile>false</Fragile>
+    <OrderTime>2026-01-08T14:13:24.0256654+02:00</OrderTime>
   </Order>
   <Order>
-    <Id>5550</Id>
+    <Id>6002</Id>
     <OrderType>Thai</OrderType>
     <Description>Thai order for Miriam Hadad</Description>
-    <Address>Old City, Jaffa Gate, Jerusalem</Address>
-    <Latitude>31.77672720366729</Latitude>
-    <Longitude>35.227629940170196</Longitude>
-    <CustomerName>Miriam Hadad</CustomerName>
-    <CustomerPhone>0516854250</CustomerPhone>
-    <Weight>1</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T13:29:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5551</Id>
-    <OrderType>Burger</OrderType>
-    <Description>Burger order for Yosef Kaplan</Description>
-    <Address>Yad Vashem, Har Hazikaron, Jerusalem</Address>
-    <Latitude>31.774339477464142</Latitude>
-    <Longitude>35.17555929720624</Longitude>
-    <CustomerName>Yosef Kaplan</CustomerName>
-    <CustomerPhone>0510403588</CustomerPhone>
-    <Weight>1</Weight>
-    <Volume>2</Volume>
-    <Fragile>false</Fragile>
-    <OrderTime>2026-07-01T13:22:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5552</Id>
-    <OrderType>Burger</OrderType>
-    <Description>Burger order for Yosef Kaplan</Description>
-    <Address>Givat Ram Campus, Hebrew University, Jerusalem</Address>
-    <Latitude>31.778454610245173</Latitude>
-    <Longitude>35.19735586158905</Longitude>
-    <CustomerName>Yosef Kaplan</CustomerName>
-    <CustomerPhone>0534600546</CustomerPhone>
-    <Weight>6</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T13:31:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5553</Id>
-    <OrderType>Thai</OrderType>
-    <Description>Thai order for Israel Israeli</Description>
     <Address>10 Ben Yehuda Street, Jerusalem</Address>
     <Latitude>31.781659548628657</Latitude>
     <Longitude>35.21768334183865</Longitude>
-    <CustomerName>Israel Israeli</CustomerName>
-    <CustomerPhone>0522909413</CustomerPhone>
-    <Weight>1</Weight>
-    <Volume>2</Volume>
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T14:10:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5554</Id>
-    <OrderType>French</OrderType>
-    <Description>French order for Avi Levi</Description>
-    <Address>100 Derech Hebron, Jerusalem</Address>
-    <Latitude>31.75372877114649</Latitude>
-    <Longitude>35.220093699825775</Longitude>
-    <CustomerName>Avi Levi</CustomerName>
-    <CustomerPhone>0525622477</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume>4</Volume>
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T12:59:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5555</Id>
-    <OrderType>Sushi</OrderType>
-    <Description>Sushi order for Sarah Schwartz</Description>
-    <Address>20 King George Street, Jerusalem</Address>
-    <Latitude>31.781445067611205</Latitude>
-    <Longitude>35.21603646969099</Longitude>
-    <CustomerName>Sarah Schwartz</CustomerName>
-    <CustomerPhone>0576802847</CustomerPhone>
-    <Weight>8</Weight>
-    <Volume>1</Volume>
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T14:47:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5556</Id>
-    <OrderType>Italian</OrderType>
-    <Description>Italian order for David Biton</Description>
-    <Address>20 King George Street, Jerusalem</Address>
-    <Latitude>31.781445067611205</Latitude>
-    <Longitude>35.21603646969099</Longitude>
-    <CustomerName>David Biton</CustomerName>
-    <CustomerPhone>0571967408</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T14:31:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5557</Id>
-    <OrderType>Salad</OrderType>
-    <Description>Salad order for Israel Israeli</Description>
-    <Address>100 Derech Hebron, Jerusalem</Address>
-    <Latitude>31.75372877114649</Latitude>
-    <Longitude>35.220093699825775</Longitude>
-    <CustomerName>Israel Israeli</CustomerName>
-    <CustomerPhone>0516944214</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume xsi:nil="true" />
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T13:23:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5558</Id>
-    <OrderType>Sushi</OrderType>
-    <Description>Sushi order for Shlomo Friedman</Description>
-    <Address>Old City, Jaffa Gate, Jerusalem</Address>
-    <Latitude>31.77672720366729</Latitude>
-    <Longitude>35.227629940170196</Longitude>
-    <CustomerName>Shlomo Friedman</CustomerName>
-    <CustomerPhone>0536979576</CustomerPhone>
-    <Weight>1</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T14:09:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5559</Id>
-    <OrderType>Italian</OrderType>
-    <Description>Italian order for Sarah Schwartz</Description>
-    <Address>Mahane Yehuda Market, Jerusalem</Address>
-    <Latitude>31.784926645982097</Latitude>
-    <Longitude>35.21267841766886</Longitude>
-    <CustomerName>Sarah Schwartz</CustomerName>
-    <CustomerPhone>0527427796</CustomerPhone>
-    <Weight>4</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T14:20:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5560</Id>
-    <OrderType>Indian</OrderType>
-    <Description>Indian order for Sarah Schwartz</Description>
-    <Address>20 King George Street, Jerusalem</Address>
-    <Latitude>31.781445067611205</Latitude>
-    <Longitude>35.21603646969099</Longitude>
-    <CustomerName>Sarah Schwartz</CustomerName>
-    <CustomerPhone>0562576365</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T13:03:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5561</Id>
-    <OrderType>French</OrderType>
-    <Description>French order for Yosef Kaplan</Description>
-    <Address>Mahane Yehuda Market, Jerusalem</Address>
-    <Latitude>31.784926645982097</Latitude>
-    <Longitude>35.21267841766886</Longitude>
-    <CustomerName>Yosef Kaplan</CustomerName>
-    <CustomerPhone>0521757892</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume xsi:nil="true" />
-    <Fragile>false</Fragile>
-    <OrderTime>2026-07-01T13:50:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5562</Id>
-    <OrderType>Thai</OrderType>
-    <Description>Thai order for Chana Berkovich</Description>
-    <Address>12 Hillel Street, Jerusalem</Address>
-    <Latitude>31.780187091786093</Latitude>
-    <Longitude>35.21726342807211</Longitude>
-    <CustomerName>Chana Berkovich</CustomerName>
-    <CustomerPhone>0549978705</CustomerPhone>
-    <Weight>1</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T13:30:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5563</Id>
-    <OrderType>Sandwich</OrderType>
-    <Description>Sandwich order for David Biton</Description>
-    <Address>55 Hanevi'im Street, Jerusalem</Address>
-    <Latitude>31.784566788971983</Latitude>
-    <Longitude>35.21797569918418</Longitude>
-    <CustomerName>David Biton</CustomerName>
-    <CustomerPhone>0580408279</CustomerPhone>
-    <Weight>6</Weight>
-    <Volume>2</Volume>
-    <Fragile>false</Fragile>
-    <OrderTime>2026-07-01T12:54:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5564</Id>
-    <OrderType>Pizza</OrderType>
-    <Description>Pizza order for Sarah Schwartz</Description>
-    <Address>50 Agrippas Street, Jerusalem</Address>
-    <Latitude>31.7839517488835</Latitude>
-    <Longitude>35.2134290577043</Longitude>
-    <CustomerName>Sarah Schwartz</CustomerName>
-    <CustomerPhone>0589717425</CustomerPhone>
-    <Weight>9</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile>false</Fragile>
-    <OrderTime>2026-07-01T15:00:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5565</Id>
-    <OrderType>Salad</OrderType>
-    <Description>Salad order for Shlomo Friedman</Description>
-    <Address>The Knesset, Jerusalem</Address>
-    <Latitude>31.776836273440203</Latitude>
-    <Longitude>35.20543532782223</Longitude>
-    <CustomerName>Shlomo Friedman</CustomerName>
-    <CustomerPhone>0583721519</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume>3</Volume>
-    <Fragile>false</Fragile>
-    <OrderTime>2026-07-01T12:47:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5566</Id>
-    <OrderType>Burger</OrderType>
-    <Description>Burger order for Rivkah Avram</Description>
-    <Address>19 King David Street, Jerusalem</Address>
-    <Latitude>31.775532039347635</Latitude>
-    <Longitude>35.22215210314104</Longitude>
-    <CustomerName>Rivkah Avram</CustomerName>
-    <CustomerPhone>0529033193</CustomerPhone>
-    <Weight>9</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T14:56:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5567</Id>
-    <OrderType>Burger</OrderType>
-    <Description>Burger order for Israel Israeli</Description>
-    <Address>Israel Museum, Ruppin Boulevard, Jerusalem</Address>
-    <Latitude>31.772260563480305</Latitude>
-    <Longitude>35.20416470565706</Longitude>
-    <CustomerName>Israel Israeli</CustomerName>
-    <CustomerPhone>0551879390</CustomerPhone>
-    <Weight>2</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T14:15:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5568</Id>
-    <OrderType>French</OrderType>
-    <Description>French order for Moshe Cohen</Description>
-    <Address>Mount Zion, Jerusalem</Address>
-    <Latitude>31.771432755523676</Latitude>
-    <Longitude>35.228548482787225</Longitude>
-    <CustomerName>Moshe Cohen</CustomerName>
-    <CustomerPhone>0578052906</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume xsi:nil="true" />
-    <Fragile>false</Fragile>
-    <OrderTime>2026-07-01T13:40:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5569</Id>
-    <OrderType>Italian</OrderType>
-    <Description>Italian order for Sarah Schwartz</Description>
-    <Address>20 King George Street, Jerusalem</Address>
-    <Latitude>31.781445067611205</Latitude>
-    <Longitude>35.21603646969099</Longitude>
-    <CustomerName>Sarah Schwartz</CustomerName>
-    <CustomerPhone>0558889334</CustomerPhone>
+    <CustomerName>Miriam Hadad</CustomerName>
+    <CustomerPhone>0514717703</CustomerPhone>
     <Weight>3</Weight>
     <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T14:03:25</OrderTime>
+    <Fragile>false</Fragile>
+    <OrderTime>2026-01-08T15:29:24.0256654+02:00</OrderTime>
   </Order>
   <Order>
-    <Id>5570</Id>
-    <OrderType>Sushi</OrderType>
-    <Description>Sushi order for Rivkah Avram</Description>
-    <Address>Old City, Jaffa Gate, Jerusalem</Address>
-    <Latitude>31.77672720366729</Latitude>
-    <Longitude>35.227629940170196</Longitude>
-    <CustomerName>Rivkah Avram</CustomerName>
-    <CustomerPhone>0539107444</CustomerPhone>
-    <Weight>8</Weight>
-    <Volume>1</Volume>
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T13:26:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5571</Id>
-    <OrderType>Sushi</OrderType>
-    <Description>Sushi order for Miriam Hadad</Description>
-    <Address>Givat Ram Campus, Hebrew University, Jerusalem</Address>
-    <Latitude>31.778454610245173</Latitude>
-    <Longitude>35.19735586158905</Longitude>
-    <CustomerName>Miriam Hadad</CustomerName>
-    <CustomerPhone>0561132691</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume>4</Volume>
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T13:18:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5572</Id>
-    <OrderType>Indian</OrderType>
-    <Description>Indian order for Moshe Cohen</Description>
-    <Address>55 Hanevi'im Street, Jerusalem</Address>
-    <Latitude>31.784566788971983</Latitude>
-    <Longitude>35.21797569918418</Longitude>
-    <CustomerName>Moshe Cohen</CustomerName>
-    <CustomerPhone>0564508739</CustomerPhone>
-    <Weight>3</Weight>
-    <Volume>2</Volume>
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T13:32:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5573</Id>
-    <OrderType>French</OrderType>
-    <Description>French order for Miriam Hadad</Description>
-    <Address>50 Agrippas Street, Jerusalem</Address>
-    <Latitude>31.7839517488835</Latitude>
-    <Longitude>35.2134290577043</Longitude>
-    <CustomerName>Miriam Hadad</CustomerName>
-    <CustomerPhone>0524025414</CustomerPhone>
-    <Weight>4</Weight>
-    <Volume>2</Volume>
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T15:29:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5574</Id>
+    <Id>6003</Id>
     <OrderType>French</OrderType>
     <Description>French order for David Biton</Description>
+    <Address>50 Agrippas Street, Jerusalem</Address>
+    <Latitude>31.7839517488835</Latitude>
+    <Longitude>35.2134290577043</Longitude>
+    <CustomerName>David Biton</CustomerName>
+    <CustomerPhone>0555056031</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume xsi:nil="true" />
+    <Fragile>true</Fragile>
+    <OrderTime>2026-01-08T14:41:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6004</Id>
+    <OrderType>Sushi</OrderType>
+    <Description>Sushi order for Sarah Schwartz</Description>
+    <Address>Old City, Damascus Gate, Jerusalem</Address>
+    <Latitude>31.781633499405633</Latitude>
+    <Longitude>35.230407836095296</Longitude>
+    <CustomerName>Sarah Schwartz</CustomerName>
+    <CustomerPhone>0572923531</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume xsi:nil="true" />
+    <Fragile>false</Fragile>
+    <OrderTime>2026-01-08T14:22:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6005</Id>
+    <OrderType>Burger</OrderType>
+    <Description>Burger order for Rivkah Avram</Description>
+    <Address>10 Ben Yehuda Street, Jerusalem</Address>
+    <Latitude>31.781659548628657</Latitude>
+    <Longitude>35.21768334183865</Longitude>
+    <CustomerName>Rivkah Avram</CustomerName>
+    <CustomerPhone>0575335882</CustomerPhone>
+    <Weight>3</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile>true</Fragile>
+    <OrderTime>2026-01-08T14:56:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6006</Id>
+    <OrderType>Italian</OrderType>
+    <Description>Italian order for Sarah Schwartz</Description>
+    <Address>55 Hanevi'im Street, Jerusalem</Address>
+    <Latitude>31.784566788971983</Latitude>
+    <Longitude>35.21797569918418</Longitude>
+    <CustomerName>Sarah Schwartz</CustomerName>
+    <CustomerPhone>0568591052</CustomerPhone>
+    <Weight>8</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile>true</Fragile>
+    <OrderTime>2026-01-08T15:27:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6007</Id>
+    <OrderType>Salad</OrderType>
+    <Description>Salad order for Shlomo Friedman</Description>
+    <Address>10 Ben Yehuda Street, Jerusalem</Address>
+    <Latitude>31.781659548628657</Latitude>
+    <Longitude>35.21768334183865</Longitude>
+    <CustomerName>Shlomo Friedman</CustomerName>
+    <CustomerPhone>0548921119</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume>2</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T14:03:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6008</Id>
+    <OrderType>Indian</OrderType>
+    <Description>Indian order for Chana Berkovich</Description>
+    <Address>10 Ben Yehuda Street, Jerusalem</Address>
+    <Latitude>31.781659548628657</Latitude>
+    <Longitude>35.21768334183865</Longitude>
+    <CustomerName>Chana Berkovich</CustomerName>
+    <CustomerPhone>0531450570</CustomerPhone>
+    <Weight>3</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile>false</Fragile>
+    <OrderTime>2026-01-08T15:08:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6009</Id>
+    <OrderType>Salad</OrderType>
+    <Description>Salad order for David Biton</Description>
+    <Address>Israel Museum, Ruppin Boulevard, Jerusalem</Address>
+    <Latitude>31.772260563480305</Latitude>
+    <Longitude>35.20416470565706</Longitude>
+    <CustomerName>David Biton</CustomerName>
+    <CustomerPhone>0535568660</CustomerPhone>
+    <Weight>7</Weight>
+    <Volume>3</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T14:26:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6010</Id>
+    <OrderType>Sushi</OrderType>
+    <Description>Sushi order for Moshe Cohen</Description>
     <Address>The Knesset, Jerusalem</Address>
     <Latitude>31.776836273440203</Latitude>
     <Longitude>35.20543532782223</Longitude>
-    <CustomerName>David Biton</CustomerName>
-    <CustomerPhone>0581622340</CustomerPhone>
-    <Weight>1</Weight>
-    <Volume>3</Volume>
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T15:15:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5575</Id>
-    <OrderType>Indian</OrderType>
-    <Description>Indian order for Moshe Cohen</Description>
-    <Address>100 Derech Hebron, Jerusalem</Address>
-    <Latitude>31.75372877114649</Latitude>
-    <Longitude>35.220093699825775</Longitude>
     <CustomerName>Moshe Cohen</CustomerName>
-    <CustomerPhone>0546643163</CustomerPhone>
+    <CustomerPhone>0533194579</CustomerPhone>
     <Weight>3</Weight>
-    <Volume>3</Volume>
+    <Volume xsi:nil="true" />
     <Fragile>false</Fragile>
-    <OrderTime>2026-07-01T14:28:25</OrderTime>
+    <OrderTime>2026-01-08T14:32:24.0256654+02:00</OrderTime>
   </Order>
   <Order>
-    <Id>5576</Id>
+    <Id>6011</Id>
+    <OrderType>Burger</OrderType>
+    <Description>Burger order for Chana Berkovich</Description>
+    <Address>Old City, Damascus Gate, Jerusalem</Address>
+    <Latitude>31.781633499405633</Latitude>
+    <Longitude>35.230407836095296</Longitude>
+    <CustomerName>Chana Berkovich</CustomerName>
+    <CustomerPhone>0532873505</CustomerPhone>
+    <Weight>5</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T13:13:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6012</Id>
+    <OrderType>Pizza</OrderType>
+    <Description>Pizza order for Shlomo Friedman</Description>
+    <Address>Old City, Damascus Gate, Jerusalem</Address>
+    <Latitude>31.781633499405633</Latitude>
+    <Longitude>35.230407836095296</Longitude>
+    <CustomerName>Shlomo Friedman</CustomerName>
+    <CustomerPhone>0527634691</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume>1</Volume>
+    <Fragile>true</Fragile>
+    <OrderTime>2026-01-08T13:19:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6013</Id>
+    <OrderType>Italian</OrderType>
+    <Description>Italian order for Miriam Hadad</Description>
+    <Address>Yad Vashem, Har Hazikaron, Jerusalem</Address>
+    <Latitude>31.774339477464142</Latitude>
+    <Longitude>35.17555929720624</Longitude>
+    <CustomerName>Miriam Hadad</CustomerName>
+    <CustomerPhone>0529377391</CustomerPhone>
+    <Weight>2</Weight>
+    <Volume>1</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T14:42:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6014</Id>
+    <OrderType>Sandwich</OrderType>
+    <Description>Sandwich order for Yosef Kaplan</Description>
+    <Address>97 Jaffa Road, Jerusalem</Address>
+    <Latitude>31.784321307301173</Latitude>
+    <Longitude>35.21492818699034</Longitude>
+    <CustomerName>Yosef Kaplan</CustomerName>
+    <CustomerPhone>0586915593</CustomerPhone>
+    <Weight>8</Weight>
+    <Volume>1</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T13:15:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6015</Id>
     <OrderType>French</OrderType>
     <Description>French order for Avi Levi</Description>
-    <Address>40 Emek Refaim Street, Jerusalem</Address>
-    <Latitude>31.76330771836013</Latitude>
-    <Longitude>35.21897174033168</Longitude>
-    <CustomerName>Avi Levi</CustomerName>
-    <CustomerPhone>0519045357</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume>3</Volume>
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T15:14:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5577</Id>
-    <OrderType>Italian</OrderType>
-    <Description>Italian order for Avi Levi</Description>
     <Address>Israel Museum, Ruppin Boulevard, Jerusalem</Address>
     <Latitude>31.772260563480305</Latitude>
     <Longitude>35.20416470565706</Longitude>
     <CustomerName>Avi Levi</CustomerName>
-    <CustomerPhone>0576447074</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume>3</Volume>
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T14:42:25</OrderTime>
+    <CustomerPhone>0573421922</CustomerPhone>
+    <Weight>8</Weight>
+    <Volume>1</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T13:32:24.0256654+02:00</OrderTime>
   </Order>
   <Order>
-    <Id>5578</Id>
-    <OrderType>Salad</OrderType>
-    <Description>Salad order for Shlomo Friedman</Description>
+    <Id>6016</Id>
+    <OrderType>French</OrderType>
+    <Description>French order for Yosef Kaplan</Description>
+    <Address>The Knesset, Jerusalem</Address>
+    <Latitude>31.776836273440203</Latitude>
+    <Longitude>35.20543532782223</Longitude>
+    <CustomerName>Yosef Kaplan</CustomerName>
+    <CustomerPhone>0532628725</CustomerPhone>
+    <Weight>1</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T12:41:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6017</Id>
+    <OrderType>Thai</OrderType>
+    <Description>Thai order for David Biton</Description>
     <Address>1 Shmuel HaNagid Street, Jerusalem</Address>
     <Latitude>31.7803234093586</Latitude>
     <Longitude>35.21509467147077</Longitude>
-    <CustomerName>Shlomo Friedman</CustomerName>
-    <CustomerPhone>0561660330</CustomerPhone>
-    <Weight>9</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T13:14:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5579</Id>
-    <OrderType>Sandwich</OrderType>
-    <Description>Sandwich order for David Biton</Description>
-    <Address>The Knesset, Jerusalem</Address>
-    <Latitude>31.776836273440203</Latitude>
-    <Longitude>35.20543532782223</Longitude>
     <CustomerName>David Biton</CustomerName>
-    <CustomerPhone>0549928952</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume xsi:nil="true" />
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T15:24:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5580</Id>
-    <OrderType>Italian</OrderType>
-    <Description>Italian order for Rivkah Avram</Description>
-    <Address>50 Agrippas Street, Jerusalem</Address>
-    <Latitude>31.7839517488835</Latitude>
-    <Longitude>35.2134290577043</Longitude>
-    <CustomerName>Rivkah Avram</CustomerName>
-    <CustomerPhone>0553592025</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T14:18:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5581</Id>
-    <OrderType>Sushi</OrderType>
-    <Description>Sushi order for Shlomo Friedman</Description>
-    <Address>20 King George Street, Jerusalem</Address>
-    <Latitude>31.781445067611205</Latitude>
-    <Longitude>35.21603646969099</Longitude>
-    <CustomerName>Shlomo Friedman</CustomerName>
-    <CustomerPhone>0581132141</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume>1</Volume>
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T14:36:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5582</Id>
-    <OrderType>Sandwich</OrderType>
-    <Description>Sandwich order for Sarah Schwartz</Description>
-    <Address>20 King George Street, Jerusalem</Address>
-    <Latitude>31.781445067611205</Latitude>
-    <Longitude>35.21603646969099</Longitude>
-    <CustomerName>Sarah Schwartz</CustomerName>
-    <CustomerPhone>0525816648</CustomerPhone>
-    <Weight>7</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T14:39:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5583</Id>
-    <OrderType>Pizza</OrderType>
-    <Description>Pizza order for Shlomo Friedman</Description>
-    <Address>19 King David Street, Jerusalem</Address>
-    <Latitude>31.775532039347635</Latitude>
-    <Longitude>35.22215210314104</Longitude>
-    <CustomerName>Shlomo Friedman</CustomerName>
-    <CustomerPhone>0568212066</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume>2</Volume>
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T14:53:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5584</Id>
-    <OrderType>Sandwich</OrderType>
-    <Description>Sandwich order for Rivkah Avram</Description>
-    <Address>40 Emek Refaim Street, Jerusalem</Address>
-    <Latitude>31.76330771836013</Latitude>
-    <Longitude>35.21897174033168</Longitude>
-    <CustomerName>Rivkah Avram</CustomerName>
-    <CustomerPhone>0572597690</CustomerPhone>
-    <Weight>4</Weight>
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T14:04:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5585</Id>
-    <OrderType>Thai</OrderType>
-    <Description>Thai order for Yosef Kaplan</Description>
-    <Address>19 King David Street, Jerusalem</Address>
-    <Latitude>31.775532039347635</Latitude>
-    <Longitude>35.22215210314104</Longitude>
-    <CustomerName>Yosef Kaplan</CustomerName>
-    <CustomerPhone>0513363676</CustomerPhone>
-    <Weight>7</Weight>
-    <Volume>1</Volume>
-    <Fragile>false</Fragile>
-    <OrderTime>2026-07-01T13:04:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5586</Id>
-    <OrderType>Sushi</OrderType>
-    <Description>Sushi order for Moshe Cohen</Description>
-    <Address>40 Emek Refaim Street, Jerusalem</Address>
-    <Latitude>31.76330771836013</Latitude>
-    <Longitude>35.21897174033168</Longitude>
-    <CustomerName>Moshe Cohen</CustomerName>
-    <CustomerPhone>0566938370</CustomerPhone>
+    <CustomerPhone>0558832404</CustomerPhone>
     <Weight>8</Weight>
-    <Volume>3</Volume>
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T13:45:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5587</Id>
-    <OrderType>Sushi</OrderType>
-    <Description>Sushi order for Miriam Hadad</Description>
-    <Address>97 Jaffa Road, Jerusalem</Address>
-    <Latitude>31.784321307301173</Latitude>
-    <Longitude>35.21492818699034</Longitude>
-    <CustomerName>Miriam Hadad</CustomerName>
-    <CustomerPhone>0552482774</CustomerPhone>
-    <Weight>7</Weight>
-    <Volume xsi:nil="true" />
+    <Volume>2</Volume>
     <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T14:33:25</OrderTime>
+    <OrderTime>2026-01-08T14:13:24.0256654+02:00</OrderTime>
   </Order>
   <Order>
-    <Id>5588</Id>
-    <OrderType>French</OrderType>
-    <Description>French order for Israel Israeli</Description>
-    <Address>The Knesset, Jerusalem</Address>
-    <Latitude>31.776836273440203</Latitude>
-    <Longitude>35.20543532782223</Longitude>
-    <CustomerName>Israel Israeli</CustomerName>
-    <CustomerPhone>0554918186</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T15:13:25</OrderTime>
+    <Id>6018</Id>
+    <OrderType>Pizza</OrderType>
+    <Description>Pizza order for Miriam Hadad</Description>
+    <Address>7 Bezalel Street, Jerusalem</Address>
+    <Latitude>31.780426988150147</Latitude>
+    <Longitude>35.21376028332093</Longitude>
+    <CustomerName>Miriam Hadad</CustomerName>
+    <CustomerPhone>0533571737</CustomerPhone>
+    <Weight>2</Weight>
+    <Volume>2</Volume>
+    <Fragile>false</Fragile>
+    <OrderTime>2026-01-08T15:17:24.0256654+02:00</OrderTime>
   </Order>
   <Order>
-    <Id>5589</Id>
+    <Id>6019</Id>
     <OrderType>Salad</OrderType>
     <Description>Salad order for Avi Levi</Description>
     <Address>100 Derech Hebron, Jerusalem</Address>
     <Latitude>31.75372877114649</Latitude>
     <Longitude>35.220093699825775</Longitude>
     <CustomerName>Avi Levi</CustomerName>
-    <CustomerPhone>0571122242</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume>3</Volume>
-    <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T15:32:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5590</Id>
-    <OrderType>French</OrderType>
-    <Description>French order for Miriam Hadad</Description>
-    <Address>100 Derech Hebron, Jerusalem</Address>
-    <Latitude>31.75372877114649</Latitude>
-    <Longitude>35.220093699825775</Longitude>
-    <CustomerName>Miriam Hadad</CustomerName>
-    <CustomerPhone>0526215872</CustomerPhone>
-    <Weight>8</Weight>
-    <Volume>2</Volume>
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T15:15:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5591</Id>
-    <OrderType>Sushi</OrderType>
-    <Description>Sushi order for Israel Israeli</Description>
-    <Address>Old City, Jaffa Gate, Jerusalem</Address>
-    <Latitude>31.77672720366729</Latitude>
-    <Longitude>35.227629940170196</Longitude>
-    <CustomerName>Israel Israeli</CustomerName>
-    <CustomerPhone>0581733074</CustomerPhone>
-    <Weight xsi:nil="true" />
+    <CustomerPhone>0572887611</CustomerPhone>
+    <Weight>9</Weight>
     <Volume xsi:nil="true" />
-    <Fragile>false</Fragile>
-    <OrderTime>2026-07-01T14:48:25</OrderTime>
+    <Fragile>true</Fragile>
+    <OrderTime>2026-01-08T15:32:24.0256654+02:00</OrderTime>
   </Order>
   <Order>
-    <Id>5592</Id>
+    <Id>6020</Id>
     <OrderType>Burger</OrderType>
-    <Description>Burger order for Israel Israeli</Description>
+    <Description>Burger order for Chana Berkovich</Description>
     <Address>19 King David Street, Jerusalem</Address>
     <Latitude>31.775532039347635</Latitude>
     <Longitude>35.22215210314104</Longitude>
-    <CustomerName>Israel Israeli</CustomerName>
-    <CustomerPhone>0522829571</CustomerPhone>
-    <Weight>6</Weight>
+    <CustomerName>Chana Berkovich</CustomerName>
+    <CustomerPhone>0574472056</CustomerPhone>
+    <Weight xsi:nil="true" />
     <Volume xsi:nil="true" />
     <Fragile>false</Fragile>
-    <OrderTime>2026-07-01T13:00:25</OrderTime>
+    <OrderTime>2026-01-08T13:42:24.0256654+02:00</OrderTime>
   </Order>
   <Order>
-    <Id>5593</Id>
-    <OrderType>Pizza</OrderType>
-    <Description>Pizza order for Shlomo Friedman</Description>
+    <Id>6021</Id>
+    <OrderType>Burger</OrderType>
+    <Description>Burger order for Chana Berkovich</Description>
+    <Address>40 Emek Refaim Street, Jerusalem</Address>
+    <Latitude>31.76330771836013</Latitude>
+    <Longitude>35.21897174033168</Longitude>
+    <CustomerName>Chana Berkovich</CustomerName>
+    <CustomerPhone>0548595799</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume>3</Volume>
+    <Fragile>false</Fragile>
+    <OrderTime>2026-01-08T14:16:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6022</Id>
+    <OrderType>Thai</OrderType>
+    <Description>Thai order for Chana Berkovich</Description>
+    <Address>55 Hanevi'im Street, Jerusalem</Address>
+    <Latitude>31.784566788971983</Latitude>
+    <Longitude>35.21797569918418</Longitude>
+    <CustomerName>Chana Berkovich</CustomerName>
+    <CustomerPhone>0554981941</CustomerPhone>
+    <Weight>1</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile>true</Fragile>
+    <OrderTime>2026-01-08T13:09:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6023</Id>
+    <OrderType>Sandwich</OrderType>
+    <Description>Sandwich order for David Biton</Description>
+    <Address>40 Emek Refaim Street, Jerusalem</Address>
+    <Latitude>31.76330771836013</Latitude>
+    <Longitude>35.21897174033168</Longitude>
+    <CustomerName>David Biton</CustomerName>
+    <CustomerPhone>0574735577</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume>4</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T14:35:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6024</Id>
+    <OrderType>Burger</OrderType>
+    <Description>Burger order for Shlomo Friedman</Description>
+    <Address>20 King George Street, Jerusalem</Address>
+    <Latitude>31.781445067611205</Latitude>
+    <Longitude>35.21603646969099</Longitude>
+    <CustomerName>Shlomo Friedman</CustomerName>
+    <CustomerPhone>0555609340</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume>1</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T15:25:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6025</Id>
+    <OrderType>Sandwich</OrderType>
+    <Description>Sandwich order for Sarah Schwartz</Description>
+    <Address>100 Derech Hebron, Jerusalem</Address>
+    <Latitude>31.75372877114649</Latitude>
+    <Longitude>35.220093699825775</Longitude>
+    <CustomerName>Sarah Schwartz</CustomerName>
+    <CustomerPhone>0573580535</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume xsi:nil="true" />
+    <Fragile>false</Fragile>
+    <OrderTime>2026-01-08T14:24:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6026</Id>
+    <OrderType>Italian</OrderType>
+    <Description>Italian order for Shlomo Friedman</Description>
     <Address>97 Jaffa Road, Jerusalem</Address>
     <Latitude>31.784321307301173</Latitude>
     <Longitude>35.21492818699034</Longitude>
     <CustomerName>Shlomo Friedman</CustomerName>
-    <CustomerPhone>0588086108</CustomerPhone>
-    <Weight>7</Weight>
-    <Volume>3</Volume>
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T15:01:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5594</Id>
-    <OrderType>Salad</OrderType>
-    <Description>Salad order for Miriam Hadad</Description>
-    <Address>97 Jaffa Road, Jerusalem</Address>
-    <Latitude>31.784321307301173</Latitude>
-    <Longitude>35.21492818699034</Longitude>
-    <CustomerName>Miriam Hadad</CustomerName>
-    <CustomerPhone>0564494995</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T12:47:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5595</Id>
-    <OrderType>Pizza</OrderType>
-    <Description>Pizza order for Israel Israeli</Description>
-    <Address>7 Bezalel Street, Jerusalem</Address>
-    <Latitude>31.780426988150147</Latitude>
-    <Longitude>35.21376028332093</Longitude>
-    <CustomerName>Israel Israeli</CustomerName>
-    <CustomerPhone>0584792191</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume xsi:nil="true" />
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T14:27:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5596</Id>
-    <OrderType>Italian</OrderType>
-    <Description>Italian order for Rivkah Avram</Description>
-    <Address>19 King David Street, Jerusalem</Address>
-    <Latitude>31.775532039347635</Latitude>
-    <Longitude>35.22215210314104</Longitude>
-    <CustomerName>Rivkah Avram</CustomerName>
-    <CustomerPhone>0579397577</CustomerPhone>
-    <Weight xsi:nil="true" />
-    <Volume>3</Volume>
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T13:54:25</OrderTime>
-  </Order>
-  <Order>
-    <Id>5597</Id>
-    <OrderType>Sushi</OrderType>
-    <Description>Sushi order for Israel Israeli</Description>
-    <Address>Givat Ram Campus, Hebrew University, Jerusalem</Address>
-    <Latitude>31.778454610245173</Latitude>
-    <Longitude>35.19735586158905</Longitude>
-    <CustomerName>Israel Israeli</CustomerName>
-    <CustomerPhone>0567094212</CustomerPhone>
+    <CustomerPhone>0575191611</CustomerPhone>
     <Weight xsi:nil="true" />
     <Volume xsi:nil="true" />
     <Fragile>false</Fragile>
-    <OrderTime>2026-07-01T15:05:25</OrderTime>
+    <OrderTime>2026-01-08T14:32:24.0256654+02:00</OrderTime>
   </Order>
   <Order>
-    <Id>5598</Id>
+    <Id>6027</Id>
+    <OrderType>Sushi</OrderType>
+    <Description>Sushi order for Rivkah Avram</Description>
+    <Address>Israel Museum, Ruppin Boulevard, Jerusalem</Address>
+    <Latitude>31.772260563480305</Latitude>
+    <Longitude>35.20416470565706</Longitude>
+    <CustomerName>Rivkah Avram</CustomerName>
+    <CustomerPhone>0526764183</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T13:36:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6028</Id>
+    <OrderType>Thai</OrderType>
+    <Description>Thai order for Israel Israeli</Description>
+    <Address>55 Hanevi'im Street, Jerusalem</Address>
+    <Latitude>31.784566788971983</Latitude>
+    <Longitude>35.21797569918418</Longitude>
+    <CustomerName>Israel Israeli</CustomerName>
+    <CustomerPhone>0589158906</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume>1</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T12:58:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6029</Id>
     <OrderType>French</OrderType>
-    <Description>French order for Rivkah Avram</Description>
+    <Description>French order for Shlomo Friedman</Description>
+    <Address>1 Shmuel HaNagid Street, Jerusalem</Address>
+    <Latitude>31.7803234093586</Latitude>
+    <Longitude>35.21509467147077</Longitude>
+    <CustomerName>Shlomo Friedman</CustomerName>
+    <CustomerPhone>0529127691</CustomerPhone>
+    <Weight>8</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile>false</Fragile>
+    <OrderTime>2026-01-08T14:39:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6030</Id>
+    <OrderType>Thai</OrderType>
+    <Description>Thai order for Avi Levi</Description>
+    <Address>10 Ben Yehuda Street, Jerusalem</Address>
+    <Latitude>31.781659548628657</Latitude>
+    <Longitude>35.21768334183865</Longitude>
+    <CustomerName>Avi Levi</CustomerName>
+    <CustomerPhone>0560206291</CustomerPhone>
+    <Weight>1</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile>true</Fragile>
+    <OrderTime>2026-01-08T14:22:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6031</Id>
+    <OrderType>Sushi</OrderType>
+    <Description>Sushi order for Miriam Hadad</Description>
+    <Address>50 Agrippas Street, Jerusalem</Address>
+    <Latitude>31.7839517488835</Latitude>
+    <Longitude>35.2134290577043</Longitude>
+    <CustomerName>Miriam Hadad</CustomerName>
+    <CustomerPhone>0522106606</CustomerPhone>
+    <Weight>5</Weight>
+    <Volume>1</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T13:59:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6032</Id>
+    <OrderType>Sushi</OrderType>
+    <Description>Sushi order for Avi Levi</Description>
+    <Address>12 Hillel Street, Jerusalem</Address>
+    <Latitude>31.780187091786093</Latitude>
+    <Longitude>35.21726342807211</Longitude>
+    <CustomerName>Avi Levi</CustomerName>
+    <CustomerPhone>0528360221</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume>1</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T14:21:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6033</Id>
+    <OrderType>Pizza</OrderType>
+    <Description>Pizza order for Rivkah Avram</Description>
+    <Address>Old City, Jaffa Gate, Jerusalem</Address>
+    <Latitude>31.77672720366729</Latitude>
+    <Longitude>35.227629940170196</Longitude>
+    <CustomerName>Rivkah Avram</CustomerName>
+    <CustomerPhone>0551622173</CustomerPhone>
+    <Weight>1</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T14:12:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6034</Id>
+    <OrderType>Pizza</OrderType>
+    <Description>Pizza order for Miriam Hadad</Description>
+    <Address>30 Gaza Street, Jerusalem</Address>
+    <Latitude>31.772801469039326</Latitude>
+    <Longitude>35.21429702871634</Longitude>
+    <CustomerName>Miriam Hadad</CustomerName>
+    <CustomerPhone>0545889859</CustomerPhone>
+    <Weight>2</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile>false</Fragile>
+    <OrderTime>2026-01-08T13:14:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6035</Id>
+    <OrderType>French</OrderType>
+    <Description>French order for Moshe Cohen</Description>
+    <Address>50 Agrippas Street, Jerusalem</Address>
+    <Latitude>31.7839517488835</Latitude>
+    <Longitude>35.2134290577043</Longitude>
+    <CustomerName>Moshe Cohen</CustomerName>
+    <CustomerPhone>0570482826</CustomerPhone>
+    <Weight>2</Weight>
+    <Volume>4</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T13:16:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6036</Id>
+    <OrderType>Italian</OrderType>
+    <Description>Italian order for Avi Levi</Description>
     <Address>Old City, Damascus Gate, Jerusalem</Address>
     <Latitude>31.781633499405633</Latitude>
     <Longitude>35.230407836095296</Longitude>
-    <CustomerName>Rivkah Avram</CustomerName>
-    <CustomerPhone>0571115883</CustomerPhone>
-    <Weight>9</Weight>
+    <CustomerName>Avi Levi</CustomerName>
+    <CustomerPhone>0530818552</CustomerPhone>
+    <Weight xsi:nil="true" />
     <Volume xsi:nil="true" />
     <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T15:36:25</OrderTime>
+    <OrderTime>2026-01-08T13:38:24.0256654+02:00</OrderTime>
   </Order>
   <Order>
-    <Id>5599</Id>
+    <Id>6037</Id>
+    <OrderType>Sushi</OrderType>
+    <Description>Sushi order for Moshe Cohen</Description>
+    <Address>Mount Zion, Jerusalem</Address>
+    <Latitude>31.771432755523676</Latitude>
+    <Longitude>35.228548482787225</Longitude>
+    <CustomerName>Moshe Cohen</CustomerName>
+    <CustomerPhone>0540848931</CustomerPhone>
+    <Weight>3</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile>false</Fragile>
+    <OrderTime>2026-01-08T12:56:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6038</Id>
+    <OrderType>Thai</OrderType>
+    <Description>Thai order for Yosef Kaplan</Description>
+    <Address>Mount Zion, Jerusalem</Address>
+    <Latitude>31.771432755523676</Latitude>
+    <Longitude>35.228548482787225</Longitude>
+    <CustomerName>Yosef Kaplan</CustomerName>
+    <CustomerPhone>0549135423</CustomerPhone>
+    <Weight>2</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T15:13:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6039</Id>
+    <OrderType>Burger</OrderType>
+    <Description>Burger order for Yosef Kaplan</Description>
+    <Address>The Knesset, Jerusalem</Address>
+    <Latitude>31.776836273440203</Latitude>
+    <Longitude>35.20543532782223</Longitude>
+    <CustomerName>Yosef Kaplan</CustomerName>
+    <CustomerPhone>0563760122</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume>4</Volume>
+    <Fragile>false</Fragile>
+    <OrderTime>2026-01-08T15:09:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6040</Id>
+    <OrderType>Sandwich</OrderType>
+    <Description>Sandwich order for Rivkah Avram</Description>
+    <Address>12 Hillel Street, Jerusalem</Address>
+    <Latitude>31.780187091786093</Latitude>
+    <Longitude>35.21726342807211</Longitude>
+    <CustomerName>Rivkah Avram</CustomerName>
+    <CustomerPhone>0560395641</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T12:53:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6041</Id>
+    <OrderType>Sandwich</OrderType>
+    <Description>Sandwich order for Shlomo Friedman</Description>
+    <Address>1 Shmuel HaNagid Street, Jerusalem</Address>
+    <Latitude>31.7803234093586</Latitude>
+    <Longitude>35.21509467147077</Longitude>
+    <CustomerName>Shlomo Friedman</CustomerName>
+    <CustomerPhone>0550251058</CustomerPhone>
+    <Weight>2</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile>false</Fragile>
+    <OrderTime>2026-01-08T15:17:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6042</Id>
+    <OrderType>Sandwich</OrderType>
+    <Description>Sandwich order for Rivkah Avram</Description>
+    <Address>Mahane Yehuda Market, Jerusalem</Address>
+    <Latitude>31.784926645982097</Latitude>
+    <Longitude>35.21267841766886</Longitude>
+    <CustomerName>Rivkah Avram</CustomerName>
+    <CustomerPhone>0548841794</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T15:24:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6043</Id>
+    <OrderType>Thai</OrderType>
+    <Description>Thai order for David Biton</Description>
+    <Address>100 Derech Hebron, Jerusalem</Address>
+    <Latitude>31.75372877114649</Latitude>
+    <Longitude>35.220093699825775</Longitude>
+    <CustomerName>David Biton</CustomerName>
+    <CustomerPhone>0545199977</CustomerPhone>
+    <Weight>1</Weight>
+    <Volume>2</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T12:53:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6044</Id>
+    <OrderType>Italian</OrderType>
+    <Description>Italian order for David Biton</Description>
+    <Address>50 Agrippas Street, Jerusalem</Address>
+    <Latitude>31.7839517488835</Latitude>
+    <Longitude>35.2134290577043</Longitude>
+    <CustomerName>David Biton</CustomerName>
+    <CustomerPhone>0520189488</CustomerPhone>
+    <Weight>1</Weight>
+    <Volume>2</Volume>
+    <Fragile>true</Fragile>
+    <OrderTime>2026-01-08T13:27:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6045</Id>
+    <OrderType>Salad</OrderType>
+    <Description>Salad order for David Biton</Description>
+    <Address>10 Ben Yehuda Street, Jerusalem</Address>
+    <Latitude>31.781659548628657</Latitude>
+    <Longitude>35.21768334183865</Longitude>
+    <CustomerName>David Biton</CustomerName>
+    <CustomerPhone>0563190052</CustomerPhone>
+    <Weight>4</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile>true</Fragile>
+    <OrderTime>2026-01-08T13:06:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6046</Id>
+    <OrderType>Indian</OrderType>
+    <Description>Indian order for Israel Israeli</Description>
+    <Address>Mount Zion, Jerusalem</Address>
+    <Latitude>31.771432755523676</Latitude>
+    <Longitude>35.228548482787225</Longitude>
+    <CustomerName>Israel Israeli</CustomerName>
+    <CustomerPhone>0589932238</CustomerPhone>
+    <Weight>2</Weight>
+    <Volume>3</Volume>
+    <Fragile>false</Fragile>
+    <OrderTime>2026-01-08T14:23:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6047</Id>
+    <OrderType>Pizza</OrderType>
+    <Description>Pizza order for Sarah Schwartz</Description>
+    <Address>Old City, Jaffa Gate, Jerusalem</Address>
+    <Latitude>31.77672720366729</Latitude>
+    <Longitude>35.227629940170196</Longitude>
+    <CustomerName>Sarah Schwartz</CustomerName>
+    <CustomerPhone>0552513869</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T14:48:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6048</Id>
+    <OrderType>Sandwich</OrderType>
+    <Description>Sandwich order for Avi Levi</Description>
+    <Address>Mahane Yehuda Market, Jerusalem</Address>
+    <Latitude>31.784926645982097</Latitude>
+    <Longitude>35.21267841766886</Longitude>
+    <CustomerName>Avi Levi</CustomerName>
+    <CustomerPhone>0511584686</CustomerPhone>
+    <Weight>8</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T15:03:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6049</Id>
+    <OrderType>Pizza</OrderType>
+    <Description>Pizza order for David Biton</Description>
+    <Address>Israel Museum, Ruppin Boulevard, Jerusalem</Address>
+    <Latitude>31.772260563480305</Latitude>
+    <Longitude>35.20416470565706</Longitude>
+    <CustomerName>David Biton</CustomerName>
+    <CustomerPhone>0574339087</CustomerPhone>
+    <Weight>4</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T15:28:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6050</Id>
+    <OrderType>Pizza</OrderType>
+    <Description>Pizza order for Moshe Cohen</Description>
+    <Address>12 Hillel Street, Jerusalem</Address>
+    <Latitude>31.780187091786093</Latitude>
+    <Longitude>35.21726342807211</Longitude>
+    <CustomerName>Moshe Cohen</CustomerName>
+    <CustomerPhone>0565764453</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume>1</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T14:06:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6051</Id>
+    <OrderType>French</OrderType>
+    <Description>French order for Chana Berkovich</Description>
+    <Address>Givat Ram Campus, Hebrew University, Jerusalem</Address>
+    <Latitude>31.778454610245173</Latitude>
+    <Longitude>35.19735586158905</Longitude>
+    <CustomerName>Chana Berkovich</CustomerName>
+    <CustomerPhone>0584858265</CustomerPhone>
+    <Weight>3</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T12:35:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6052</Id>
+    <OrderType>Salad</OrderType>
+    <Description>Salad order for Shlomo Friedman</Description>
+    <Address>40 Emek Refaim Street, Jerusalem</Address>
+    <Latitude>31.76330771836013</Latitude>
+    <Longitude>35.21897174033168</Longitude>
+    <CustomerName>Shlomo Friedman</CustomerName>
+    <CustomerPhone>0525013617</CustomerPhone>
+    <Weight>6</Weight>
+    <Volume>3</Volume>
+    <Fragile>false</Fragile>
+    <OrderTime>2026-01-08T13:54:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6053</Id>
+    <OrderType>Thai</OrderType>
+    <Description>Thai order for David Biton</Description>
+    <Address>Old City, Jaffa Gate, Jerusalem</Address>
+    <Latitude>31.77672720366729</Latitude>
+    <Longitude>35.227629940170196</Longitude>
+    <CustomerName>David Biton</CustomerName>
+    <CustomerPhone>0515686689</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume>3</Volume>
+    <Fragile>true</Fragile>
+    <OrderTime>2026-01-08T13:31:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6054</Id>
+    <OrderType>Sandwich</OrderType>
+    <Description>Sandwich order for Sarah Schwartz</Description>
+    <Address>Old City, Damascus Gate, Jerusalem</Address>
+    <Latitude>31.781633499405633</Latitude>
+    <Longitude>35.230407836095296</Longitude>
+    <CustomerName>Sarah Schwartz</CustomerName>
+    <CustomerPhone>0513991386</CustomerPhone>
+    <Weight>2</Weight>
+    <Volume>3</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T14:46:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6055</Id>
+    <OrderType>Sushi</OrderType>
+    <Description>Sushi order for Rivkah Avram</Description>
+    <Address>12 Hillel Street, Jerusalem</Address>
+    <Latitude>31.780187091786093</Latitude>
+    <Longitude>35.21726342807211</Longitude>
+    <CustomerName>Rivkah Avram</CustomerName>
+    <CustomerPhone>0541019510</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T13:49:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6056</Id>
+    <OrderType>Sushi</OrderType>
+    <Description>Sushi order for Chana Berkovich</Description>
+    <Address>Old City, Damascus Gate, Jerusalem</Address>
+    <Latitude>31.781633499405633</Latitude>
+    <Longitude>35.230407836095296</Longitude>
+    <CustomerName>Chana Berkovich</CustomerName>
+    <CustomerPhone>0565102935</CustomerPhone>
+    <Weight>1</Weight>
+    <Volume>3</Volume>
+    <Fragile>true</Fragile>
+    <OrderTime>2026-01-08T14:01:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6057</Id>
+    <OrderType>Italian</OrderType>
+    <Description>Italian order for Chana Berkovich</Description>
+    <Address>30 Gaza Street, Jerusalem</Address>
+    <Latitude>31.772801469039326</Latitude>
+    <Longitude>35.21429702871634</Longitude>
+    <CustomerName>Chana Berkovich</CustomerName>
+    <CustomerPhone>0530598782</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T14:33:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6058</Id>
+    <OrderType>Salad</OrderType>
+    <Description>Salad order for Israel Israeli</Description>
+    <Address>Old City, Damascus Gate, Jerusalem</Address>
+    <Latitude>31.781633499405633</Latitude>
+    <Longitude>35.230407836095296</Longitude>
+    <CustomerName>Israel Israeli</CustomerName>
+    <CustomerPhone>0535758956</CustomerPhone>
+    <Weight>2</Weight>
+    <Volume>1</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T12:52:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6059</Id>
+    <OrderType>Sushi</OrderType>
+    <Description>Sushi order for Sarah Schwartz</Description>
+    <Address>Mahane Yehuda Market, Jerusalem</Address>
+    <Latitude>31.784926645982097</Latitude>
+    <Longitude>35.21267841766886</Longitude>
+    <CustomerName>Sarah Schwartz</CustomerName>
+    <CustomerPhone>0561294582</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume>3</Volume>
+    <Fragile>true</Fragile>
+    <OrderTime>2026-01-08T14:08:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6060</Id>
+    <OrderType>Italian</OrderType>
+    <Description>Italian order for Israel Israeli</Description>
+    <Address>The Knesset, Jerusalem</Address>
+    <Latitude>31.776836273440203</Latitude>
+    <Longitude>35.20543532782223</Longitude>
+    <CustomerName>Israel Israeli</CustomerName>
+    <CustomerPhone>0536478237</CustomerPhone>
+    <Weight>1</Weight>
+    <Volume>4</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T12:45:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6061</Id>
+    <OrderType>Pizza</OrderType>
+    <Description>Pizza order for Yosef Kaplan</Description>
+    <Address>Givat Ram Campus, Hebrew University, Jerusalem</Address>
+    <Latitude>31.778454610245173</Latitude>
+    <Longitude>35.19735586158905</Longitude>
+    <CustomerName>Yosef Kaplan</CustomerName>
+    <CustomerPhone>0527083085</CustomerPhone>
+    <Weight>5</Weight>
+    <Volume>3</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T14:39:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6062</Id>
+    <OrderType>Italian</OrderType>
+    <Description>Italian order for Shlomo Friedman</Description>
+    <Address>19 King David Street, Jerusalem</Address>
+    <Latitude>31.775532039347635</Latitude>
+    <Longitude>35.22215210314104</Longitude>
+    <CustomerName>Shlomo Friedman</CustomerName>
+    <CustomerPhone>0579704336</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume>2</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T14:35:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6063</Id>
     <OrderType>Indian</OrderType>
     <Description>Indian order for Avi Levi</Description>
+    <Address>40 Emek Refaim Street, Jerusalem</Address>
+    <Latitude>31.76330771836013</Latitude>
+    <Longitude>35.21897174033168</Longitude>
+    <CustomerName>Avi Levi</CustomerName>
+    <CustomerPhone>0553353761</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume>3</Volume>
+    <Fragile>false</Fragile>
+    <OrderTime>2026-01-08T14:08:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6064</Id>
+    <OrderType>Thai</OrderType>
+    <Description>Thai order for Chana Berkovich</Description>
+    <Address>Mount Zion, Jerusalem</Address>
+    <Latitude>31.771432755523676</Latitude>
+    <Longitude>35.228548482787225</Longitude>
+    <CustomerName>Chana Berkovich</CustomerName>
+    <CustomerPhone>0549618183</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T13:53:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6065</Id>
+    <OrderType>Thai</OrderType>
+    <Description>Thai order for Chana Berkovich</Description>
+    <Address>55 Hanevi'im Street, Jerusalem</Address>
+    <Latitude>31.784566788971983</Latitude>
+    <Longitude>35.21797569918418</Longitude>
+    <CustomerName>Chana Berkovich</CustomerName>
+    <CustomerPhone>0546366508</CustomerPhone>
+    <Weight>1</Weight>
+    <Volume>2</Volume>
+    <Fragile>false</Fragile>
+    <OrderTime>2026-01-08T12:44:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6066</Id>
+    <OrderType>Salad</OrderType>
+    <Description>Salad order for Yosef Kaplan</Description>
+    <Address>Mahane Yehuda Market, Jerusalem</Address>
+    <Latitude>31.784926645982097</Latitude>
+    <Longitude>35.21267841766886</Longitude>
+    <CustomerName>Yosef Kaplan</CustomerName>
+    <CustomerPhone>0565888755</CustomerPhone>
+    <Weight>5</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T14:28:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6067</Id>
+    <OrderType>Indian</OrderType>
+    <Description>Indian order for Moshe Cohen</Description>
+    <Address>97 Jaffa Road, Jerusalem</Address>
+    <Latitude>31.784321307301173</Latitude>
+    <Longitude>35.21492818699034</Longitude>
+    <CustomerName>Moshe Cohen</CustomerName>
+    <CustomerPhone>0555195032</CustomerPhone>
+    <Weight>9</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile>true</Fragile>
+    <OrderTime>2026-01-08T13:02:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6068</Id>
+    <OrderType>Italian</OrderType>
+    <Description>Italian order for Miriam Hadad</Description>
+    <Address>100 Derech Hebron, Jerusalem</Address>
+    <Latitude>31.75372877114649</Latitude>
+    <Longitude>35.220093699825775</Longitude>
+    <CustomerName>Miriam Hadad</CustomerName>
+    <CustomerPhone>0542623852</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume>4</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T15:26:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6069</Id>
+    <OrderType>French</OrderType>
+    <Description>French order for Miriam Hadad</Description>
+    <Address>20 King George Street, Jerusalem</Address>
+    <Latitude>31.781445067611205</Latitude>
+    <Longitude>35.21603646969099</Longitude>
+    <CustomerName>Miriam Hadad</CustomerName>
+    <CustomerPhone>0548461172</CustomerPhone>
+    <Weight>8</Weight>
+    <Volume>3</Volume>
+    <Fragile>false</Fragile>
+    <OrderTime>2026-01-08T15:04:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6070</Id>
+    <OrderType>Italian</OrderType>
+    <Description>Italian order for Sarah Schwartz</Description>
+    <Address>Mount Zion, Jerusalem</Address>
+    <Latitude>31.771432755523676</Latitude>
+    <Longitude>35.228548482787225</Longitude>
+    <CustomerName>Sarah Schwartz</CustomerName>
+    <CustomerPhone>0530292562</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume xsi:nil="true" />
+    <Fragile>true</Fragile>
+    <OrderTime>2026-01-08T15:33:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6071</Id>
+    <OrderType>Italian</OrderType>
+    <Description>Italian order for Moshe Cohen</Description>
+    <Address>Israel Museum, Ruppin Boulevard, Jerusalem</Address>
+    <Latitude>31.772260563480305</Latitude>
+    <Longitude>35.20416470565706</Longitude>
+    <CustomerName>Moshe Cohen</CustomerName>
+    <CustomerPhone>0562245411</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T14:13:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6072</Id>
+    <OrderType>Indian</OrderType>
+    <Description>Indian order for Moshe Cohen</Description>
+    <Address>Mahane Yehuda Market, Jerusalem</Address>
+    <Latitude>31.784926645982097</Latitude>
+    <Longitude>35.21267841766886</Longitude>
+    <CustomerName>Moshe Cohen</CustomerName>
+    <CustomerPhone>0580272581</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T14:57:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6073</Id>
+    <OrderType>Thai</OrderType>
+    <Description>Thai order for Chana Berkovich</Description>
+    <Address>55 Hanevi'im Street, Jerusalem</Address>
+    <Latitude>31.784566788971983</Latitude>
+    <Longitude>35.21797569918418</Longitude>
+    <CustomerName>Chana Berkovich</CustomerName>
+    <CustomerPhone>0564718153</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T15:32:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6074</Id>
+    <OrderType>Salad</OrderType>
+    <Description>Salad order for Israel Israeli</Description>
+    <Address>10 Ben Yehuda Street, Jerusalem</Address>
+    <Latitude>31.781659548628657</Latitude>
+    <Longitude>35.21768334183865</Longitude>
+    <CustomerName>Israel Israeli</CustomerName>
+    <CustomerPhone>0541633563</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume xsi:nil="true" />
+    <Fragile>true</Fragile>
+    <OrderTime>2026-01-08T13:19:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6075</Id>
+    <OrderType>Salad</OrderType>
+    <Description>Salad order for David Biton</Description>
+    <Address>1 Shmuel HaNagid Street, Jerusalem</Address>
+    <Latitude>31.7803234093586</Latitude>
+    <Longitude>35.21509467147077</Longitude>
+    <CustomerName>David Biton</CustomerName>
+    <CustomerPhone>0529281281</CustomerPhone>
+    <Weight>9</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile>false</Fragile>
+    <OrderTime>2026-01-08T14:50:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6076</Id>
+    <OrderType>Pizza</OrderType>
+    <Description>Pizza order for Avi Levi</Description>
+    <Address>Old City, Damascus Gate, Jerusalem</Address>
+    <Latitude>31.781633499405633</Latitude>
+    <Longitude>35.230407836095296</Longitude>
+    <CustomerName>Avi Levi</CustomerName>
+    <CustomerPhone>0584234647</CustomerPhone>
+    <Weight>2</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile>true</Fragile>
+    <OrderTime>2026-01-08T13:26:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6077</Id>
+    <OrderType>Indian</OrderType>
+    <Description>Indian order for Shlomo Friedman</Description>
+    <Address>The Knesset, Jerusalem</Address>
+    <Latitude>31.776836273440203</Latitude>
+    <Longitude>35.20543532782223</Longitude>
+    <CustomerName>Shlomo Friedman</CustomerName>
+    <CustomerPhone>0554135794</CustomerPhone>
+    <Weight>2</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile>true</Fragile>
+    <OrderTime>2026-01-08T14:55:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6078</Id>
+    <OrderType>Italian</OrderType>
+    <Description>Italian order for Chana Berkovich</Description>
+    <Address>1 Shmuel HaNagid Street, Jerusalem</Address>
+    <Latitude>31.7803234093586</Latitude>
+    <Longitude>35.21509467147077</Longitude>
+    <CustomerName>Chana Berkovich</CustomerName>
+    <CustomerPhone>0536727509</CustomerPhone>
+    <Weight>4</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile>false</Fragile>
+    <OrderTime>2026-01-08T13:05:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6079</Id>
+    <OrderType>Thai</OrderType>
+    <Description>Thai order for Israel Israeli</Description>
+    <Address>19 King David Street, Jerusalem</Address>
+    <Latitude>31.775532039347635</Latitude>
+    <Longitude>35.22215210314104</Longitude>
+    <CustomerName>Israel Israeli</CustomerName>
+    <CustomerPhone>0540539720</CustomerPhone>
+    <Weight>4</Weight>
+    <Volume>1</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T12:58:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6080</Id>
+    <OrderType>Salad</OrderType>
+    <Description>Salad order for David Biton</Description>
+    <Address>The Knesset, Jerusalem</Address>
+    <Latitude>31.776836273440203</Latitude>
+    <Longitude>35.20543532782223</Longitude>
+    <CustomerName>David Biton</CustomerName>
+    <CustomerPhone>0571955560</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume>2</Volume>
+    <Fragile>true</Fragile>
+    <OrderTime>2026-01-08T14:16:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6081</Id>
+    <OrderType>Italian</OrderType>
+    <Description>Italian order for Avi Levi</Description>
+    <Address>1 Shmuel HaNagid Street, Jerusalem</Address>
+    <Latitude>31.7803234093586</Latitude>
+    <Longitude>35.21509467147077</Longitude>
+    <CustomerName>Avi Levi</CustomerName>
+    <CustomerPhone>0512567575</CustomerPhone>
+    <Weight>2</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T13:38:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6082</Id>
+    <OrderType>Pizza</OrderType>
+    <Description>Pizza order for Chana Berkovich</Description>
+    <Address>12 Hillel Street, Jerusalem</Address>
+    <Latitude>31.780187091786093</Latitude>
+    <Longitude>35.21726342807211</Longitude>
+    <CustomerName>Chana Berkovich</CustomerName>
+    <CustomerPhone>0524802839</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume>2</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T12:40:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6083</Id>
+    <OrderType>Sushi</OrderType>
+    <Description>Sushi order for Miriam Hadad</Description>
+    <Address>1 Shmuel HaNagid Street, Jerusalem</Address>
+    <Latitude>31.7803234093586</Latitude>
+    <Longitude>35.21509467147077</Longitude>
+    <CustomerName>Miriam Hadad</CustomerName>
+    <CustomerPhone>0526931466</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume>1</Volume>
+    <Fragile>true</Fragile>
+    <OrderTime>2026-01-08T13:23:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6084</Id>
+    <OrderType>Burger</OrderType>
+    <Description>Burger order for Moshe Cohen</Description>
+    <Address>50 Agrippas Street, Jerusalem</Address>
+    <Latitude>31.7839517488835</Latitude>
+    <Longitude>35.2134290577043</Longitude>
+    <CustomerName>Moshe Cohen</CustomerName>
+    <CustomerPhone>0529943384</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume>1</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T14:38:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6085</Id>
+    <OrderType>Burger</OrderType>
+    <Description>Burger order for Israel Israeli</Description>
+    <Address>Yad Vashem, Har Hazikaron, Jerusalem</Address>
+    <Latitude>31.774339477464142</Latitude>
+    <Longitude>35.17555929720624</Longitude>
+    <CustomerName>Israel Israeli</CustomerName>
+    <CustomerPhone>0518804125</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume>1</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T15:07:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6086</Id>
+    <OrderType>Thai</OrderType>
+    <Description>Thai order for Moshe Cohen</Description>
+    <Address>12 Hillel Street, Jerusalem</Address>
+    <Latitude>31.780187091786093</Latitude>
+    <Longitude>35.21726342807211</Longitude>
+    <CustomerName>Moshe Cohen</CustomerName>
+    <CustomerPhone>0572413205</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume xsi:nil="true" />
+    <Fragile>true</Fragile>
+    <OrderTime>2026-01-08T13:09:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6087</Id>
+    <OrderType>French</OrderType>
+    <Description>French order for Israel Israeli</Description>
+    <Address>100 Derech Hebron, Jerusalem</Address>
+    <Latitude>31.75372877114649</Latitude>
+    <Longitude>35.220093699825775</Longitude>
+    <CustomerName>Israel Israeli</CustomerName>
+    <CustomerPhone>0571516788</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T14:20:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6088</Id>
+    <OrderType>Pizza</OrderType>
+    <Description>Pizza order for Shlomo Friedman</Description>
     <Address>7 Bezalel Street, Jerusalem</Address>
     <Latitude>31.780426988150147</Latitude>
     <Longitude>35.21376028332093</Longitude>
-    <CustomerName>Avi Levi</CustomerName>
-    <CustomerPhone>0557809575</CustomerPhone>
+    <CustomerName>Shlomo Friedman</CustomerName>
+    <CustomerPhone>0533289948</CustomerPhone>
     <Weight>7</Weight>
-    <Volume>1</Volume>
-    <Fragile xsi:nil="true" />
-    <OrderTime>2026-07-01T13:31:25</OrderTime>
+    <Volume>4</Volume>
+    <Fragile>false</Fragile>
+    <OrderTime>2026-01-08T14:43:24.0256654+02:00</OrderTime>
   </Order>
   <Order>
-    <Id>5600</Id>
+    <Id>6089</Id>
+    <OrderType>Sandwich</OrderType>
+    <Description>Sandwich order for David Biton</Description>
+    <Address>Old City, Jaffa Gate, Jerusalem</Address>
+    <Latitude>31.77672720366729</Latitude>
+    <Longitude>35.227629940170196</Longitude>
+    <CustomerName>David Biton</CustomerName>
+    <CustomerPhone>0559741094</CustomerPhone>
+    <Weight>5</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T15:07:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6090</Id>
     <OrderType>Salad</OrderType>
-    <Description>Salad order for Miriam Hadad</Description>
+    <Description>Salad order for Avi Levi</Description>
+    <Address>19 King David Street, Jerusalem</Address>
+    <Latitude>31.775532039347635</Latitude>
+    <Longitude>35.22215210314104</Longitude>
+    <CustomerName>Avi Levi</CustomerName>
+    <CustomerPhone>0570164880</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume>1</Volume>
+    <Fragile>true</Fragile>
+    <OrderTime>2026-01-08T13:19:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6091</Id>
+    <OrderType>Italian</OrderType>
+    <Description>Italian order for Israel Israeli</Description>
+    <Address>30 Gaza Street, Jerusalem</Address>
+    <Latitude>31.772801469039326</Latitude>
+    <Longitude>35.21429702871634</Longitude>
+    <CustomerName>Israel Israeli</CustomerName>
+    <CustomerPhone>0570892147</CustomerPhone>
+    <Weight>1</Weight>
+    <Volume>2</Volume>
+    <Fragile>true</Fragile>
+    <OrderTime>2026-01-08T13:08:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6092</Id>
+    <OrderType>Salad</OrderType>
+    <Description>Salad order for Yosef Kaplan</Description>
+    <Address>40 Emek Refaim Street, Jerusalem</Address>
+    <Latitude>31.76330771836013</Latitude>
+    <Longitude>35.21897174033168</Longitude>
+    <CustomerName>Yosef Kaplan</CustomerName>
+    <CustomerPhone>0584705859</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume>2</Volume>
+    <Fragile>true</Fragile>
+    <OrderTime>2026-01-08T13:53:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6093</Id>
+    <OrderType>Salad</OrderType>
+    <Description>Salad order for Yosef Kaplan</Description>
+    <Address>30 Gaza Street, Jerusalem</Address>
+    <Latitude>31.772801469039326</Latitude>
+    <Longitude>35.21429702871634</Longitude>
+    <CustomerName>Yosef Kaplan</CustomerName>
+    <CustomerPhone>0546869372</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume>3</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T15:00:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6094</Id>
+    <OrderType>Salad</OrderType>
+    <Description>Salad order for Moshe Cohen</Description>
+    <Address>55 Hanevi'im Street, Jerusalem</Address>
+    <Latitude>31.784566788971983</Latitude>
+    <Longitude>35.21797569918418</Longitude>
+    <CustomerName>Moshe Cohen</CustomerName>
+    <CustomerPhone>0586741543</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T15:33:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6095</Id>
+    <OrderType>Indian</OrderType>
+    <Description>Indian order for David Biton</Description>
+    <Address>1 Shmuel HaNagid Street, Jerusalem</Address>
+    <Latitude>31.7803234093586</Latitude>
+    <Longitude>35.21509467147077</Longitude>
+    <CustomerName>David Biton</CustomerName>
+    <CustomerPhone>0575494822</CustomerPhone>
+    <Weight>1</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T13:22:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6096</Id>
+    <OrderType>Italian</OrderType>
+    <Description>Italian order for Avi Levi</Description>
+    <Address>Yad Vashem, Har Hazikaron, Jerusalem</Address>
+    <Latitude>31.774339477464142</Latitude>
+    <Longitude>35.17555929720624</Longitude>
+    <CustomerName>Avi Levi</CustomerName>
+    <CustomerPhone>0574359295</CustomerPhone>
+    <Weight>5</Weight>
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T15:10:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6097</Id>
+    <OrderType>Indian</OrderType>
+    <Description>Indian order for Rivkah Avram</Description>
+    <Address>97 Jaffa Road, Jerusalem</Address>
+    <Latitude>31.784321307301173</Latitude>
+    <Longitude>35.21492818699034</Longitude>
+    <CustomerName>Rivkah Avram</CustomerName>
+    <CustomerPhone>0582622750</CustomerPhone>
+    <Weight>6</Weight>
+    <Volume>3</Volume>
+    <Fragile>false</Fragile>
+    <OrderTime>2026-01-08T15:14:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6098</Id>
+    <OrderType>French</OrderType>
+    <Description>French order for Sarah Schwartz</Description>
     <Address>Old City, Damascus Gate, Jerusalem</Address>
     <Latitude>31.781633499405633</Latitude>
     <Longitude>35.230407836095296</Longitude>
+    <CustomerName>Sarah Schwartz</CustomerName>
+    <CustomerPhone>0528009028</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume>4</Volume>
+    <Fragile xsi:nil="true" />
+    <OrderTime>2026-01-08T13:40:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6099</Id>
+    <OrderType>Sushi</OrderType>
+    <Description>Sushi order for David Biton</Description>
+    <Address>Yad Vashem, Har Hazikaron, Jerusalem</Address>
+    <Latitude>31.774339477464142</Latitude>
+    <Longitude>35.17555929720624</Longitude>
+    <CustomerName>David Biton</CustomerName>
+    <CustomerPhone>0529549714</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume xsi:nil="true" />
+    <Fragile>false</Fragile>
+    <OrderTime>2026-01-08T14:12:24.0256654+02:00</OrderTime>
+  </Order>
+  <Order>
+    <Id>6100</Id>
+    <OrderType>Sandwich</OrderType>
+    <Description>Sandwich order for Miriam Hadad</Description>
+    <Address>10 Ben Yehuda Street, Jerusalem</Address>
+    <Latitude>31.781659548628657</Latitude>
+    <Longitude>35.21768334183865</Longitude>
     <CustomerName>Miriam Hadad</CustomerName>
-    <CustomerPhone>0541998187</CustomerPhone>
-    <Weight>3</Weight>
-    <Volume>3</Volume>
+    <CustomerPhone>0540676716</CustomerPhone>
+    <Weight>8</Weight>
+    <Volume xsi:nil="true" />
     <Fragile>true</Fragile>
-    <OrderTime>2026-07-01T13:06:25</OrderTime>
+    <OrderTime>2026-01-08T15:07:24.0256654+02:00</OrderTime>
   </Order>
 </ArrayOfOrder>

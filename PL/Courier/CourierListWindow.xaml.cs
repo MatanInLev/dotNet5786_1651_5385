@@ -104,10 +104,11 @@ namespace PL.Courier
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error opening courier window: {ex.Message}",
+                ModernMessageBox.Show($"Error opening courier window: {ex.Message}",
                                 "Error",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Error);
+                                ModernMessageBox.MessageBoxType.Error,
+                                ModernMessageBox.MessageBoxButtons.OK,
+                                this);
             }
         }
         private void addCourierButton_Click(object sender, RoutedEventArgs e)

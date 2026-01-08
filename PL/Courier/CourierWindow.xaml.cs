@@ -127,26 +127,27 @@ namespace PL.Courier
                 }
 
                 // Confirm with the user before attempting deletion
-                var result = MessageBox.Show($"Are you sure you want to delete courier {CurrentCourier.Id}?",
+                var result = ModernMessageBox.Show($"Are you sure you want to delete courier {CurrentCourier.Id}?",
                                              "Confirm Delete",
-                                             MessageBoxButton.YesNo,
-                                             MessageBoxImage.Question);
+                                             ModernMessageBox.MessageBoxType.Question,
+                                             ModernMessageBox.MessageBoxButtons.YesNo,
+                                             this);
 
-                if (result != MessageBoxResult.Yes)
+                if (result != true)
                     return;
 
                 int adminId = s_bl.Admin.GetConfig().AdminId;
                 s_bl.Courier.Delete(adminId, CurrentCourier.Id);
-                MessageBox.Show("Courier deleted successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                ModernMessageBox.Show("Courier deleted successfully!", "Success", ModernMessageBox.MessageBoxType.Success, ModernMessageBox.MessageBoxButtons.OK, this);
                 Close();
             }
             catch (BlInvalidValueException ex)
             {
-                MessageBox.Show($"Invalid Data: {ex.Message}", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ModernMessageBox.Show($"Invalid Data: {ex.Message}", "Validation Error", ModernMessageBox.MessageBoxType.Warning, ModernMessageBox.MessageBoxButtons.OK, this);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernMessageBox.Show($"Error: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
             }
         }
 
@@ -164,7 +165,7 @@ namespace PL.Courier
                 var validationError = ValidateBeforeSave(CurrentCourier, ButtonText == "Add");
                 if (validationError != null)
                 {
-                    MessageBox.Show(validationError, "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    ModernMessageBox.Show(validationError, "Validation Error", ModernMessageBox.MessageBoxType.Warning, ModernMessageBox.MessageBoxButtons.OK, this);
                     return;
                 }
 
@@ -174,7 +175,7 @@ namespace PL.Courier
                 {
                     s_bl.Courier.Add(adminId, CurrentCourier);
 
-                    MessageBox.Show("Courier added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    ModernMessageBox.Show("Courier added successfully!", "Success", ModernMessageBox.MessageBoxType.Success, ModernMessageBox.MessageBoxButtons.OK, this);
                 }
                 else
                 {
@@ -183,28 +184,30 @@ namespace PL.Courier
                     {
                         if (CurrentCourier.OrderInProgress != null)
                         {
-                            var result = MessageBox.Show(
+                            var result = ModernMessageBox.Show(
                                 $"This courier is currently delivering Order #{CurrentCourier.OrderInProgress.OrderId}.\n\n" +
                                 "Deactivating will cancel this active delivery.\n\n" +
                                 "Are you sure you want to continue?",
                                 "Confirm Deactivation",
-                                MessageBoxButton.YesNo,
-                                MessageBoxImage.Warning);
+                                ModernMessageBox.MessageBoxType.Warning,
+                                ModernMessageBox.MessageBoxButtons.YesNo,
+                                this);
 
-                            if (result != MessageBoxResult.Yes)
+                            if (result != true)
                             {
                                 return; // User cancelled
                             }
                         }
                         else
                         {
-                            var result = MessageBox.Show(
+                            var result = ModernMessageBox.Show(
                                 $"Are you sure you want to deactivate courier {CurrentCourier.Name}?",
                                 "Confirm Deactivation",
-                                MessageBoxButton.YesNo,
-                                MessageBoxImage.Question);
+                                ModernMessageBox.MessageBoxType.Question,
+                                ModernMessageBox.MessageBoxButtons.YesNo,
+                                this);
 
-                            if (result != MessageBoxResult.Yes)
+                            if (result != true)
                             {
                                 return; // User cancelled
                             }
@@ -212,30 +215,30 @@ namespace PL.Courier
                     }
 
                     s_bl.Courier.Update(adminId, CurrentCourier);
-                    MessageBox.Show("Courier updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    ModernMessageBox.Show("Courier updated successfully!", "Success", ModernMessageBox.MessageBoxType.Success, ModernMessageBox.MessageBoxButtons.OK, this);
                 }
                 Close();
             }
             catch (BlDoesNotExistException ex)
             {
-                MessageBox.Show($"Not Found: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ModernMessageBox.Show($"Not Found: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Warning, ModernMessageBox.MessageBoxButtons.OK, this);
             }
             catch (BlInvalidValueException ex)
             {
-                MessageBox.Show($"Invalid Data: {ex.Message}", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ModernMessageBox.Show($"Invalid Data: {ex.Message}", "Validation Error", ModernMessageBox.MessageBoxType.Warning, ModernMessageBox.MessageBoxButtons.OK, this);
             }
             catch (BlAlreadyExistsException ex)
             {
-                MessageBox.Show($"ID Already Exists: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernMessageBox.Show($"ID Already Exists: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
             }
             catch (BlBaseException ex)
             {
-                MessageBox.Show($"Business Logic Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernMessageBox.Show($"Business Logic Error: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An unexpected error occurred. Please try again or contact support.\n\nDetails: {ex.Message}", 
-                    "Unexpected Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernMessageBox.Show($"An unexpected error occurred. Please try again or contact support.\n\nDetails: {ex.Message}", 
+                    "Unexpected Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
             }
         }
 

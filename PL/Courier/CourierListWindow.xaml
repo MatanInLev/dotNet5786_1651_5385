@@ -359,7 +359,7 @@
 
         <!-- Add Button -->
         <Button Grid.Row="3" 
-                Content="➕  Add New Courier" 
+                Content="Add New Courier" 
                 Click="addCourierButton_Click"
                 Style="{StaticResource ModernButton}"
                 HorizontalAlignment="Center"

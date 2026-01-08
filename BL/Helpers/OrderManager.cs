@@ -606,9 +606,59 @@ internal static class OrderManager
         // 5. Project to BO.ClosedDeliveryInList
         return closedOrders.Select(item =>
         {
-            // Calculate actual distance if available or aerial
-            // Assuming ActualDistance is stored in Delivery, or we calculate it.
-            // For Closed Delivery, the Distance property in DO.Delivery should ideally be populated.
+            // Calculate actual distance if not stored in Delivery record
+            double? actualDistance = item.Delivery.Distance;
+            
+            if (actualDistance == null && item.Order != null)
+            {
+                // Calculate distance from company to customer address
+                double compLat = s_dal.Config.Latitude ?? 0;
+                double compLon = s_dal.Config.Longitude ?? 0;
+                
+                try
+                {
+                    actualDistance = Tools.CalculateRouteDistance(
+                        compLat, 
+                        compLon, 
+                        item.Order.Latitude, 
+                        item.Order.Longitude, 
+                        (BO.Vehicle)item.Delivery.VehicleType);
+                }
+                catch
+                {
+                    // If route calculation fails, use aerial distance
+                    actualDistance = Tools.CalculateAerialDistance(
+                        compLat, 
+                        compLon, 
+                        item.Order.Latitude, 
+                        item.Order.Longitude);
+                }
+            }
+
+            // Calculate processing time - handle case where StartTime might not be set properly
+            TimeSpan processingTime = TimeSpan.Zero;
+            if (item.Delivery.EndTime.HasValue && item.Delivery.StartTime > DateTime.MinValue)
+            {
+                processingTime = item.Delivery.EndTime.Value - item.Delivery.StartTime;
+                
+                // If processing time is negative or unreasonably large, reset to zero
+                if (processingTime.TotalMinutes < 0 || processingTime.TotalDays > 7)
+                {
+                    processingTime = TimeSpan.Zero;
+                }
+            }
+            else if (item.Delivery.EndTime.HasValue && item.Order != null)
+            {
+                // If StartTime is not set, try to estimate from OrderTime
+                var estimatedStart = item.Order.OrderTime;
+                processingTime = item.Delivery.EndTime.Value - estimatedStart;
+                
+                // Validate the estimated time
+                if (processingTime.TotalMinutes < 0 || processingTime.TotalDays > 7)
+                {
+                    processingTime = TimeSpan.Zero;
+                }
+            }
 
             return new BO.ClosedDeliveryInList
             {
@@ -617,13 +667,8 @@ internal static class OrderManager
                 OrderType = (BO.OrderType)(item.Order?.OrderType ?? DO.OrderType.Pizza),
                 CustomerAddress = item.Order?.Address ?? "Unknown",
                 Vehicle = (BO.Vehicle)item.Delivery.VehicleType,
-
-                // ActualDistance comes from DO.Delivery (if set) or calculated
-                ActualDistance = item.Delivery.Distance,
-
-                // Processing Time: EndTime - StartTime
-                ProcessingTime = (item.Delivery.EndTime ?? DateTime.MinValue) - item.Delivery.StartTime,
-
+                ActualDistance = actualDistance,
+                ProcessingTime = processingTime,
                 DeliveryEndStatus = (BO.DeliveryStatus?)item.Delivery.EndOfDelivery
             };
         });

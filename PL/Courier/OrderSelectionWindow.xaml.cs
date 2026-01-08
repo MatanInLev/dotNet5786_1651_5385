@@ -39,7 +39,7 @@ namespace PL.Courier
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading orders: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernMessageBox.Show($"Error loading orders: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
             }
         }
 
@@ -83,14 +83,14 @@ namespace PL.Courier
                 var orderDetail = s_bl.Order.Get(adminId, orderId);
                 SendEmailToCourier(orderDetail);
 
-                MessageBox.Show("Order assigned to you. Check courier main screen.", "Assigned", MessageBoxButton.OK, MessageBoxImage.Information);
+                ModernMessageBox.Show("Order assigned to you. Check courier main screen.", "Assigned", ModernMessageBox.MessageBoxType.Information, ModernMessageBox.MessageBoxButtons.OK, this);
 
                 // refresh list
                 LoadOrders();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error assigning order: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernMessageBox.Show($"Error assigning order: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
             }
         }
 

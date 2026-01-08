@@ -125,35 +125,35 @@ namespace PL.Order
                 if (ButtonText == "Add")
                 {
                     s_bl.Order.Add(adminId, CurrentOrder);
-                    MessageBox.Show("Order added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    ModernMessageBox.Show("Order added successfully!", "Success", ModernMessageBox.MessageBoxType.Success, ModernMessageBox.MessageBoxButtons.OK, this);
                 }
                 else
                 {
                     s_bl.Order.Update(adminId, CurrentOrder);
-                    MessageBox.Show("Order updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    ModernMessageBox.Show("Order updated successfully!", "Success", ModernMessageBox.MessageBoxType.Success, ModernMessageBox.MessageBoxButtons.OK, this);
                 }
                 Close();
             }
             catch (BlDoesNotExistException ex)
             {
-                MessageBox.Show($"Not Found: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ModernMessageBox.Show($"Not Found: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Warning, ModernMessageBox.MessageBoxButtons.OK, this);
             }
             catch (BlInvalidValueException ex)
             {
-                MessageBox.Show($"Invalid Data: {ex.Message}", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ModernMessageBox.Show($"Invalid Data: {ex.Message}", "Validation Error", ModernMessageBox.MessageBoxType.Warning, ModernMessageBox.MessageBoxButtons.OK, this);
             }
             catch (BlAlreadyExistsException ex)
             {
-                MessageBox.Show($"Already Exists: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernMessageBox.Show($"Already Exists: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
             }
             catch (BlBaseException ex)
             {
-                MessageBox.Show($"Business Logic Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernMessageBox.Show($"Business Logic Error: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An unexpected error occurred. Please try again or contact support.\n\nDetails: {ex.Message}", 
-                    "Unexpected Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernMessageBox.Show($"An unexpected error occurred. Please try again or contact support.\n\nDetails: {ex.Message}", 
+                    "Unexpected Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
             }
         }
 

@@ -77,7 +77,7 @@ namespace PL.Courier
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading closed deliveries: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ModernMessageBox.Show($"Error loading closed deliveries: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
             }
         }
 
