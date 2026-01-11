@@ -82,6 +82,16 @@ internal class AdminImplementation : IAdmin
         AdminManager.SetConfig(config);
     }
 
+    public void StartSimulator(int minutesPerSecond)
+    {
+        AdminManager.Start(minutesPerSecond);
+    }
+
+    public void StopSimulator()
+    {
+        AdminManager.Stop();
+    }
+
     public void AddClockObserver(Action clockObserver) =>
     AdminManager.ClockUpdatedObservers += clockObserver;
     public void RemoveClockObserver(Action clockObserver) =>

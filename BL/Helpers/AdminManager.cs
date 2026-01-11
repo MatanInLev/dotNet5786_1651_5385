@@ -1,5 +1,7 @@
 ﻿using BO;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Helpers;
 
@@ -20,6 +22,7 @@ internal static class AdminManager //stage 4
     internal static event Action? ClockUpdatedObservers; //stage 5 - for clock update observers
 
     private static Task? _periodicTask = null; //stage 7
+    private static Task? _simulateTask = null; //stage 7
 
     /// <summary>
     /// Method to update application's clock from any BL class as may be required
@@ -27,28 +30,42 @@ internal static class AdminManager //stage 4
     /// <param name="newClock">updated clock value</param>
     internal static void UpdateClock(DateTime newClock) //stage 4-7
     {
-        var oldClock = s_dal.Config.Clock; //stage 4
-        s_dal.Config.Clock = newClock; //stage 4
+        DateTime oldClock;
+        lock (BlMutex)
+        {
+            oldClock = s_dal.Config.Clock;
+            s_dal.Config.Clock = newClock;
+        }
 
-        //Add calls here to any logic method that should be called periodically,
-        //after each clock update
-        //for example, Periodic students' updates:
-        // - Go through all students to update properties that are affected by the clock update
-        // - (students become not active after 5 years etc.)
-
-        //TO_DO: //stage 4
-        CourierManager.UpdateCourierActivityStatus();
-        //stage 4. to be removed in stage 7 and replaced as below
-
-        //...
-
-        //TO_DO: //stage 7
-        //if (_periodicTask is null || _periodicTask.IsCompleted) //stage 7
-        //    _periodicTask = Task.Run(() => StudentManager.PeriodicStudentsUpdates(oldClock, newClock));
-        //...
+        // Schedule periodic updates asynchronously (stage 7)
+        if (_periodicTask is null || _periodicTask.IsCompleted)
+            _periodicTask = PeriodicUpdatesAsync(oldClock, newClock);
 
         //Calling all the observers of clock update
         ClockUpdatedObservers?.Invoke(); //prepared for stage 5
+    }
+
+    private static Task PeriodicUpdatesAsync(DateTime oldClock, DateTime newClock)
+    {
+        return Task.Run(() =>
+        {
+            lock (BlMutex)
+            {
+                // Periodic logic that must run after each clock tick
+                CourierManager.UpdateCourierActivityStatus();
+            }
+        });
+    }
+
+    private static Task SimulateOperationsAsync()
+    {
+        return Task.Run(() =>
+        {
+            lock (BlMutex)
+            {
+                // TODO: add domain-specific simulation (add/update/delete) if required
+            }
+        });
     }
 
     /// <summary>
@@ -209,21 +226,14 @@ internal static class AdminManager //stage 4
         }
     }
 
-    private static Task? _simulateTask = null;
-
     private static void clockRunner()
     {
         while (!s_stop)
         {
             UpdateClock(Now.AddMinutes(s_interval));
 
-            //TO_DO: //stage 7
-            //Add calls here to any logic simulation that was required in stage 7
-            //for example: course registration simulation
-            //if (_simulateTask is null || _simulateTask.IsCompleted)//stage 7
-            //    _simulateTask = Task.Run(() => StudentManager.SimulateCourseRegistrationAndGrade());
-
-            //etc...
+            if (_simulateTask is null || _simulateTask.IsCompleted)
+                _simulateTask = SimulateOperationsAsync();
 
             try
             {
