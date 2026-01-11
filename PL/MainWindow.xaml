@@ -283,6 +283,22 @@
                             Background="#D35400"
                             Margin="0,3"
                             Height="32"/>
+
+                    <!-- Simulator Controls -->
+                    <TextBlock Text="Simulateur (minutes par seconde)" 
+                               FontSize="12" 
+                               Foreground="#666"
+                               Margin="0,12,0,4"/>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBox Width="80"
+                                 Style="{StaticResource ModernTextBox}"
+                                 Text="{Binding SimulatorSpeed, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button Content="{Binding SimulatorButtonText}"
+                                Click="btnToggleSimulator_Click"
+                                Style="{StaticResource ModernButton}"
+                                Background="#2C3E50"
+                                Height="32"/>
+                    </StackPanel>
                 </StackPanel>
             </Border>
 

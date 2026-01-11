@@ -1,7 +1,9 @@
-﻿using BO;
+﻿using System;
+using BO;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Helpers;
 
@@ -23,6 +25,7 @@ internal static class AdminManager //stage 4
 
     private static Task? _periodicTask = null; //stage 7
     private static Task? _simulateTask = null; //stage 7
+    private static readonly Random s_random = new();
 
     /// <summary>
     /// Method to update application's clock from any BL class as may be required
@@ -63,7 +66,40 @@ internal static class AdminManager //stage 4
         {
             lock (BlMutex)
             {
-                // TODO: add domain-specific simulation (add/update/delete) if required
+                // 1) Try to complete an active delivery
+                var activeDeliveries = s_dal.Delivery.ReadAll(d => d.EndTime == null).ToList();
+                if (activeDeliveries.Any())
+                {
+                    var delivery = activeDeliveries[s_random.Next(activeDeliveries.Count)];
+                    var status = s_random.Next(100) < 70 ? DeliveryStatus.Delivered : DeliveryStatus.Refused;
+                    OrderManager.CompleteOrder(delivery.Id, status);
+                    return;
+                }
+
+                // 2) Try to assign an open order to a free courier
+                var scheduledOrders = s_dal.Order.ReadAll()
+                    .Where(o => OrderManager.CalculateOrderStatus(o.Id) == OrderStatus.Scheduled)
+                    .ToList();
+
+                var freeCouriers = s_dal.Courier.ReadAll(c => c.IsActive && !s_dal.Delivery.ReadAll(d => d.CourierId == c.Id && d.EndTime == null).Any()).ToList();
+
+                if (scheduledOrders.Any() && freeCouriers.Any())
+                {
+                    var order = scheduledOrders[s_random.Next(scheduledOrders.Count)];
+                    var courier = freeCouriers[s_random.Next(freeCouriers.Count)];
+                    OrderManager.AssignOrderToCourier(order.Id, courier.Id);
+                    return;
+                }
+
+                // 3) Otherwise create a new order
+                var newOrder = new Order
+                {
+                    CustomerName = $"Client Auto {s_random.Next(1000, 9999)}",
+                    CustomerPhone = "0501234567",
+                    CustomerAddress = "1 Main St",
+                    Type = OrderType.Pizza
+                };
+                OrderManager.Create(newOrder);
             }
         });
     }

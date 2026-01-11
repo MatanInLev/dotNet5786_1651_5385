@@ -82,6 +82,33 @@ namespace PL
         public static readonly DependencyProperty DatabaseButtonsEnabledProperty =
             DependencyProperty.Register(nameof(DatabaseButtonsEnabled), typeof(bool), typeof(MainWindow), new PropertyMetadata(true));
 
+        // --- Simulator Speed (minutes per second) ---
+        public int SimulatorSpeed
+        {
+            get => (int)GetValue(SimulatorSpeedProperty);
+            set => SetValue(SimulatorSpeedProperty, value);
+        }
+        public static readonly DependencyProperty SimulatorSpeedProperty =
+            DependencyProperty.Register(nameof(SimulatorSpeed), typeof(int), typeof(MainWindow), new PropertyMetadata(1));
+
+        // --- Simulator Button Text ---
+        public string SimulatorButtonText
+        {
+            get => (string)GetValue(SimulatorButtonTextProperty);
+            set => SetValue(SimulatorButtonTextProperty, value);
+        }
+        public static readonly DependencyProperty SimulatorButtonTextProperty =
+            DependencyProperty.Register(nameof(SimulatorButtonText), typeof(string), typeof(MainWindow), new PropertyMetadata("Start Simulator"));
+
+        // --- Simulator Running Flag ---
+        public bool IsSimulatorRunning
+        {
+            get => (bool)GetValue(IsSimulatorRunningProperty);
+            set => SetValue(IsSimulatorRunningProperty, value);
+        }
+        public static readonly DependencyProperty IsSimulatorRunningProperty =
+            DependencyProperty.Register(nameof(IsSimulatorRunning), typeof(bool), typeof(MainWindow), new PropertyMetadata(false));
+
         #endregion
 
         #region Constructor & Window Events
@@ -92,6 +119,11 @@ namespace PL
         public MainWindow()
         {
             InitializeComponent();
+
+            // Defaults for simulator
+            SimulatorSpeed = 1;
+            SimulatorButtonText = "Start Simulator";
+            IsSimulatorRunning = false;
 
             // Register for Window Life-cycle events
             Loaded += Window_Loaded;
@@ -126,6 +158,14 @@ namespace PL
         {
             s_bl.Admin.RemoveClockObserver(clockObserver);
             s_bl.Admin.RemoveConfigObserver(configObserver);
+
+            if (IsSimulatorRunning)
+            {
+                try { s_bl.Admin.StopSimulator(); }
+                catch { }
+                IsSimulatorRunning = false;
+                SimulatorButtonText = "Start Simulator";
+            }
         }
 
         #endregion
@@ -167,6 +207,35 @@ namespace PL
         #endregion
 
         #region Management Buttons
+
+        private void btnToggleSimulator_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (SimulatorSpeed <= 0)
+                {
+                    ModernMessageBox.Show("Vitesse du simulateur doit être > 0 (minutes par seconde)", "Validation", ModernMessageBox.MessageBoxType.Warning, ModernMessageBox.MessageBoxButtons.OK, this);
+                    return;
+                }
+
+                if (!IsSimulatorRunning)
+                {
+                    s_bl.Admin.StartSimulator(SimulatorSpeed);
+                    IsSimulatorRunning = true;
+                    SimulatorButtonText = "Stop Simulator";
+                }
+                else
+                {
+                    s_bl.Admin.StopSimulator();
+                    IsSimulatorRunning = false;
+                    SimulatorButtonText = "Start Simulator";
+                }
+            }
+            catch (Exception ex)
+            {
+                ModernMessageBox.Show($"Erreur simulateur: {ex.Message}", "Erreur", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
+            }
+        }
 
         /// <summary>
         /// Applies configuration changes to the business layer.
