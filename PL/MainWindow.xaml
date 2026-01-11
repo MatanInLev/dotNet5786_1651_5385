@@ -289,7 +289,7 @@
                                FontSize="12" 
                                Foreground="#666"
                                Margin="0,12,0,4"/>
-                    <StackPanel Orientation="Horizontal" Spacing="8">
+                    <StackPanel Orientation="Horizontal">
                         <TextBox Width="80"
                                  Style="{StaticResource ModernTextBox}"
                                  Text="{Binding SimulatorSpeed, UpdateSourceTrigger=PropertyChanged}"/>
@@ -297,7 +297,8 @@
                                 Click="btnToggleSimulator_Click"
                                 Style="{StaticResource ModernButton}"
                                 Background="#2C3E50"
-                                Height="32"/>
+                                Height="32"
+                                Margin="8,0,0,0"/>
                     </StackPanel>
                 </StackPanel>
             </Border>
