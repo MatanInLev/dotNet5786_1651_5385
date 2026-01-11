@@ -71,7 +71,7 @@ internal static class AdminManager //stage 4
                 if (activeDeliveries.Any())
                 {
                     var delivery = activeDeliveries[s_random.Next(activeDeliveries.Count)];
-                    var status = s_random.Next(100) < 70 ? DeliveryStatus.Delivered : DeliveryStatus.Refused;
+                    var status = s_random.Next(100) < 70 ? DeliveryStatus.Delivered : DeliveryStatus.Canceled;
                     OrderManager.CompleteOrder(delivery.Id, status);
                     return;
                 }
