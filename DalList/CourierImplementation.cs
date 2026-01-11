@@ -46,6 +46,7 @@ internal class CourierImplementation : ICourier
     /// - The method does not auto-generate an Id; callers must supply a unique Id.
     /// - Thread-safe: uses DataSource.CouriersLock for synchronization.
     /// </remarks>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Create(Courier item)
     {
         lock (DataSource.CouriersLock)
@@ -69,6 +70,7 @@ internal class CourierImplementation : ICourier
     /// <remarks>
     /// Thread-safe: uses DataSource.CouriersLock for synchronization.
     /// </remarks>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Delete(int id)
     {
         lock (DataSource.CouriersLock)
@@ -90,6 +92,7 @@ internal class CourierImplementation : ICourier
     /// Use only when you intend to reset the entire courier dataset for the process.
     /// Thread-safe: uses DataSource.CouriersLock for synchronization.
     /// </remarks>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void DeleteAll()
     {
         lock (DataSource.CouriersLock)
@@ -109,6 +112,7 @@ internal class CourierImplementation : ICourier
     /// The returned reference points to the same object stored in the internal list. Modifying the returned object
     /// will mutate the DAL's stored instance unless the caller clones it first.
     /// </remarks>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Courier? Read(Func<Courier, bool> filter)
     {
         return DataSource.Couriers.FirstOrDefault(filter);
@@ -125,6 +129,7 @@ internal class CourierImplementation : ICourier
     /// The returned reference points to the same object stored in the internal list. Modifying the returned object
     /// will mutate the DAL's stored instance.
     /// </remarks>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Courier? Read(int id)
     {
         return DataSource.Couriers.FirstOrDefault(c => c.Id == id);
@@ -144,6 +149,7 @@ internal class CourierImplementation : ICourier
     /// This method returns an enumerable wrapper around the internal collection (or a filtered view).
     /// The elements returned are the same instances as stored internally (shallow copy semantics).
     /// </remarks>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public IEnumerable<Courier> ReadAll(Func<Courier, bool>? filter = null)
         => filter == null
             ? DataSource.Couriers.Select(item => item)
@@ -163,6 +169,7 @@ internal class CourierImplementation : ICourier
     /// The method finds the index of the existing courier and performs a full replacement of the stored element at that index.
     /// To perform a partial update, callers should read the existing record, modify the fields, and then call this method.
     /// </remarks>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Update(Courier item)
 
     {

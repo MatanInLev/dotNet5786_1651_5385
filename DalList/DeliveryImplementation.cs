@@ -1,6 +1,7 @@
 ﻿using DalApi;
 using DalList;
 using DO;
+using System.Runtime.CompilerServices;
 
 namespace Dal;
 
@@ -47,6 +48,7 @@ internal class DeliveryImplementation : IDelivery
     /// - Adds the resulting instance to <c>DataSource.Deliveries</c>.
     /// - No validation of field values is performed in this method; validation should occur prior to calling the DAL.
     /// </remarks>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Create(Delivery item)
     {
         int newId = Config.Instance.NextDeliveryId;
@@ -65,6 +67,7 @@ internal class DeliveryImplementation : IDelivery
     /// Performs an index lookup using <see cref="List{T}.FindIndex(Predicate{T})"/> and removes the element via
     /// <see cref="List{T}.RemoveAt(int)"/>. This method mutates the shared DataSource and affects all consumers.
     /// </remarks>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Delete(int id)
     {
         int index = DataSource.Deliveries.FindIndex(delivery => delivery.Id == id);
@@ -80,6 +83,7 @@ internal class DeliveryImplementation : IDelivery
     /// This operation clears the entire <c>DataSource.Deliveries</c> list. Use with caution: it affects all consumers
     /// of the shared DataSource within the process and cannot be undone.
     /// </remarks>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void DeleteAll()
     {
         DataSource.Deliveries.Clear();
@@ -96,6 +100,7 @@ internal class DeliveryImplementation : IDelivery
     /// The returned object is the same instance that is stored in the internal list (no defensive copy).
     /// Modifying this instance will modify the DAL's stored record.
     /// </remarks>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Delivery? Read(Func<Delivery, bool> filter)
     {
         return DataSource.Deliveries.FirstOrDefault(filter);
@@ -112,6 +117,7 @@ internal class DeliveryImplementation : IDelivery
     /// The returned object is the same instance that is stored in the internal list (no defensive copy).
     /// Modifying this instance will modify the DAL's stored record.
     /// </remarks>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Delivery? Read(int id)
     {
         return DataSource.Deliveries.FirstOrDefault(d => d.Id == id);
@@ -132,6 +138,7 @@ internal class DeliveryImplementation : IDelivery
     /// This method returns an enumerable wrapper around the internal collection (or a filtered view).
     /// The elements returned are the same instances as stored internally (shallow copy semantics).
     /// </remarks>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public IEnumerable<Delivery> ReadAll(Func<Delivery, bool>? filter = null)
         => filter == null
             ? DataSource.Deliveries.Select(item => item)
@@ -151,6 +158,7 @@ internal class DeliveryImplementation : IDelivery
     /// This method performs a full replacement of the stored element at the found index. To perform a partial update,
     /// callers should read the existing record, modify selected fields, and pass the modified record back to this method.
     /// </remarks>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Update(Delivery item)
     {
         int index = DataSource.Deliveries.FindIndex(delivery => delivery.Id == item.Id);

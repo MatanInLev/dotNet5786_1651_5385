@@ -1,4 +1,5 @@
-﻿using DalApi;
+﻿using System.Runtime.CompilerServices;
+using DalApi;
 using DalList;
 using DO;
 
@@ -44,6 +45,7 @@ internal class OrderImplementation : IOrder
     /// - If <paramref name="item"/> has required fields missing that the business layer requires, no validation
     ///   is performed here; validation should be done before calling the DAL.
     /// </remarks>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Create(Order item)
     {
         int newId = Config.Instance.NextOrderId;
@@ -61,6 +63,7 @@ internal class OrderImplementation : IOrder
     /// <remarks>
     /// The method locates the index of the matching order and removes it using <see cref="List{T}.RemoveAt(int)"/>.
     /// </remarks>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Delete(int id)
     {
         int index = DataSource.Orders.FindIndex(order => order.Id == id);
@@ -76,6 +79,7 @@ internal class OrderImplementation : IOrder
     /// This operation clears the entire <c>DataSource.Orders</c> list. Use with caution:
     /// it affects all consumers of the shared DataSource within the process.
     /// </remarks>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void DeleteAll()
     {
         DataSource.Orders.Clear();
@@ -92,6 +96,7 @@ internal class OrderImplementation : IOrder
     /// The returned reference is the same object stored in the internal list. Modifying the returned
     /// object will affect the stored value unless the caller explicitly copies it first.
     /// </remarks>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Order? Read(Func<Order, bool> filter)
     {
         return DataSource.Orders.FirstOrDefault(filter);
@@ -108,6 +113,7 @@ internal class OrderImplementation : IOrder
     /// The returned reference is the same object stored in the internal list. Modifying the returned
     /// object will affect the stored value unless the caller explicitly copies it first.
     /// </remarks>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Order? Read(int id)
     {
         return DataSource.Orders.FirstOrDefault(o => o.Id == id);
@@ -129,6 +135,7 @@ internal class OrderImplementation : IOrder
     /// Each <see cref="Order"/> in the returned enumerable is the same object instance from the internal list
     /// (shallow copy).
     /// </remarks>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public IEnumerable<Order> ReadAll(Func<Order, bool>? filter = null)
         => filter == null
             ? DataSource.Orders.Select(item => item)
@@ -149,6 +156,7 @@ internal class OrderImplementation : IOrder
     /// This is a full-replacement operation; partial updates must be performed by reading the record,
     /// updating selected fields, and then calling this method with the modified record.
     /// </remarks>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Update(Order item)
     {
         int index = DataSource.Orders.FindIndex(order => order.Id == item.Id);
