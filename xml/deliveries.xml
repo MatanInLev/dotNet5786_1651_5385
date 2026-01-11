@@ -17,8 +17,8 @@
     <VehicleType>Motorcycle</VehicleType>
     <StartTime>2026-01-08T15:07:24.0256654+02:00</StartTime>
     <Distance xsi:nil="true" />
-    <EndOfDelivery xsi:nil="true" />
-    <EndTime xsi:nil="true" />
+    <EndOfDelivery>Canceled</EndOfDelivery>
+    <EndTime>2026-01-08T15:34:24.0256654+02:00</EndTime>
   </Delivery>
   <Delivery>
     <Id>3735</Id>

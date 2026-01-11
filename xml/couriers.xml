@@ -51,16 +51,6 @@
     <VehicleType>Car</VehicleType>
   </Courier>
   <Courier>
-    <Id>307587564</Id>
-    <Name>Ariela Levin</Name>
-    <PhoneNumber>0525966990</PhoneNumber>
-    <Email>Ariela.Levin@company.com</Email>
-    <Distance>26</Distance>
-    <IsActive>true</IsActive>
-    <Date>2026-01-08T15:34:24.193276+02:00</Date>
-    <VehicleType>Foot</VehicleType>
-  </Courier>
-  <Courier>
     <Id>249149284</Id>
     <Name>Ariela Levin</Name>
     <PhoneNumber>0526909707</PhoneNumber>
@@ -76,7 +66,7 @@
     <PhoneNumber>0591658505</PhoneNumber>
     <Email>Ariela.Levin@company.com</Email>
     <Distance>17</Distance>
-    <IsActive>true</IsActive>
+    <IsActive>false</IsActive>
     <Date>2026-01-08T15:34:24.2262293+02:00</Date>
     <VehicleType>Motorcycle</VehicleType>
   </Courier>
@@ -152,7 +142,7 @@
   </Courier>
   <Courier>
     <Id>201250713</Id>
-    <Name>Noa Kirel</Name>
+    <Name>Noa Kirel cohen</Name>
     <PhoneNumber>0565342522</PhoneNumber>
     <Email>Noa.Kirel@company.com</Email>
     <Distance xsi:nil="true" />

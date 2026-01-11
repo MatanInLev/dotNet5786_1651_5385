@@ -137,19 +137,16 @@ internal static class CourierManager
             // Check if there is an active delivery currently (no EndTime)
             var activeDelivery = courierDeliveries.FirstOrDefault(d => d.EndTime == null);
 
-            // Calculate deliveries OnTime / Late (basic logic for demonstration)
-            // Assuming MaxSupplyTime is global from configuration
-            // Only count successfully delivered orders (EndOfDelivery == Delivered)
+            // Calculate deliveries OnTime / Late
+            // Count all completed deliveries (with EndTime set), regardless of final status
             TimeSpan maxSupply = s_dal.Config.MaxDeliveryTime;
 
             int onTime = courierDeliveries.Count(d =>
                 d.EndTime != null &&
-                d.EndOfDelivery == DO.EndOfDelivery.Delivered &&
                 d.EndTime <= d.StartTime.Add(maxSupply));
 
             int late = courierDeliveries.Count(d =>
                 d.EndTime != null &&
-                d.EndOfDelivery == DO.EndOfDelivery.Delivered &&
                 d.EndTime > d.StartTime.Add(maxSupply));
 
             return new BO.CourierInList
@@ -322,17 +319,15 @@ internal static class CourierManager
         }
 
         // Calculate on-time and late deliveries
-        // Only count successfully delivered orders (EndOfDelivery == Delivered)
+        // Count all completed deliveries (with EndTime set), regardless of final status
         TimeSpan maxSupply = s_dal.Config.MaxDeliveryTime;
 
         int onTime = allDeliveries.Count(d =>
             d.EndTime != null &&
-            d.EndOfDelivery == DO.EndOfDelivery.Delivered &&
             d.EndTime <= d.StartTime.Add(maxSupply));
 
         int late = allDeliveries.Count(d =>
             d.EndTime != null &&
-            d.EndOfDelivery == DO.EndOfDelivery.Delivered &&
             d.EndTime > d.StartTime.Add(maxSupply));
 
         // 3. Construct BO
@@ -446,14 +441,20 @@ internal static class CourierManager
         }
 
         // Check if ever handled (History exists)
-        // Depending on strictness, you might soft-delete (set IsActive=false) or prevent deletion entirely.
-        // If the instruction implies "Never handled ANY order" to allow hard delete:
-        if (deliveries.Any())
+        // A courier has "handled" an order only if they completed a delivery (EndTime is set)
+        // Deliveries that were only assigned but never completed (EndTime == null) should be removed
+        if (deliveries.Any(d => d.EndTime != null))
         {
             throw new BO.BlDeletionImpossibleException("Cannot delete courier: History of deliveries exists. Consider setting to Inactive.");
         }
 
-        // 2. Perform Delete
+        // 2. Delete any assigned but never started/completed deliveries
+        foreach (var delivery in deliveries)
+        {
+            s_dal.Delivery.Delete(delivery.Id);
+        }
+
+        // 3. Perform Delete
         try
         {
             s_dal.Courier.Delete(courierId);
