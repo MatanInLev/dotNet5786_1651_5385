@@ -4,9 +4,11 @@ using DO;
 using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using System.Runtime.CompilerServices;
 
 internal class CourierImplementation : ICourier
 {
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Create(Courier item)
     {
         // Load the current list from the XML file
@@ -23,6 +25,7 @@ internal class CourierImplementation : ICourier
         XMLTools.SaveListToXMLSerializer(couriers, Config.courier_file_name);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Courier? Read(int id)
     {
         // Load the list from XML and find the item
@@ -31,12 +34,14 @@ internal class CourierImplementation : ICourier
     }
 
     // Fix for CS0535: Implement Read(Func<Courier, bool> filter)
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Courier? Read(Func<Courier, bool> filter)
     {
         List<Courier> couriers = XMLTools.LoadListFromXMLSerializer<Courier>(Config.courier_file_name);
         return couriers.FirstOrDefault(filter);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public List<Courier> ReadAll()
     {
         // Return the entire list from the XML file
@@ -44,12 +49,14 @@ internal class CourierImplementation : ICourier
     }
 
     // Fix for CS0535: Implement ReadAll(Func<Courier, bool>? filter)
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public IEnumerable<Courier> ReadAll(Func<Courier, bool>? filter = null)
     {
         List<Courier> couriers = XMLTools.LoadListFromXMLSerializer<Courier>(Config.courier_file_name);
         return filter == null ? couriers : couriers.Where(filter);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Update(Courier item)
     {
         // Load the current list from XML
@@ -67,6 +74,7 @@ internal class CourierImplementation : ICourier
         XMLTools.SaveListToXMLSerializer(couriers, Config.courier_file_name);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Delete(int id)
     {
         // Load the current list from XML
@@ -84,6 +92,7 @@ internal class CourierImplementation : ICourier
         XMLTools.SaveListToXMLSerializer(couriers, Config.courier_file_name);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void DeleteAll()
     {
         // Create an empty list

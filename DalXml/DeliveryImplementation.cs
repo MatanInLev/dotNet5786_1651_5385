@@ -4,6 +4,7 @@ using DO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 internal class DeliveryImplementation : IDelivery
 {
@@ -11,6 +12,7 @@ internal class DeliveryImplementation : IDelivery
     /// Create a new delivery record. Generates and assigns a new Id,
     /// then saves the updated list to the XML file.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Create(Delivery item)
     {
         // Load the current list from the XML file
@@ -31,6 +33,7 @@ internal class DeliveryImplementation : IDelivery
     /// Delete delivery by id from the XML file. 
     /// Throws DalDoesNotExistException if missing.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Delete(int id)
     {
         // Load the current list from XML
@@ -51,6 +54,7 @@ internal class DeliveryImplementation : IDelivery
     /// <summary>
     /// Remove all deliveries by saving an empty list to the XML file.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void DeleteAll()
     {
         // Create an empty list
@@ -63,6 +67,7 @@ internal class DeliveryImplementation : IDelivery
     /// <summary>
     /// Read a single delivery by id from the XML file. Returns null when not found.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Delivery? Read(int id)
     {
         // Load the list from XML and find the item
@@ -74,6 +79,7 @@ internal class DeliveryImplementation : IDelivery
     /// <summary>
     /// Read a single delivery matching a filter from the XML file. Returns null when not found.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Delivery? Read(Func<Delivery, bool> filter)
     {
         List<Delivery> deliveries = XMLTools.LoadListFromXMLSerializer<Delivery>(Config.delivery_file_name);
@@ -83,6 +89,7 @@ internal class DeliveryImplementation : IDelivery
     /// <summary>
     /// Read all deliveries matching a filter from the XML file.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public IEnumerable<Delivery> ReadAll(Func<Delivery, bool>? filter = null)
     {
         List<Delivery> deliveries = XMLTools.LoadListFromXMLSerializer<Delivery>(Config.delivery_file_name);
@@ -93,6 +100,7 @@ internal class DeliveryImplementation : IDelivery
     /// Replace an existing delivery record in the XML file.
     /// Throws DalDoesNotExistException when the id is not present.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Update(Delivery item)
     {
         // Load the current list from XML
