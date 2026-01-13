@@ -15,6 +15,11 @@ namespace PL
         /// </summary>
         static readonly IBl s_bl = Factory.Get();
 
+        /// <summary>
+        /// Observer mutex to prevent concurrent observer callbacks - Stage 7
+        /// </summary>
+        private readonly ObserverMutex _observerMutex = new(); //stage 7
+
         #region Dependency Properties
 
         // --- CurrentTime ---
@@ -82,6 +87,62 @@ namespace PL
         public static readonly DependencyProperty DatabaseButtonsEnabledProperty =
             DependencyProperty.Register(nameof(DatabaseButtonsEnabled), typeof(bool), typeof(MainWindow), new PropertyMetadata(true));
 
+        // --- Simulator Status - Stage 7 ---
+        /// <summary>
+        /// Status message for the simulator.
+        /// </summary>
+        public string SimulatorStatus
+        {
+            get { return (string)GetValue(SimulatorStatusProperty); }
+            set { SetValue(SimulatorStatusProperty, value); }
+        }
+
+        public static readonly DependencyProperty SimulatorStatusProperty =
+            DependencyProperty.Register(nameof(SimulatorStatus), typeof(string), typeof(MainWindow), new PropertyMetadata("Simulator Stopped"));
+
+        // --- Simulator Interval - Stage 7 ---
+        /// <summary>
+        /// Simulator interval in minutes per second.
+        /// </summary>
+        public int SimulatorInterval
+        {
+            get { return (int)GetValue(SimulatorIntervalProperty); }
+            set { SetValue(SimulatorIntervalProperty, value); }
+        }
+
+        public static readonly DependencyProperty SimulatorIntervalProperty =
+            DependencyProperty.Register(nameof(SimulatorInterval), typeof(int), typeof(MainWindow), new PropertyMetadata(1));
+
+        // --- Simulator Button Text - Stage 7 ---
+        /// <summary>
+        /// Text for the simulator toggle button.
+        /// </summary>
+        public string SimulatorButtonText
+        {
+            get { return (string)GetValue(SimulatorButtonTextProperty); }
+            set { SetValue(SimulatorButtonTextProperty, value); }
+        }
+
+        public static readonly DependencyProperty SimulatorButtonTextProperty =
+            DependencyProperty.Register(nameof(SimulatorButtonText), typeof(string), typeof(MainWindow), new PropertyMetadata("Start Simulator"));
+
+        // --- Simulator Button Background - Stage 7 ---
+        /// <summary>
+        /// Background color for the simulator toggle button.
+        /// </summary>
+        public System.Windows.Media.Brush SimulatorButtonBackground
+        {
+            get { return (System.Windows.Media.Brush)GetValue(SimulatorButtonBackgroundProperty); }
+            set { SetValue(SimulatorButtonBackgroundProperty, value); }
+        }
+
+        public static readonly DependencyProperty SimulatorButtonBackgroundProperty =
+            DependencyProperty.Register(nameof(SimulatorButtonBackground), typeof(System.Windows.Media.Brush), typeof(MainWindow), 
+                new PropertyMetadata(System.Windows.Media.Brushes.Green));
+
+        // --- Simulator Running Flag - Stage 7 ---
+        private bool _simulatorRunning = false;
+
         #endregion
 
         #region Constructor & Window Events
@@ -137,8 +198,19 @@ namespace PL
         /// </summary>
         private void clockObserver()
         {
-            // Dispatcher.Invoke ensures we update the UI thread correctly
-            Dispatcher.Invoke(() => CurrentTime = s_bl.Admin.GetClock());
+            // Stage 7: Check if already processing - if so, exit immediately
+            if (_observerMutex.CheckAndSetInProgress())
+                return;
+
+            try
+            {
+                // Dispatcher.Invoke ensures we update the UI thread correctly
+                Dispatcher.Invoke(() => CurrentTime = s_bl.Admin.GetClock());
+            }
+            finally
+            {
+                _observerMutex.UnsetInProgress();
+            }
         }
 
         /// <summary>
@@ -146,7 +218,18 @@ namespace PL
         /// </summary>
         private void configObserver()
         {
-            Dispatcher.Invoke(() => Configuration = s_bl.Admin.GetConfig());
+            // Stage 7: Check if already processing - if so, exit immediately
+            if (_observerMutex.CheckAndSetInProgress())
+                return;
+
+            try
+            {
+                Dispatcher.Invoke(() => Configuration = s_bl.Admin.GetConfig());
+            }
+            finally
+            {
+                _observerMutex.UnsetInProgress();
+            }
         }
 
         #endregion
@@ -323,6 +406,73 @@ namespace PL
         private void btnOpenOrderList_Click(object sender, RoutedEventArgs e)
         {
             new Order.OrderListWindow().Show();
+        }
+
+        #endregion
+
+        #region Simulator Control - Stage 7
+
+        /// <summary>
+        /// Toggles the simulator on/off.
+        /// </summary>
+        private void btnToggleSimulator_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!_simulatorRunning)
+                {
+                    // Validate interval
+                    if (SimulatorInterval <= 0)
+                    {
+                        ModernMessageBox.Show("Please enter a valid interval (greater than 0).", "Invalid Interval",
+                            ModernMessageBox.MessageBoxType.Warning, ModernMessageBox.MessageBoxButtons.OK, this);
+                        return;
+                    }
+
+                    // Start simulator
+                    s_bl.Admin.StartSimulator(SimulatorInterval);
+                    
+                    _simulatorRunning = true;
+                    SimulatorStatus = $"Simulator Running ({SimulatorInterval} min/sec)";
+                    SimulatorButtonText = "Stop Simulator";
+                    SimulatorButtonBackground = System.Windows.Media.Brushes.Red;
+                    DatabaseButtonsEnabled = false; // Disable database operations while simulator runs
+                    
+                    ModernMessageBox.Show(
+                        $"Simulator started!\n\n" +
+                        $"• Clock advances {SimulatorInterval} min/sec\n" +
+                        $"• Orders auto-assigned\n" +
+                        $"• Deliveries auto-completed", 
+                        "Simulator Started", 
+                        ModernMessageBox.MessageBoxType.Success, 
+                        ModernMessageBox.MessageBoxButtons.OK, 
+                        this);
+                }
+                else
+                {
+                    // Stop simulator
+                    s_bl.Admin.StopSimulator();
+                    
+                    _simulatorRunning = false;
+                    SimulatorStatus = "Simulator Stopped";
+                    SimulatorButtonText = "Start Simulator";
+                    SimulatorButtonBackground = System.Windows.Media.Brushes.Green;
+                    DatabaseButtonsEnabled = true; // Re-enable database operations
+                    
+                    ModernMessageBox.Show("Simulator stopped.", "Simulator Stopped", 
+                        ModernMessageBox.MessageBoxType.Information, ModernMessageBox.MessageBoxButtons.OK, this);
+                }
+            }
+            catch (BO.BlTemporaryNotAvailableException ex)
+            {
+                ModernMessageBox.Show(ex.Message, "Operation Not Available", 
+                    ModernMessageBox.MessageBoxType.Warning, ModernMessageBox.MessageBoxButtons.OK, this);
+            }
+            catch (Exception ex)
+            {
+                ModernMessageBox.Show($"Error: {ex.Message}", "Error", 
+                    ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
+            }
         }
 
         #endregion

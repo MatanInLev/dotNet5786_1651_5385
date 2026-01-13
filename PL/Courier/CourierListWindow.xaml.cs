@@ -12,6 +12,11 @@ namespace PL.Courier
     {
         private static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
 
+        /// <summary>
+        /// Observer mutex to prevent concurrent observer callbacks - Stage 7
+        /// </summary>
+        private readonly ObserverMutex _observerMutex = new(); //stage 7
+
         // In a real app this should be the logged-in admin id.
         // For now 0 is fine as long as BL accepts it.
         private readonly int _userId = 0;
@@ -44,15 +49,32 @@ namespace PL.Courier
         {
             InitializeComponent();
 
-            // initial load
-            QueryCourierList();
-            (s_bl.Courier as BlApi.IObservable)?.AddObserver(QueryCourierList);
+            // Load data asynchronously
+            Loaded += async (_, _) => await QueryCourierListAsync();
+            
+            (s_bl.Courier as BlApi.IObservable)?.AddObserver(OnCourierListUpdated);
+        }
+
+        private void OnCourierListUpdated()
+        {
+            // Stage 7: Check if already processing - if so, exit immediately
+            if (_observerMutex.CheckAndSetInProgress())
+                return;
+
+            try
+            {
+                Dispatcher.InvokeAsync(async () => await QueryCourierListAsync());
+            }
+            finally
+            {
+                _observerMutex.UnsetInProgress();
+            }
         }
 
         /// <summary>
         /// Runs the BL query and updates CourierList according to the filter.
         /// </summary>
-        private void QueryCourierList()
+        private async System.Threading.Tasks.Task QueryCourierListAsync()
         {
             // map enum -> bool? for the BL method:
             // null = all, true = active, false = inactive
@@ -64,25 +86,40 @@ namespace PL.Courier
                 _ => null
             };
 
-            // This matches your ICourier:
-            // IEnumerable<BO.CourierInList> GetList(int userId, bool? isActive = null, BO.Vehicle? vehicle = null);
-            CourierList = s_bl.Courier.GetList(_userId, isActive);
+            IEnumerable<BO.CourierInList>? list = null;
+            
+            await System.Threading.Tasks.Task.Run(() =>
+            {
+                // This matches your ICourier:
+                // IEnumerable<BO.CourierInList> GetList(int userId, bool? isActive = null, BO.Vehicle? vehicle = null);
+                list = s_bl.Courier.GetList(_userId, isActive);
+            });
+            
+            CourierList = list;
+        }
+
+        /// <summary>
+        /// Synchronous wrapper for backward compatibility
+        /// </summary>
+        private void QueryCourierList()
+        {
+            QueryCourierListAsync().GetAwaiter().GetResult();
         }
 
         /// <summary>
         /// Called whenever the ComboBox selection changes.
         /// Filter property is already updated by binding, we just re-query.
         /// </summary>
-        private void FilterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void FilterComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            QueryCourierList();
+            await QueryCourierListAsync();
         }
 
         // OPTIONAL – only אם עשית observers
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
-            (s_bl.Courier as BlApi.IObservable)?.RemoveObserver(QueryCourierList);
+            (s_bl.Courier as BlApi.IObservable)?.RemoveObserver(OnCourierListUpdated);
         }
 
         private void courierList_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

@@ -11,6 +11,11 @@ namespace PL.Courier
     {
         static readonly IBl s_bl = Factory.Get();
 
+        /// <summary>
+        /// Observer mutex to prevent concurrent observer callbacks - Stage 7
+        /// </summary>
+        private readonly ObserverMutex _observerMutex = new(); //stage 7
+
         private int _adminId;
         private int _courierId;
         private bool _observerRegistered = false;
@@ -67,7 +72,12 @@ namespace PL.Courier
         {
             _adminId = adminId;
             _courierId = courierId;
-            Refresh();
+            
+            // Load courier data asynchronously to avoid freezing
+            Loaded += async (s, e) =>
+            {
+                await RefreshAsync();
+            };
         }
 
         private static void OnCourierChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -92,6 +102,31 @@ namespace PL.Courier
             bool isActive = CurrentCourier?.IsActive ?? false;
             CanPickOrder = isActive && !hasOrder;
             CanFinishDelivery = hasOrder;
+        }
+
+        private async System.Threading.Tasks.Task RefreshAsync()
+        {
+            try
+            {
+                BO.Courier? courier = null;
+                
+                await System.Threading.Tasks.Task.Run(() =>
+                {
+                    courier = s_bl.Courier.Get(_adminId, _courierId);
+                });
+                
+                CurrentCourier = courier;
+                CurrentOrderInProgress = CurrentCourier?.OrderInProgress;
+                EditableMaxDistance = CurrentCourier?.MaxDistance;
+                EditableVehicle = CurrentCourier?.Vehicle ?? VehiclesList.FirstOrDefault();
+                DataContext = null;
+                DataContext = this;
+            }
+            catch
+            {
+                CurrentCourier = null;
+                CurrentOrderInProgress = null;
+            }
         }
 
         private void Refresh()
@@ -135,7 +170,18 @@ namespace PL.Courier
 
         private void OnCourierUpdated()
         {
-            Dispatcher.Invoke(Refresh);
+            // Stage 7: Check if already processing - if so, exit immediately
+            if (_observerMutex.CheckAndSetInProgress())
+                return;
+
+            try
+            {
+                Dispatcher.InvokeAsync(async () => await RefreshAsync());
+            }
+            finally
+            {
+                _observerMutex.UnsetInProgress();
+            }
         }
 
         private void BtnHistory_Click(object sender, RoutedEventArgs e)
@@ -163,7 +209,7 @@ namespace PL.Courier
             }
         }
 
-        private void BtnSelectOrder_Click(object sender, RoutedEventArgs e)
+        private async void BtnSelectOrder_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -175,7 +221,8 @@ namespace PL.Courier
 
                 var win = new Courier.OpenOrdersForCourierWindow(_adminId, _courierId) { Owner = this };
                 win.ShowDialog();
-                Refresh();
+                
+                await RefreshAsync();
             }
             catch (Exception ex)
             {
@@ -183,7 +230,7 @@ namespace PL.Courier
             }
         }
 
-        private void BtnFinish_Click(object sender, RoutedEventArgs e)
+        private async void BtnFinish_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -199,18 +246,39 @@ namespace PL.Courier
                 if (dialog.ShowDialog() != true)
                     return;
 
+                // Disable button during operation
+                var button = sender as System.Windows.Controls.Button;
+                if (button != null)
+                {
+                    button.IsEnabled = false;
+                }
+
                 var status = dialog.SelectedStatus;
-                s_bl.Order.CompleteOrderDelivery(_adminId, CurrentOrderInProgress.DeliveryId, status);
+                int adminId = s_bl.Admin.GetConfig().AdminId;
+                int deliveryId = CurrentOrderInProgress.DeliveryId;
+                
+                await System.Threading.Tasks.Task.Run(() =>
+                {
+                    s_bl.Order.CompleteOrderDelivery(adminId, deliveryId, status);
+                });
+                
                 ModernMessageBox.Show("Delivery completed.", "Success", ModernMessageBox.MessageBoxType.Success, ModernMessageBox.MessageBoxButtons.OK, this);
-                Refresh();
+                
+                await RefreshAsync();
             }
             catch (Exception ex)
             {
                 ModernMessageBox.Show($"Error while finishing: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
+                
+                var button = sender as System.Windows.Controls.Button;
+                if (button != null)
+                {
+                    button.IsEnabled = true;
+                }
             }
         }
 
-        private void BtnUpdateCourier_Click(object sender, RoutedEventArgs e)
+        private async void BtnUpdateCourier_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -235,6 +303,13 @@ namespace PL.Courier
                     return;
                 }
 
+                // Disable button during operation
+                var button = sender as System.Windows.Controls.Button;
+                if (button != null)
+                {
+                    button.IsEnabled = false;
+                }
+
                 var updated = new BO.Courier
                 {
                     Id = CurrentCourier.Id,
@@ -250,13 +325,26 @@ namespace PL.Courier
                     OrderInProgress = CurrentCourier.OrderInProgress
                 };
 
-                s_bl.Courier.Update(_adminId, updated);
+                int adminId = s_bl.Admin.GetConfig().AdminId;
+                
+                await System.Threading.Tasks.Task.Run(() =>
+                {
+                    s_bl.Courier.Update(adminId, updated);
+                });
+                
                 ModernMessageBox.Show("Profile updated.", "Success", ModernMessageBox.MessageBoxType.Success, ModernMessageBox.MessageBoxButtons.OK, this);
-                Refresh();
+                
+                await RefreshAsync();
             }
             catch (Exception ex)
             {
                 ModernMessageBox.Show($"Update failed: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
+                
+                var button = sender as System.Windows.Controls.Button;
+                if (button != null)
+                {
+                    button.IsEnabled = true;
+                }
             }
         }
     }

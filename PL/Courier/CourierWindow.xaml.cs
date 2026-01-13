@@ -11,6 +11,11 @@ namespace PL.Courier
     {
         static readonly IBl s_bl = Factory.Get();
 
+        /// <summary>
+        /// Observer mutex to prevent concurrent observer callbacks - Stage 7
+        /// </summary>
+        private readonly ObserverMutex _observerMutex = new(); //stage 7
+
         private BO.Courier? _originalCourier;
         private bool _observerRegistered = false;
         private bool _disposed = false;
@@ -96,9 +101,11 @@ namespace PL.Courier
 
             if (courierId != 0)
             {
-                // Load original from BL and edit a copy so closing/cancel doesn't commit changes
-                _originalCourier = s_bl.Courier.Get(adminId, courierId);
-                CurrentCourier = CloneCourier(_originalCourier!);
+                // Load data asynchronously to avoid UI freeze
+                Loaded += async (s, e) =>
+                {
+                    await LoadCourierDataAsync(adminId, courierId);
+                };
             }
             else
             {
@@ -114,7 +121,29 @@ namespace PL.Courier
             }
         }
 
-        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        private async System.Threading.Tasks.Task LoadCourierDataAsync(int adminId, int courierId)
+        {
+            try
+            {
+                BO.Courier? courier = null;
+                
+                await System.Threading.Tasks.Task.Run(() =>
+                {
+                    courier = s_bl.Courier.Get(adminId, courierId);
+                });
+                
+                _originalCourier = courier;
+                CurrentCourier = CloneCourier(_originalCourier!);
+            }
+            catch (Exception ex)
+            {
+                ModernMessageBox.Show($"Error loading courier: {ex.Message}", "Error", 
+                    ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
+                Close();
+            }
+        }
+
+        private async void btnDelete_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -136,18 +165,42 @@ namespace PL.Courier
                 if (result != true)
                     return;
 
+                // Disable button during operation
+                var button = sender as System.Windows.Controls.Button;
+                if (button != null)
+                {
+                    button.IsEnabled = false;
+                }
+
                 int adminId = s_bl.Admin.GetConfig().AdminId;
-                s_bl.Courier.Delete(adminId, CurrentCourier.Id);
+                
+                await System.Threading.Tasks.Task.Run(() =>
+                {
+                    s_bl.Courier.Delete(adminId, CurrentCourier.Id);
+                });
+                
                 ModernMessageBox.Show("Courier deleted successfully!", "Success", ModernMessageBox.MessageBoxType.Success, ModernMessageBox.MessageBoxButtons.OK, this);
                 Close();
             }
             catch (BlInvalidValueException ex)
             {
                 ModernMessageBox.Show($"Invalid Data: {ex.Message}", "Validation Error", ModernMessageBox.MessageBoxType.Warning, ModernMessageBox.MessageBoxButtons.OK, this);
+                
+                var button = sender as System.Windows.Controls.Button;
+                if (button != null)
+                {
+                    button.IsEnabled = true;
+                }
             }
             catch (Exception ex)
             {
                 ModernMessageBox.Show($"Error: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
+                
+                var button = sender as System.Windows.Controls.Button;
+                if (button != null)
+                {
+                    button.IsEnabled = true;
+                }
             }
         }
 
@@ -155,7 +208,7 @@ namespace PL.Courier
         /// Handles the Add/Update button click.
         /// Commits only when the user clicks the button (save-on-demand).
         /// </summary>
-        private void btnAction_Click(object sender, RoutedEventArgs e)
+        private async void btnAction_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -169,11 +222,21 @@ namespace PL.Courier
                     return;
                 }
 
+                // Disable button during operation
+                var button = sender as System.Windows.Controls.Button;
+                if (button != null)
+                {
+                    button.IsEnabled = false;
+                }
+
                 int adminId = s_bl.Admin.GetConfig().AdminId;
 
                 if (ButtonText == "Add")
                 {
-                    s_bl.Courier.Add(adminId, CurrentCourier);
+                    await System.Threading.Tasks.Task.Run(() =>
+                    {
+                        s_bl.Courier.Add(adminId, CurrentCourier);
+                    });
 
                     ModernMessageBox.Show("Courier added successfully!", "Success", ModernMessageBox.MessageBoxType.Success, ModernMessageBox.MessageBoxButtons.OK, this);
                 }
@@ -195,7 +258,12 @@ namespace PL.Courier
 
                             if (result != true)
                             {
-                                return; // User cancelled
+                                // Re-enable button if user cancelled
+                                if (button != null)
+                                {
+                                    button.IsEnabled = true;
+                                }
+                                return;
                             }
                         }
                         else
@@ -209,12 +277,21 @@ namespace PL.Courier
 
                             if (result != true)
                             {
-                                return; // User cancelled
+                                // Re-enable button if user cancelled
+                                if (button != null)
+                                {
+                                    button.IsEnabled = true;
+                                }
+                                return;
                             }
                         }
                     }
 
-                    s_bl.Courier.Update(adminId, CurrentCourier);
+                    await System.Threading.Tasks.Task.Run(() =>
+                    {
+                        s_bl.Courier.Update(adminId, CurrentCourier);
+                    });
+                    
                     ModernMessageBox.Show("Courier updated successfully!", "Success", ModernMessageBox.MessageBoxType.Success, ModernMessageBox.MessageBoxButtons.OK, this);
                 }
                 Close();
@@ -222,48 +299,106 @@ namespace PL.Courier
             catch (BlDoesNotExistException ex)
             {
                 ModernMessageBox.Show($"Not Found: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Warning, ModernMessageBox.MessageBoxButtons.OK, this);
+                
+                var button = sender as System.Windows.Controls.Button;
+                if (button != null)
+                {
+                    button.IsEnabled = true;
+                }
             }
             catch (BlInvalidValueException ex)
             {
                 ModernMessageBox.Show($"Invalid Data: {ex.Message}", "Validation Error", ModernMessageBox.MessageBoxType.Warning, ModernMessageBox.MessageBoxButtons.OK, this);
+                
+                var button = sender as System.Windows.Controls.Button;
+                if (button != null)
+                {
+                    button.IsEnabled = true;
+                }
             }
             catch (BlAlreadyExistsException ex)
             {
                 ModernMessageBox.Show($"ID Already Exists: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
+                
+                var button = sender as System.Windows.Controls.Button;
+                if (button != null)
+                {
+                    button.IsEnabled = true;
+                }
             }
             catch (BlBaseException ex)
             {
                 ModernMessageBox.Show($"Business Logic Error: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
+                
+                var button = sender as System.Windows.Controls.Button;
+                if (button != null)
+                {
+                    button.IsEnabled = true;
+                }
             }
             catch (Exception ex)
             {
                 ModernMessageBox.Show($"An unexpected error occurred. Please try again or contact support.\n\nDetails: {ex.Message}", 
                     "Unexpected Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
+                
+                var button = sender as System.Windows.Controls.Button;
+                if (button != null)
+                {
+                    button.IsEnabled = true;
+                }
             }
         }
 
         private void CourierObserver()
         {
-            Dispatcher.Invoke(() =>
-            {
-                if (CurrentCourier?.Id == 0) return;
+            // Stage 7: Check if already processing - if so, exit immediately
+            if (_observerMutex.CheckAndSetInProgress())
+                return;
 
-                try
+            try
+            {
+                System.Diagnostics.Debug.WriteLine($"[CourierWindow] Observer fired for courier {CurrentCourier?.Id} at {DateTime.Now:HH:mm:ss.fff}");
+                
+                // Use InvokeAsync to avoid blocking the BL thread (prevent deadlock)
+                Dispatcher.InvokeAsync(async () =>
                 {
-                    int adminId = s_bl.Admin.GetConfig().AdminId; 
-                    CurrentCourier = s_bl.Courier.Get(adminId, CurrentCourier!.Id);
-                }
-                catch (Exception)
-                {
-                    Close();
-                }
-            });
+                    if (CurrentCourier?.Id == 0) return;
+
+                    try
+                    {
+                        int adminId = s_bl.Admin.GetConfig().AdminId;
+                        BO.Courier? updatedCourier = null;
+                        
+                        await System.Threading.Tasks.Task.Run(() =>
+                        {
+                            updatedCourier = s_bl.Courier.Get(adminId, CurrentCourier!.Id);
+                        });
+                        
+                        System.Diagnostics.Debug.WriteLine($"[CourierWindow] Refreshing courier {CurrentCourier.Id}: {updatedCourier?.Name}");
+                        
+                        // Replace the entire object and update the original
+                        _originalCourier = updatedCourier;
+                        CurrentCourier = CloneCourier(updatedCourier!);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[CourierWindow] Error in observer: {ex.Message}");
+                        // Courier was deleted or no longer accessible
+                        Close();
+                    }
+                });
+            }
+            finally
+            {
+                _observerMutex.UnsetInProgress();
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             if (CurrentCourier != null && CurrentCourier.Id != 0)
             {
+                System.Diagnostics.Debug.WriteLine($"[CourierWindow] Registering observer for courier {CurrentCourier.Id}");
                 (s_bl.Courier as IObservable)?.AddObserver(CurrentCourier.Id, CourierObserver);
                 _observerRegistered = true;
             }
@@ -301,6 +436,7 @@ namespace PL.Courier
             {
                 try
                 {
+                    System.Diagnostics.Debug.WriteLine($"[CourierWindow] Removing observer for courier {CurrentCourier.Id}");
                     (s_bl.Courier as IObservable)?.RemoveObserver(CurrentCourier.Id, CourierObserver);
                 }
                 catch

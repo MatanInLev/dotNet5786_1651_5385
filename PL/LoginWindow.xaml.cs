@@ -50,7 +50,7 @@ namespace PL
             }
         }
 
-        private void ConnectButton_Click(object sender, RoutedEventArgs e)
+        private async void ConnectButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -73,6 +73,13 @@ namespace PL
                     return;
                 }
 
+                // Disable button to prevent multiple clicks
+                var button = sender as System.Windows.Controls.Button;
+                if (button != null)
+                {
+                    button.IsEnabled = false;
+                }
+
                 // Get admin ID from configuration
                 int adminId = s_bl.Admin.GetConfig().AdminId;
 
@@ -86,10 +93,15 @@ namespace PL
                     return;
                 }
 
-                // Try to find courier with this ID
+                // Try to find courier with this ID (run on background thread)
                 try
                 {
-                    var courier = s_bl.Courier.Get(adminId, userId);
+                    BO.Courier? courier = null;
+                    
+                    await System.Threading.Tasks.Task.Run(() =>
+                    {
+                        courier = s_bl.Courier.Get(adminId, userId);
+                    });
                     
                     if (courier != null)
                     {
@@ -107,17 +119,36 @@ namespace PL
                         "Login Failed", 
                         ModernMessageBox.MessageBoxType.Error, 
                         ModernMessageBox.MessageBoxButtons.OK, this);
+                    
+                    // Re-enable button
+                    if (button != null)
+                    {
+                        button.IsEnabled = true;
+                    }
                 }
                 catch (Exception ex)
                 {
                     ModernMessageBox.Show($"An error occurred: {ex.Message}", "Error", 
                         ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
+                    
+                    // Re-enable button
+                    if (button != null)
+                    {
+                        button.IsEnabled = true;
+                    }
                 }
             }
             catch (Exception ex)
             {
                 ModernMessageBox.Show($"Login error: {ex.Message}", "Error", 
                     ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
+                
+                // Re-enable button
+                var button = sender as System.Windows.Controls.Button;
+                if (button != null)
+                {
+                    button.IsEnabled = true;
+                }
             }
         }
     }

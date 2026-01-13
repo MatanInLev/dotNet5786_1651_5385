@@ -20,9 +20,9 @@ static class XMLTools
     {
         string xmlFilePath = s_xmlDir + xmlFileName;
 
-        // Retry logic to handle file locks
-        int maxRetries = 3;
-        int delayMs = 100;
+        // Retry logic to handle file locks - increased for simulation
+        int maxRetries = 10;
+        int delayMs = 50;
 
         for (int attempt = 0; attempt < maxRetries; attempt++)
         {
@@ -31,8 +31,6 @@ static class XMLTools
                 // Force garbage collection to release any file handles
                 if (attempt > 0)
                 {
-                    GC.Collect();
-                    GC.WaitForPendingFinalizers();
                     Thread.Sleep(delayMs * attempt);
                 }
 
@@ -57,17 +55,34 @@ static class XMLTools
     {
         string xmlFilePath = s_xmlDir + xmlFileName;
 
-        try
+        // Retry logic for reading to handle concurrent access - increased for simulation
+        int maxRetries = 10;
+        int delayMs = 30;
+
+        for (int attempt = 0; attempt < maxRetries; attempt++)
         {
-            if (!File.Exists(xmlFilePath)) return new();
-            using FileStream file = new(xmlFilePath, FileMode.Open);
-            XmlSerializer x = new(typeof(List<T>));
-            return x.Deserialize(file) as List<T> ?? new();
+            try
+            {
+                if (!File.Exists(xmlFilePath)) return new();
+                
+                // Add FileShare.Read to allow concurrent reads during simulation
+                using FileStream file = new(xmlFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                XmlSerializer x = new(typeof(List<T>));
+                return x.Deserialize(file) as List<T> ?? new();
+            }
+            catch (IOException) when (attempt < maxRetries - 1)
+            {
+                // File is locked, wait and retry
+                Thread.Sleep(delayMs * (attempt + 1));
+                continue;
+            }
+            catch (Exception ex)
+            {
+                throw new DalXMLFileLoadCreateException($"fail to load xml file: {xmlFilePath}, {ex.Message}");
+            }
         }
-        catch (Exception ex)
-        {
-            throw new DalXMLFileLoadCreateException($"fail to load xml file: {xmlFilePath}, {ex.Message}");
-        }
+
+        throw new DalXMLFileLoadCreateException($"fail to load xml file: {xmlFilePath}, The process cannot access the file because it is being used by another process.");
     }
     #endregion
 
@@ -76,14 +91,36 @@ static class XMLTools
     {
         string xmlFilePath = s_xmlDir + xmlFileName;
 
-        try
+        // Retry logic to handle file locks during simulation
+        int maxRetries = 3;
+        int delayMs = 100;
+
+        for (int attempt = 0; attempt < maxRetries; attempt++)
         {
-            rootElem.Save(xmlFilePath);
+            try
+            {
+                if (attempt > 0)
+                {
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    Thread.Sleep(delayMs * attempt);
+                }
+
+                rootElem.Save(xmlFilePath);
+                return; // Success
+            }
+            catch (IOException) when (attempt < maxRetries - 1)
+            {
+                // File is locked, retry
+                continue;
+            }
+            catch (Exception ex)
+            {
+                throw new DalXMLFileLoadCreateException($"fail to create xml file: {s_xmlDir + xmlFilePath}, {ex.Message}");
+            }
         }
-        catch (Exception ex)
-        {
-            throw new DalXMLFileLoadCreateException($"fail to create xml file: {s_xmlDir + xmlFilePath}, {ex.Message}");
-        }
+
+        throw new DalXMLFileLoadCreateException($"fail to create xml file: {xmlFilePath}, The process cannot access the file because it is being used by another process.");
     }
     public static XElement LoadListFromXMLElement(string xmlFileName)
     {
@@ -92,8 +129,40 @@ static class XMLTools
         try
         {
             if (File.Exists(xmlFilePath))
-                return XElement.Load(xmlFilePath);
+            {
+                // Use FileStream with FileShare.Read to allow concurrent access
+                using FileStream file = new(xmlFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                return XElement.Load(file);
+            }
+            
+            // File doesn't exist - create it with retry logic
             XElement rootElem = new(xmlFileName);
+            
+            // Retry logic for initial file creation
+            int maxRetries = 3;
+            int delayMs = 100;
+
+            for (int attempt = 0; attempt < maxRetries; attempt++)
+            {
+                try
+                {
+                    if (attempt > 0)
+                    {
+                        GC.Collect();
+                        GC.WaitForPendingFinalizers();
+                        Thread.Sleep(delayMs * attempt);
+                    }
+
+                    rootElem.Save(xmlFilePath);
+                    return rootElem;
+                }
+                catch (IOException) when (attempt < maxRetries - 1)
+                {
+                    continue;
+                }
+            }
+            
+            // Last attempt without catch
             rootElem.Save(xmlFilePath);
             return rootElem;
         }

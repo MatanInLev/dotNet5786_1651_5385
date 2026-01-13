@@ -29,20 +29,37 @@ namespace PL.Courier
             _userId = userId;
             _courierId = courierId;
 
-            Loaded += (_, _) => QueryList();
+            Loaded += async (_, _) => await QueryListAsync();
 
-            (s_bl.Order as IObservable)?.AddObserver(QueryList);
+            (s_bl.Order as IObservable)?.AddObserver(OnOrderListUpdated);
         }
 
-        private void QueryList()
+        private void OnOrderListUpdated()
+        {
+            Dispatcher.InvokeAsync(async () => await QueryListAsync());
+        }
+
+        private async System.Threading.Tasks.Task QueryListAsync()
         {
             try
             {
                 BO.OrderType? typeFilter = null;
                 var typeItem = cmbType?.SelectedItem;
-                if (typeItem is System.Windows.Controls.ComboBoxItem cb && cb.Content?.ToString() != "All")
+                
+                // Handle both ComboBoxItem (for "All") and enum values
+                if (typeItem is System.Windows.Controls.ComboBoxItem cb)
                 {
-                    if (Enum.TryParse(cb.Content?.ToString(), out BO.OrderType parsed)) typeFilter = parsed;
+                    // "All" option is a ComboBoxItem
+                    if (cb.Content?.ToString() != "All")
+                    {
+                        if (Enum.TryParse(cb.Content?.ToString(), out BO.OrderType parsed))
+                            typeFilter = parsed;
+                    }
+                }
+                else if (typeItem is BO.OrderType orderType)
+                {
+                    // Enum values are directly available
+                    typeFilter = orderType;
                 }
 
                 BO.DeliveryStatus? statusFilter = null;
@@ -58,7 +75,17 @@ namespace PL.Courier
                     sortTag = sortItem.Tag as string;
                 }
 
-                var list = s_bl.Order.GetClosedOrdersForCourier(_userId, _courierId, typeFilter, null) ?? Enumerable.Empty<ClosedDeliveryInList>();
+                IEnumerable<ClosedDeliveryInList>? list = null;
+                
+                await System.Threading.Tasks.Task.Run(() =>
+                {
+                    list = s_bl.Order.GetClosedOrdersForCourier(_userId, _courierId, typeFilter, null);
+                });
+                
+                if (list == null)
+                {
+                    list = Enumerable.Empty<ClosedDeliveryInList>();
+                }
 
                 if (statusFilter != null)
                 {
@@ -81,24 +108,19 @@ namespace PL.Courier
             }
         }
 
-        private void Filter_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private async void Filter_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             if (!IsLoaded)
             {
                 return;
             }
 
-            QueryList();
-        }
-
-        private void Refresh_Click(object sender, RoutedEventArgs e)
-        {
-            QueryList();
+            await QueryListAsync();
         }
 
         protected override void OnClosed(EventArgs e)
         {
-            (s_bl.Order as IObservable)?.RemoveObserver(QueryList);
+            (s_bl.Order as IObservable)?.RemoveObserver(OnOrderListUpdated);
             base.OnClosed(e);
         }
     }

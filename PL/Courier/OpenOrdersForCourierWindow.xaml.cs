@@ -17,7 +17,35 @@ namespace PL.Courier
 
         public ObservableCollection<OpenOrderInList> Orders { get; } = new();
 
-        public OrderType? SelectedType { get; set; } = null;
+        private OrderType? _selectedType = null;
+        public OrderType? SelectedType
+        {
+            get => _selectedType;
+            set
+            {
+                if (_selectedType != value)
+                {
+                    _selectedType = value;
+                    OnPropertyChanged();
+                    LoadData();
+                }
+            }
+        }
+
+        private ScheduleStatus? _selectedStatus = null;
+        public ScheduleStatus? SelectedStatus
+        {
+            get => _selectedStatus;
+            set
+            {
+                if (_selectedStatus != value)
+                {
+                    _selectedStatus = value;
+                    OnPropertyChanged();
+                    LoadData();
+                }
+            }
+        }
 
         private OpenOrderInList? _selectedOrder;
         public OpenOrderInList? SelectedOrder
@@ -34,8 +62,29 @@ namespace PL.Courier
         }
 
         public record OrderTypeOption(OrderType? Value, string Label);
+        public record ScheduleStatusOption(ScheduleStatus? Value, string Label);
 
-        public System.Collections.Generic.IEnumerable<OrderTypeOption> OrderTypeOptions { get; private set; }
+        private System.Collections.Generic.IEnumerable<OrderTypeOption> _orderTypeOptions;
+        public System.Collections.Generic.IEnumerable<OrderTypeOption> OrderTypeOptions
+        {
+            get => _orderTypeOptions;
+            private set
+            {
+                _orderTypeOptions = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private System.Collections.Generic.IEnumerable<ScheduleStatusOption> _scheduleStatusOptions;
+        public System.Collections.Generic.IEnumerable<ScheduleStatusOption> ScheduleStatusOptions
+        {
+            get => _scheduleStatusOptions;
+            private set
+            {
+                _scheduleStatusOptions = value;
+                OnPropertyChanged();
+            }
+        }
 
         private readonly BO.Vehicle _vehicle;
 
@@ -51,25 +100,70 @@ namespace PL.Courier
             _adminId = adminId;
             _courierId = courierId;
             _vehicle = _bl.Courier.Get(_adminId, _courierId).Vehicle;
+            
+            // Create filter options with "All" as the first option BEFORE InitializeComponent
+            OrderTypeOptions = new[]
+            {
+                new OrderTypeOption(null, "All")
+            }.Concat(
+                Enum.GetValues(typeof(OrderType))
+                    .Cast<OrderType>()
+                    .Select(t => new OrderTypeOption(t, t.ToString()))
+            ).ToList();
+
+            ScheduleStatusOptions = new[]
+            {
+                new ScheduleStatusOption(null, "All")
+            }.Concat(
+                Enum.GetValues(typeof(ScheduleStatus))
+                    .Cast<ScheduleStatus>()
+                    .Select(s => new ScheduleStatusOption(s, s.ToString()))
+            ).ToList();
+            
             InitializeComponent();
-            OrderTypeOptions = Enum.GetValues(typeof(OrderType))
-                                    .Cast<OrderType>()
-                                    .Select(t => new OrderTypeOption(t, t.ToString()))
-                                    .Prepend(new OrderTypeOption(null, "All"))
-                                    .ToList();
-            DataContext = this;
+            
+            // Set default selection to "All" (null value)
+            SelectedType = null;
+            SelectedStatus = null;
+            
+            System.Diagnostics.Debug.WriteLine($"[OpenOrdersForCourierWindow] Registering observer for order list");
+            (_bl.Order as IObservable)?.AddObserver(OnOrderListUpdated);
+            
             LoadData();
-            (_bl.Order as IObservable)?.AddObserver(LoadData);
+        }
+        
+        private void OnOrderListUpdated()
+        {
+            System.Diagnostics.Debug.WriteLine($"[OpenOrdersForCourierWindow] Observer fired, refreshing order list");
+            Dispatcher.Invoke(() => LoadData());
         }
 
         private void LoadData()
         {
             try
             {
+                System.Diagnostics.Debug.WriteLine($"[OpenOrdersForCourierWindow] Loading orders for courier {_courierId}, type filter: {SelectedType?.ToString() ?? "All"}, status filter: {SelectedStatus?.ToString() ?? "All"}");
                 Orders.Clear();
                 var list = _bl.Order.GetOpenOrdersForCourier(_adminId, _courierId, SelectedType, null);
+                
+                // Apply client-side ScheduleStatus filter if selected
+                if (SelectedStatus.HasValue)
+                {
+                    list = list.Where(o => o.ScheduleStatus == SelectedStatus.Value);
+                }
+                
+                // Sort by priority: Risk first, then Late, then OnTime
+                list = list.OrderBy(o => o.ScheduleStatus switch
+                {
+                    ScheduleStatus.Risk => 0,
+                    ScheduleStatus.Late => 1,
+                    ScheduleStatus.OnTime => 2,
+                    _ => 3
+                });
+                
                 foreach (var o in list)
                     Orders.Add(o);
+                System.Diagnostics.Debug.WriteLine($"[OpenOrdersForCourierWindow] Loaded {Orders.Count} orders");
             }
             catch (Exception ex)
             {
@@ -77,18 +171,24 @@ namespace PL.Courier
             }
         }
 
-        private void Refresh_Click(object sender, RoutedEventArgs e)
-        {
-            LoadData();
-        }
-
-        private void Collect_Click(object sender, RoutedEventArgs e)
+        private async void Collect_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 if (sender is FrameworkElement fe && fe.Tag is int orderId)
                 {
-                    _bl.Order.AssignOrder(_adminId, orderId, _courierId);
+                    // Disable the button to prevent multiple clicks
+                    if (sender is System.Windows.Controls.Button btn)
+                    {
+                        btn.IsEnabled = false;
+                    }
+
+                    // Run the assignment on a background thread to avoid UI freeze
+                    await System.Threading.Tasks.Task.Run(() =>
+                    {
+                        _bl.Order.AssignOrder(_adminId, orderId, _courierId);
+                    });
+
                     ModernMessageBox.Show($"Order {orderId} assigned.", "Success", ModernMessageBox.MessageBoxType.Success, ModernMessageBox.MessageBoxButtons.OK, this);
                     DialogResult = true;
                     Close();
@@ -97,6 +197,12 @@ namespace PL.Courier
             catch (Exception ex)
             {
                 ModernMessageBox.Show($"Unable to assign: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
+                
+                // Re-enable the button if there was an error
+                if (sender is System.Windows.Controls.Button btn)
+                {
+                    btn.IsEnabled = true;
+                }
             }
         }
 
@@ -104,6 +210,13 @@ namespace PL.Courier
         {
             DialogResult = false;
             Close();
+        }
+        
+        private void ClearFilter_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine($"[OpenOrdersForCourierWindow] Clearing filters");
+            SelectedType = null;
+            SelectedStatus = null;
         }
 
         private void Orders_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -117,11 +230,12 @@ namespace PL.Courier
 
         protected override void OnClosed(EventArgs e)
         {
-            (_bl.Order as IObservable)?.RemoveObserver(LoadData);
+            System.Diagnostics.Debug.WriteLine($"[OpenOrdersForCourierWindow] Removing observer");
+            (_bl.Order as IObservable)?.RemoveObserver(OnOrderListUpdated);
             base.OnClosed(e);
         }
 
-        private void ShowMapForSelection(OpenOrderInList sel)
+        private void ShowMapForSelection(OpenOrderInList? sel)
         {
             if (sel == null) return;
 
@@ -131,13 +245,20 @@ namespace PL.Courier
             double ordLon = sel.Longitude;
 
             double routeDistanceKm = sel.DistanceFromCompany;
-            try
+            
+            // Use cached route distance if available, otherwise use aerial distance
+            // Don't make network calls on UI thread
+            var cacheKey = (
+                Math.Round(compLat, 4),
+                Math.Round(compLon, 4),
+                Math.Round(ordLat, 4),
+                Math.Round(ordLon, 4),
+                _vehicle
+            );
+            
+            if (BO.Tools.TryGetCachedRouteDistance(cacheKey.Item1, cacheKey.Item2, cacheKey.Item3, cacheKey.Item4, cacheKey.Item5, out double cached))
             {
-                routeDistanceKm = BO.Tools.CalculateRouteDistance(compLat, compLon, ordLat, ordLon, _vehicle);
-            }
-            catch
-            {
-                // keep aerial if routing fails
+                routeDistanceKm = cached;
             }
 
             // Simple simulated route polyline between points to visualize driving/walking/bike

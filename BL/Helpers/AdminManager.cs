@@ -19,36 +19,21 @@ internal static class AdminManager //stage 4
     internal static event Action? ConfigUpdatedObservers; //stage 5 - for config update observers
     internal static event Action? ClockUpdatedObservers; //stage 5 - for clock update observers
 
-    private static Task? _periodicTask = null; //stage 7
-
     /// <summary>
     /// Method to update application's clock from any BL class as may be required
     /// </summary>
     /// <param name="newClock">updated clock value</param>
     internal static void UpdateClock(DateTime newClock) //stage 4-7
     {
-        var oldClock = s_dal.Config.Clock; //stage 4
         s_dal.Config.Clock = newClock; //stage 4
 
-        //Add calls here to any logic method that should be called periodically,
-        //after each clock update
-        //for example, Periodic students' updates:
-        // - Go through all students to update properties that are affected by the clock update
-        // - (students become not active after 5 years etc.)
-
-        //TO_DO: //stage 4
-        CourierManager.UpdateCourierActivityStatus();
-        //stage 4. to be removed in stage 7 and replaced as below
-
-        //...
-
-        //TO_DO: //stage 7
-        //if (_periodicTask is null || _periodicTask.IsCompleted) //stage 7
-        //    _periodicTask = Task.Run(() => StudentManager.PeriodicStudentsUpdates(oldClock, newClock));
-        //...
+        // Call periodic method asynchronously to update courier activity status
+        // This is called every time the clock updates to check for inactive couriers
+        // The method runs in a separate thread from the Thread Pool without blocking the clock update
+        _ = Task.Run(() => CourierManager.UpdateCourierActivityStatus()); //stage 7
 
         //Calling all the observers of clock update
-        ClockUpdatedObservers?.Invoke(); //prepared for stage 5
+        ClockUpdatedObservers?.Invoke(); //stage 5
     }
 
     /// <summary>
@@ -209,21 +194,14 @@ internal static class AdminManager //stage 4
         }
     }
 
-    private static Task? _simulateTask = null;
-
     private static void clockRunner()
     {
         while (!s_stop)
         {
             UpdateClock(Now.AddMinutes(s_interval));
 
-            //TO_DO: //stage 7
-            //Add calls here to any logic simulation that was required in stage 7
-            //for example: course registration simulation
-            //if (_simulateTask is null || _simulateTask.IsCompleted)//stage 7
-            //    _simulateTask = Task.Run(() => StudentManager.SimulateCourseRegistrationAndGrade());
-
-            //etc...
+            //stage 7 - Call the simulation method asynchronously
+            _ = Task.Run(() => CourierManager.SimulateDeliveryOperationsAsync());
 
             try
             {

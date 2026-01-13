@@ -95,6 +95,22 @@
             </Setter>
         </Style>
 
+        <!-- ComboBoxItem Style -->
+        <Style x:Key="ModernComboBoxItem" TargetType="ComboBoxItem">
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FFF3F0"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#FFE5E0"/>
+                    <Setter Property="Foreground" Value="#D84315"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
         <!-- Modern ComboBox Style -->
         <Style x:Key="ModernComboBox" TargetType="ComboBox">
             <Setter Property="Background" Value="White"/>
@@ -102,64 +118,14 @@
             <Setter Property="BorderThickness" Value="1.5"/>
             <Setter Property="Padding" Value="12,10"/>
             <Setter Property="FontSize" Value="13"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ComboBox">
-                        <Grid>
-                            <Border x:Name="border"
-                                    Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="8">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <ContentPresenter Grid.Column="0"
-                                                      Content="{TemplateBinding SelectionBoxItem}"
-                                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                                      Margin="{TemplateBinding Padding}"
-                                                      VerticalAlignment="Center"
-                                                      HorizontalAlignment="Left"
-                                                      IsHitTestVisible="False"/>
-                                    <ToggleButton Grid.Column="1"
-                                                  IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                                  Focusable="False"
-                                                  Background="Transparent"
-                                                  BorderThickness="0"
-                                                  Width="30">
-                                        <Path Data="M 0 0 L 4 4 L 8 0 Z" Fill="#666" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </ToggleButton>
-                                </Grid>
-                            </Border>
-                            <Popup IsOpen="{TemplateBinding IsDropDownOpen}"
-                                   Placement="Bottom"
-                                   AllowsTransparency="True"
-                                   Focusable="False"
-                                   PopupAnimation="Slide">
-                                <Border Background="White"
-                                        BorderBrush="#E0E0E0"
-                                        BorderThickness="1"
-                                        CornerRadius="8"
-                                        Margin="0,4,0,0">
-                                    <Border.Effect>
-                                        <DropShadowEffect Color="#000000" BlurRadius="16" ShadowDepth="2" Opacity="0.12"/>
-                                    </Border.Effect>
-                                    <ScrollViewer MaxHeight="200" Margin="0,4">
-                                        <ItemsPresenter/>
-                                    </ScrollViewer>
-                                </Border>
-                            </Popup>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="BorderBrush" Value="#FF5722"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="ItemContainerStyle" Value="{StaticResource ModernComboBoxItem}"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="#FF5722"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <!-- Modern DataGrid Style -->
@@ -262,35 +228,71 @@
                         Padding="16" 
                         Margin="0,0,0,16">
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="12"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Column="0" 
-                                   Text="Filter by type:" 
-                                   VerticalAlignment="Center"
-                                   FontSize="13"
-                                   Foreground="#495057"
-                                   Margin="0,0,12,0"/>
-                        
-                        <ComboBox Grid.Column="1"
-                                  Style="{StaticResource ModernComboBox}"
-                                  ItemsSource="{Binding OrderTypeOptions}"
-                                  SelectedValue="{Binding SelectedType, Mode=TwoWay}"
-                                  SelectedValuePath="Value"
-                                  DisplayMemberPath="Label"
-                                  SelectedIndex="-1"
-                                  MinWidth="150"/>
-                        
-                        <Button Grid.Column="2"
-                                Content="Refresh" 
-                                Click="Refresh_Click"
-                                Style="{StaticResource ModernButton}"
-                                Background="#FF5722"
-                                Margin="12,0,0,0"
-                                MinWidth="100"/>
+                        <!-- Order Type Filter -->
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" 
+                                       Text="Filter by type:" 
+                                       VerticalAlignment="Center"
+                                       FontSize="13"
+                                       Foreground="#495057"
+                                       Margin="0,0,12,0"/>
+                            
+                            <ComboBox Grid.Column="1"
+                                      x:Name="FilterComboBox"
+                                      Style="{StaticResource ModernComboBox}"
+                                      ItemsSource="{Binding OrderTypeOptions}"
+                                      SelectedValue="{Binding SelectedType, Mode=TwoWay}"
+                                      SelectedValuePath="Value"
+                                      DisplayMemberPath="Label"
+                                      SelectedIndex="0"
+                                      MinWidth="150"/>
+                            
+                            <Button Grid.Column="2"
+                                    Content="Clear Filters" 
+                                    Click="ClearFilter_Click"
+                                    Style="{StaticResource ModernButton}"
+                                    Background="#6C757D"
+                                    Margin="12,0,0,0"
+                                    MinWidth="110"
+                                    ToolTip="Reset all filters"/>
+                        </Grid>
+
+                        <!-- Schedule Status Filter -->
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" 
+                                       Text="Filter by status:" 
+                                       VerticalAlignment="Center"
+                                       FontSize="13"
+                                       Foreground="#495057"
+                                       Margin="0,0,12,0"/>
+                            
+                            <ComboBox Grid.Column="1"
+                                      x:Name="StatusFilterComboBox"
+                                      Style="{StaticResource ModernComboBox}"
+                                      ItemsSource="{Binding ScheduleStatusOptions}"
+                                      SelectedValue="{Binding SelectedStatus, Mode=TwoWay}"
+                                      SelectedValuePath="Value"
+                                      DisplayMemberPath="Label"
+                                      SelectedIndex="0"
+                                      MinWidth="150"/>
+                        </Grid>
                     </Grid>
                 </Border>
 

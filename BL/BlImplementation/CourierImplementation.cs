@@ -9,11 +9,13 @@ internal class CourierImplementation : ICourier
 {
     public void Add(int userId, Courier courier)
     {
+        AdminManager.ThrowOnSimulatorIsRunning(); //stage 7
         CourierManager.Create(courier);
     }
 
     public void Delete(int userId, int courierId)
     {
+        AdminManager.ThrowOnSimulatorIsRunning(); //stage 7
         CourierManager.Delete(courierId);
     }
 
@@ -34,6 +36,7 @@ internal class CourierImplementation : ICourier
 
     public void Update(int userId, Courier courier)
     {
+        AdminManager.ThrowOnSimulatorIsRunning(); //stage 7
         CourierManager.Update(courier);
     }
 

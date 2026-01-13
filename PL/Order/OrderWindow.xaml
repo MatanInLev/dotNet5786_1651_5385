@@ -7,7 +7,7 @@
         xmlns:bo="clr-namespace:BO;assembly=BL"
         xmlns:pl="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="Order Details" Height="750" Width="600"
+        Title="Order Details" Height="800" Width="600"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Background="#F5F7FA"
         WindowStartupLocation="CenterScreen">
@@ -41,6 +41,9 @@
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter Property="Opacity" Value="0.8"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.5"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -134,6 +137,8 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
                     <!-- Order ID -->
@@ -188,6 +193,7 @@
                                VerticalAlignment="Center" 
                                Margin="0,6,15,6"/>
                     <TextBox Grid.Row="3" Grid.Column="1" 
+                             x:Name="txtCustomerName"
                              Text="{Binding CurrentOrder.CustomerName, Mode=TwoWay}" 
                              Style="{StaticResource ModernTextBox}"
                              Margin="0,6"/>
@@ -200,6 +206,7 @@
                                VerticalAlignment="Center" 
                                Margin="0,6,15,6"/>
                     <TextBox Grid.Row="4" Grid.Column="1" 
+                             x:Name="txtCustomerPhone"
                              Text="{Binding CurrentOrder.CustomerPhone, Mode=TwoWay}" 
                              Style="{StaticResource ModernTextBox}"
                              Margin="0,6"/>
@@ -211,68 +218,121 @@
                                Foreground="#555"
                                VerticalAlignment="Top" 
                                Margin="0,6,15,6"/>
-                    <TextBox Grid.Row="5" Grid.Column="1" 
-                             Text="{Binding CurrentOrder.CustomerAddress, Mode=TwoWay}" 
-                             TextWrapping="Wrap"
-                             Height="50"
-                             Style="{StaticResource ModernTextBox}"
-                             VerticalScrollBarVisibility="Auto"
-                             Margin="0,6"/>
+                    <Grid Grid.Row="5" Grid.Column="1" Margin="0,6">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBox Grid.Row="0"
+                                 x:Name="txtAddress"
+                                 Text="{Binding CurrentOrder.CustomerAddress, Mode=TwoWay}" 
+                                 TextWrapping="Wrap"
+                                 Height="50"
+                                 Style="{StaticResource ModernTextBox}"
+                                 VerticalScrollBarVisibility="Auto"/>
+                        <Button Grid.Row="1"
+                                x:Name="btnValidateAddress"
+                                Content="🌍 Validate Address"
+                                Click="btnValidateAddress_Click"
+                                Style="{StaticResource ModernButton}"
+                                Background="#3498DB"
+                                HorizontalAlignment="Left"
+                                Margin="0,8,0,0"
+                                Padding="12,6"/>
+                    </Grid>
+
+                    <!-- Geocoding Progress -->
+                    <Grid Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
+                          x:Name="geocodingProgress"
+                          Visibility="Collapsed"
+                          Margin="0,10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0"
+                                   x:Name="txtGeocodingStatus"
+                                   Text="Geocoding address..."
+                                   FontSize="11"
+                                   Foreground="#3498DB"
+                                   FontStyle="Italic"
+                                   Margin="0,0,0,5"/>
+                        <ProgressBar Grid.Row="1"
+                                     x:Name="progressBarGeocoding"
+                                     Height="4"
+                                     IsIndeterminate="True"
+                                     Foreground="#3498DB"/>
+                    </Grid>
+
+                    <!-- Coordinates Display -->
+                    <TextBlock Grid.Row="7" Grid.Column="0" 
+                               Text="Coordinates:" 
+                               FontSize="11"
+                               Foreground="#888"
+                               VerticalAlignment="Center" 
+                               Margin="0,6,15,6"/>
+                    <TextBlock Grid.Row="7" Grid.Column="1" 
+                               x:Name="txtCoordinates"
+                               Text="{Binding CoordinatesDisplay}" 
+                               FontSize="11"
+                               Foreground="#888"
+                               VerticalAlignment="Center" 
+                               Margin="0,6"/>
 
                     <!-- Separator -->
-                    <Separator Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,15,0,10"/>
+                    <Separator Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,15,0,10"/>
 
                     <!-- Distance -->
-                    <TextBlock Grid.Row="7" Grid.Column="0" 
+                    <TextBlock Grid.Row="9" Grid.Column="0" 
                                Text="Distance (km):" 
                                FontWeight="SemiBold" 
                                FontSize="12"
                                Foreground="#555"
                                VerticalAlignment="Center" 
                                Margin="0,6,15,6"/>
-                    <TextBlock Grid.Row="7" Grid.Column="1" 
+                    <TextBlock Grid.Row="9" Grid.Column="1" 
                                Text="{Binding CurrentOrder.Distance, StringFormat=N2}" 
                                FontSize="12"
                                VerticalAlignment="Center" 
                                Margin="0,6"/>
 
                     <!-- Order Date -->
-                    <TextBlock Grid.Row="8" Grid.Column="0" 
+                    <TextBlock Grid.Row="10" Grid.Column="0" 
                                Text="Order Date:" 
                                FontWeight="SemiBold" 
                                FontSize="12"
                                Foreground="#555"
                                VerticalAlignment="Center" 
                                Margin="0,6,15,6"/>
-                    <TextBlock Grid.Row="8" Grid.Column="1" 
+                    <TextBlock Grid.Row="10" Grid.Column="1" 
                                Text="{Binding CurrentOrder.OrderDate, StringFormat='dd/MM/yyyy HH:mm'}" 
                                FontSize="12"
                                VerticalAlignment="Center" 
                                Margin="0,6"/>
 
                     <!-- Expected Delivery -->
-                    <TextBlock Grid.Row="9" Grid.Column="0" 
+                    <TextBlock Grid.Row="11" Grid.Column="0" 
                                Text="Expected Delivery:" 
                                FontWeight="SemiBold" 
                                FontSize="12"
                                Foreground="#555"
                                VerticalAlignment="Center" 
                                Margin="0,6,15,6"/>
-                    <TextBlock Grid.Row="9" Grid.Column="1" 
+                    <TextBlock Grid.Row="11" Grid.Column="1" 
                                Text="{Binding CurrentOrder.ExpectedDelivery, StringFormat='dd/MM/yyyy HH:mm'}" 
                                FontSize="12"
                                VerticalAlignment="Center" 
                                Margin="0,6"/>
 
                     <!-- Order Status -->
-                    <TextBlock Grid.Row="10" Grid.Column="0" 
+                    <TextBlock Grid.Row="12" Grid.Column="0" 
                                Text="Order Status:" 
                                FontWeight="SemiBold" 
                                FontSize="12"
                                Foreground="#555"
                                VerticalAlignment="Center" 
                                Margin="0,6,15,6"/>
-                    <TextBlock Grid.Row="10" Grid.Column="1" 
+                    <TextBlock Grid.Row="12" Grid.Column="1" 
                                Text="{Binding CurrentOrder.Status}" 
                                FontSize="12"
                                FontWeight="SemiBold"
@@ -280,14 +340,14 @@
                                Margin="0,6"/>
 
                     <!-- Schedule Status -->
-                    <TextBlock Grid.Row="11" Grid.Column="0" 
+                    <TextBlock Grid.Row="13" Grid.Column="0" 
                                Text="Schedule Status:" 
                                FontWeight="SemiBold" 
                                FontSize="12"
                                Foreground="#555"
                                VerticalAlignment="Center" 
                                Margin="0,6,15,6"/>
-                    <TextBlock Grid.Row="11" Grid.Column="1" 
+                    <TextBlock Grid.Row="13" Grid.Column="1" 
                                Text="{Binding CurrentOrder.ScheduleStatus}" 
                                FontSize="12"
                                FontWeight="SemiBold"
@@ -295,14 +355,14 @@
                                Margin="0,6"/>
 
                     <!-- Time Left -->
-                    <TextBlock Grid.Row="12" Grid.Column="0" 
+                    <TextBlock Grid.Row="14" Grid.Column="0" 
                                Text="Time Left:" 
                                FontWeight="SemiBold" 
                                FontSize="12"
                                Foreground="#555"
                                VerticalAlignment="Center" 
                                Margin="0,6,15,6"/>
-                    <TextBlock Grid.Row="12" Grid.Column="1" 
+                    <TextBlock Grid.Row="14" Grid.Column="1" 
                                Text="{Binding CurrentOrder.TimeLeft, StringFormat=hh\\:mm\\:ss}" 
                                FontSize="12"
                                FontWeight="SemiBold"
@@ -310,14 +370,14 @@
                                Margin="0,6"/>
 
                     <!-- Delivery History -->
-                    <TextBlock Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="2"
+                    <TextBlock Grid.Row="15" Grid.Column="0" Grid.ColumnSpan="2"
                                Text="Delivery History" 
                                FontWeight="Bold" 
                                FontSize="14"
                                Foreground="#3498DB"
                                Margin="0,20,0,10"/>
 
-                    <DataGrid Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="2"
+                    <DataGrid Grid.Row="16" Grid.Column="0" Grid.ColumnSpan="2"
                               ItemsSource="{Binding CurrentOrder.DeliveryList}"
                               IsReadOnly="True"
                               Style="{StaticResource ModernDataGrid}"

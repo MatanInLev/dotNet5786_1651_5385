@@ -18,6 +18,8 @@ internal class AdminImplementation : IAdmin
     /// <param name="unit">The time unit to advance the clock by (minutes, hours, days, months, years).</param>
     public void ForwardClock(TimeUnit unit)
     {
+        AdminManager.ThrowOnSimulatorIsRunning(); //stage 7
+        
         switch (unit)
         {
             case TimeUnit.Minutes:
@@ -61,6 +63,7 @@ internal class AdminImplementation : IAdmin
     /// </summary>
     public void InitializeDB()
     {
+        AdminManager.ThrowOnSimulatorIsRunning(); //stage 7
         AdminManager.InitializeDB();
     }
 
@@ -69,6 +72,7 @@ internal class AdminImplementation : IAdmin
     /// </summary>
     public void ResetDB()
     {
+        AdminManager.ThrowOnSimulatorIsRunning(); //stage 7
         AdminManager.ResetDB();
     }
 
@@ -79,6 +83,7 @@ internal class AdminImplementation : IAdmin
     /// <param name="config">The new configuration to apply.</param>
     public void SetConfig(Config config)
     {
+        AdminManager.ThrowOnSimulatorIsRunning(); //stage 7
         AdminManager.SetConfig(config);
     }
 
@@ -90,4 +95,20 @@ internal class AdminImplementation : IAdmin
     AdminManager.ConfigUpdatedObservers += configObserver;
     public void RemoveConfigObserver(Action configObserver) =>
     AdminManager.ConfigUpdatedObservers -= configObserver;
+    
+    /// <summary>
+    /// Starts the simulator with the specified interval.
+    /// </summary>
+    /// <param name="interval">The interval in minutes for clock updates.</param>
+    public void StartSimulator(int interval) //stage 7
+    {
+        AdminManager.ThrowOnSimulatorIsRunning(); //stage 7
+        AdminManager.Start(interval); //stage 7
+    }
+    
+    /// <summary>
+    /// Stops the currently running simulator.
+    /// </summary>
+    public void StopSimulator() //stage 7
+        => AdminManager.Stop(); //stage 7
 }

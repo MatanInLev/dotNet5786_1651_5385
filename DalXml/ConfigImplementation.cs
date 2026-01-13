@@ -1,5 +1,6 @@
 ﻿using DalApi;
 using System;
+using System.Runtime.CompilerServices;
 
 namespace Dal;
 

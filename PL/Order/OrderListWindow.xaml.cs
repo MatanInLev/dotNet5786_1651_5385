@@ -15,6 +15,11 @@ namespace PL.Order
     {
         static readonly IBl s_bl = Factory.Get();
 
+        /// <summary>
+        /// Observer mutex to prevent concurrent observer callbacks - Stage 7
+        /// </summary>
+        private readonly ObserverMutex _observerMutex = new(); //stage 7
+
         public BO.OrderInList? SelectedOrder { get; set; }
 
         /// <summary>
@@ -62,11 +67,31 @@ namespace PL.Order
             QueryOrderList();
 
             // Subscribe to updates (if BL supports observers)
-            (s_bl.Order as IObservable)?.AddObserver(QueryOrderList);
+            (s_bl.Order as IObservable)?.AddObserver(ObserverCallback); //stage 7
 
             // Initialize status combobox to "All"
             if (cmbOrderStatus != null)
                 cmbOrderStatus.SelectedIndex = 0;
+        }
+
+        /// <summary>
+        /// Observer callback for list updates - Stage 7
+        /// </summary>
+        private void ObserverCallback()
+        {
+            // Stage 7: Check if already processing - if so, exit immediately
+            if (_observerMutex.CheckAndSetInProgress())
+                return;
+
+            try
+            {
+                // Use InvokeAsync to avoid blocking the BL thread (prevent deadlock)
+                Dispatcher.InvokeAsync(() => QueryOrderList());
+            }
+            finally
+            {
+                _observerMutex.UnsetInProgress();
+            }
         }
 
         /// <summary>
@@ -204,7 +229,7 @@ namespace PL.Order
 
         private void Window_Closed(object? sender, EventArgs e)
         {
-            (s_bl.Order as IObservable)?.RemoveObserver(QueryOrderList);
+            (s_bl.Order as IObservable)?.RemoveObserver(ObserverCallback); //stage 7
         }
     }
 }

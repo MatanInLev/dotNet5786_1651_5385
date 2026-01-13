@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="Admin Dashboard" Height="650" Width="700"
+        Title="Admin Dashboard" Height="700" Width="900"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Background="#F5F7FA"
         WindowStartupLocation="CenterScreen">
@@ -183,18 +183,69 @@
                             Click="btnResetDB_Click" 
                             Style="{StaticResource ModernButton}"
                             Background="#E74C3C"
-                            IsEnabled="{Binding DatabaseButtonsEnabled}"
-                            Margin="0,4"
-                            Height="38"/>
+                            Margin="0,3"
+                            Height="32"
+                            IsEnabled="{Binding DatabaseButtonsEnabled}"/>
 
-                    <!-- Database Status -->
-                    <TextBlock Text="{Binding DatabaseStatus}"
-                               FontSize="11"
-                               Foreground="#3498DB"
-                               TextWrapping="Wrap"
-                               Margin="0,10,0,0"
-                               MinHeight="40"
-                               VerticalAlignment="Top"/>
+                    <!-- Simulator Control - Stage 7 -->
+                    <TextBlock Text="Simulator" 
+                               FontSize="16" 
+                               FontWeight="Bold" 
+                               Foreground="#E74C3C"
+                               Margin="0,20,0,12"/>
+
+                    <!-- Simulator Status Display -->
+                    <Border Background="#FFEBEE" 
+                            CornerRadius="8" 
+                            Padding="12"
+                            Margin="0,0,0,10">
+                        <TextBlock Text="{Binding SimulatorStatus}"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="#C0392B"
+                                   HorizontalAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   TextAlignment="Center"/>
+                    </Border>
+
+                    <!-- Simulator Interval Input -->
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" 
+                                   Text="Interval:" 
+                                   FontSize="12" 
+                                   Foreground="#666"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,8,0"/>
+
+                        <TextBox Grid.Column="1" 
+                                 x:Name="txtSimulatorInterval"
+                                 Style="{StaticResource ModernTextBox}"
+                                 Text="{Binding SimulatorInterval, UpdateSourceTrigger=PropertyChanged}"
+                                 ToolTip="Clock advance in minutes per second"
+                                 HorizontalAlignment="Stretch"/>
+
+                        <TextBlock Grid.Column="2" 
+                                   Text="min/sec" 
+                                   FontSize="11" 
+                                   Foreground="#999"
+                                   VerticalAlignment="Center"
+                                   Margin="8,0,0,0"/>
+                    </Grid>
+
+                    <!-- Simulator Toggle Button -->
+                    <Button Content="{Binding SimulatorButtonText}" 
+                            Click="btnToggleSimulator_Click" 
+                            Style="{StaticResource ModernButton}"
+                            Background="{Binding SimulatorButtonBackground}"
+                            Margin="0,4"
+                            Height="40"/>
+
                 </StackPanel>
             </Border>
 
@@ -283,6 +334,7 @@
                             Background="#D35400"
                             Margin="0,3"
                             Height="32"/>
+
                 </StackPanel>
             </Border>
 

@@ -234,7 +234,6 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="200"/>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
                         <!-- Type Filter -->
@@ -291,14 +290,6 @@
                             <ComboBoxItem Content="Distance" Tag="distance"/>
                             <ComboBoxItem Content="Processing Time" Tag="processing"/>
                         </ComboBox>
-
-                        <!-- Refresh Button -->
-                        <Button Grid.Column="9"
-                                Content="Refresh" 
-                                Click="Refresh_Click"
-                                Style="{StaticResource ModernButton}"
-                                Background="#3498DB"
-                                MinWidth="110"/>
                     </Grid>
                 </Border>
 

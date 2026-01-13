@@ -8,21 +8,25 @@ internal class OrderImplementation : IOrder
 {
     public void Add(int userId, Order order)
     {
+        AdminManager.ThrowOnSimulatorIsRunning(); //stage 7
         OrderManager.Create(order);
     }
 
     public void Cancel(int userId, int orderId)
     {
+        AdminManager.ThrowOnSimulatorIsRunning(); //stage 7
         OrderManager.CancelOrder(orderId);
     }
 
     public void CompleteOrderDelivery(int userId, int deliveryId, DeliveryStatus status)
     {
+        AdminManager.ThrowOnSimulatorIsRunning(); //stage 7
         OrderManager.CompleteOrder(deliveryId, status);
     }
 
     public void Delete(int userId, int orderId)
     {
+        AdminManager.ThrowOnSimulatorIsRunning(); //stage 7
         OrderManager.Delete(orderId);
     }
 
@@ -43,10 +47,13 @@ internal class OrderImplementation : IOrder
 
     public void Update(int userId, Order order)
     {
+        AdminManager.ThrowOnSimulatorIsRunning(); //stage 7
         OrderManager.Update(order);
     }
+    
     public void AssignOrder(int userId, int orderId, int courierId)
     {
+        AdminManager.ThrowOnSimulatorIsRunning(); //stage 7
         OrderManager.AssignOrderToCourier(orderId, courierId);
     }
     public IEnumerable<ClosedDeliveryInList> GetClosedOrdersForCourier(int userId, int courierId, OrderType? typeFilter = null, string? sortProperty = null)
