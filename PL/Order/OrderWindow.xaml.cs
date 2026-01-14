@@ -324,10 +324,10 @@ namespace PL.Order
             if (_observerMutex.CheckAndSetInProgress())
                 return;
 
-            try
+            // Use InvokeAsync to avoid blocking the BL thread (prevent deadlock)
+            Dispatcher.InvokeAsync(() =>
             {
-                // Use InvokeAsync to avoid blocking the BL thread (prevent deadlock)
-                Dispatcher.InvokeAsync(() =>
+                try
                 {
                     if (CurrentOrder?.Id == 0) return;
 
@@ -335,7 +335,7 @@ namespace PL.Order
                     {
                         int adminId = s_bl.Admin.GetConfig().AdminId;
                         var updatedOrder = s_bl.Order.Get(adminId, CurrentOrder!.Id);
-                        
+
                         // Preserve user edits for editable fields by creating a new order with updated calculated fields
                         CurrentOrder = new BO.Order
                         {
@@ -362,12 +362,12 @@ namespace PL.Order
                         // Order was deleted or no longer accessible
                         Close();
                     }
-                });
-            }
-            finally
-            {
-                _observerMutex.UnsetInProgress();
-            }
+                }
+                finally
+                {
+                    _observerMutex.UnsetInProgress();
+                }
+            });
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

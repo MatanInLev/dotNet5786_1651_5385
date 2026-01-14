@@ -9,7 +9,8 @@
         Width="550"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Background="#F5F5F5">
+        Background="#F5F5F5"
+        Icon="Resources/delivery_icon.ico">
 
     <Grid Margin="50,30">
         <Grid.RowDefinitions>

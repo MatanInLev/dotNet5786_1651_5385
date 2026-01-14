@@ -97,28 +97,12 @@ internal class AdminImplementation : IAdmin
         AdminManager.Stop();
     }
 
-    public void AddClockObserver(Action clockObserver) =>
-    AdminManager.ClockUpdatedObservers += clockObserver;
-    public void RemoveClockObserver(Action clockObserver) =>
-    AdminManager.ClockUpdatedObservers -= clockObserver;
-    public void AddConfigObserver(Action configObserver) =>
-    AdminManager.ConfigUpdatedObservers += configObserver;
-    public void RemoveConfigObserver(Action configObserver) =>
-    AdminManager.ConfigUpdatedObservers -= configObserver;
-    
-    /// <summary>
-    /// Starts the simulator with the specified interval.
-    /// </summary>
-    /// <param name="interval">The interval in minutes for clock updates.</param>
-    public void StartSimulator(int interval) //stage 7
-    {
-        AdminManager.ThrowOnSimulatorIsRunning(); //stage 7
-        AdminManager.Start(interval); //stage 7
+        public void AddClockObserver(Action clockObserver) =>
+        AdminManager.ClockUpdatedObservers += clockObserver;
+        public void RemoveClockObserver(Action clockObserver) =>
+        AdminManager.ClockUpdatedObservers -= clockObserver;
+        public void AddConfigObserver(Action configObserver) =>
+        AdminManager.ConfigUpdatedObservers += configObserver;
+        public void RemoveConfigObserver(Action configObserver) =>
+        AdminManager.ConfigUpdatedObservers -= configObserver;
     }
-    
-    /// <summary>
-    /// Stops the currently running simulator.
-    /// </summary>
-    public void StopSimulator() //stage 7
-        => AdminManager.Stop(); //stage 7
-}

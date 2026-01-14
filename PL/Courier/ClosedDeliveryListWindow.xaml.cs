@@ -11,6 +11,11 @@ namespace PL.Courier
     {
         static readonly IBl s_bl = Factory.Get();
 
+        /// <summary>
+        /// Observer mutex to prevent concurrent observer callbacks
+        /// </summary>
+        private readonly ObserverMutex _observerMutex = new();
+
         public IEnumerable<ClosedDeliveryInList> ClosedDeliveries
         {
             get => (IEnumerable<ClosedDeliveryInList>)GetValue(ClosedDeliveriesProperty);
@@ -36,7 +41,22 @@ namespace PL.Courier
 
         private void OnOrderListUpdated()
         {
-            Dispatcher.InvokeAsync(async () => await QueryListAsync());
+            // Check if already processing - if so, exit immediately
+            if (_observerMutex.CheckAndSetInProgress())
+                return;
+
+            // Schedule UI update on dispatcher and properly handle mutex release
+            Dispatcher.InvokeAsync(async () =>
+            {
+                try
+                {
+                    await QueryListAsync();
+                }
+                finally
+                {
+                    _observerMutex.UnsetInProgress();
+                }
+            });
         }
 
         private async System.Threading.Tasks.Task QueryListAsync()

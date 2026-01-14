@@ -51,20 +51,21 @@ internal static class OrderManager
                     OrderType = (DO.OrderType)boOrder.Type
                 };
 
-                // 4. Save
-                try
-                {
-                    s_dal.Order.Create(doOrder);
-                    Logger.LogInfo($"Successfully created order for customer: {boOrder.CustomerName}");
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogError(ex, "Failed to create order in database");
-                    throw new BO.BlInvalidValueException("Failed to create order", ex);
-                }
+                    // 4. Save
+                    try
+                    {
+                        s_dal.Order.Create(doOrder);
+                        Logger.LogInfo($"Successfully created order for customer: {boOrder.CustomerName}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogError(ex, "Failed to create order in database");
+                        throw new BO.BlInvalidValueException("Failed to create order", ex);
+                    }
+                } //stage 7
 
+                // Notify observers AFTER releasing the lock to prevent deadlock
                 Observers.NotifyListUpdated();
-            } //stage 7
         }
         catch (BO.BlInvalidValueException)
         {
@@ -217,12 +218,13 @@ internal static class OrderManager
                     Longitude = lon
                 };
 
-                s_dal.Order.Update(updated);
-                Logger.LogInfo($"Successfully updated order {boOrder.Id}");
+                    s_dal.Order.Update(updated);
+                    Logger.LogInfo($"Successfully updated order {boOrder.Id}");
+                } //stage 7
 
+                // Notify observers AFTER releasing the lock to prevent deadlock
                 Observers.NotifyItemUpdated(boOrder.Id);
                 Observers.NotifyListUpdated();
-            } //stage 7
         }
         catch (BO.BlBaseException)
         {

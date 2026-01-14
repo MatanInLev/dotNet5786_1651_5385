@@ -10,7 +10,8 @@
         Width="1200"
         WindowStartupLocation="CenterOwner"
         Background="#F0F2F5"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Icon="/Resources/delivery_icon.ico">
 
     <Window.Resources>
         <!-- Modern Button Template -->
@@ -414,7 +415,7 @@
                         BorderBrush="#E9ECEF" 
                         BorderThickness="1"
                         ClipToBounds="True">
-                    <WebBrowser Name="wbMap" 
+                    <WebBrowser x:Name="wbMap" 
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"/>
                 </Border>

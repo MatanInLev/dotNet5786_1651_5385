@@ -11,7 +11,8 @@
         Title="Courier Details" Height="650" Width="550"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Background="#F5F7FA"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Icon="/Resources/delivery_icon.ico">
 
     <Window.Resources>
         <!-- Converters -->

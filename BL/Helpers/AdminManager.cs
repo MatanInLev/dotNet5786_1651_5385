@@ -127,8 +127,11 @@ internal static class AdminManager //stage 4
         {
             s_dal.ResetDB(); //stage 4
             AdminManager.UpdateClock(AdminManager.Now); //stage 5 - needed since we want the label on Pl to be updated
-            ConfigUpdatedObservers?.Invoke(); //stage 5 - needed to update PL 
         }
+        // Notify observers AFTER releasing the lock to prevent deadlock
+        ConfigUpdatedObservers?.Invoke(); //stage 5 - needed to update PL 
+        OrderManager.Observers.NotifyListUpdated(); // Notify order list observers
+        CourierManager.Observers.NotifyListUpdated(); // Notify courier list observers
     }
 
     internal static void InitializeDB() //stage 4-7
@@ -137,8 +140,11 @@ internal static class AdminManager //stage 4
         {
             DalTest.Initialization.Do(); //stage 4
             AdminManager.UpdateClock(AdminManager.Now);  //stage 5 - needed since we want the label on Pl to be updated           
-            ConfigUpdatedObservers?.Invoke(); //stage 5 - needed for update the PL
         }
+        // Notify observers AFTER releasing the lock to prevent deadlock
+        ConfigUpdatedObservers?.Invoke(); //stage 5 - needed for update the PL
+        OrderManager.Observers.NotifyListUpdated(); // Notify order list observers
+        CourierManager.Observers.NotifyListUpdated(); // Notify courier list observers
     }
 
     #endregion Stage 4-7

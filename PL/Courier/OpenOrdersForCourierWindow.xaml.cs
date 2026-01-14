@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using Microsoft.Win32;
 
 namespace PL.Courier
 {
@@ -14,6 +15,11 @@ namespace PL.Courier
         private readonly IBl _bl = Factory.Get();
         private readonly int _adminId;
         private readonly int _courierId;
+
+        /// <summary>
+        /// Observer mutex to prevent concurrent observer callbacks
+        /// </summary>
+        private readonly ObserverMutex _observerMutex = new();
 
         public ObservableCollection<OpenOrderInList> Orders { get; } = new();
 
@@ -27,7 +33,7 @@ namespace PL.Courier
                 {
                     _selectedType = value;
                     OnPropertyChanged();
-                    LoadData();
+                    _ = LoadDataAsync();
                 }
             }
         }
@@ -42,7 +48,7 @@ namespace PL.Courier
                 {
                     _selectedStatus = value;
                     OnPropertyChanged();
-                    LoadData();
+                    _ = LoadDataAsync();
                 }
             }
         }
@@ -64,7 +70,7 @@ namespace PL.Courier
         public record OrderTypeOption(OrderType? Value, string Label);
         public record ScheduleStatusOption(ScheduleStatus? Value, string Label);
 
-        private System.Collections.Generic.IEnumerable<OrderTypeOption> _orderTypeOptions;
+        private System.Collections.Generic.IEnumerable<OrderTypeOption> _orderTypeOptions = Array.Empty<OrderTypeOption>();
         public System.Collections.Generic.IEnumerable<OrderTypeOption> OrderTypeOptions
         {
             get => _orderTypeOptions;
@@ -75,7 +81,7 @@ namespace PL.Courier
             }
         }
 
-        private System.Collections.Generic.IEnumerable<ScheduleStatusOption> _scheduleStatusOptions;
+        private System.Collections.Generic.IEnumerable<ScheduleStatusOption> _scheduleStatusOptions = Array.Empty<ScheduleStatusOption>();
         public System.Collections.Generic.IEnumerable<ScheduleStatusOption> ScheduleStatusOptions
         {
             get => _scheduleStatusOptions;
@@ -97,72 +103,101 @@ namespace PL.Courier
 
         public OpenOrdersForCourierWindow(int adminId, int courierId)
         {
-            _adminId = adminId;
-            _courierId = courierId;
-            _vehicle = _bl.Courier.Get(_adminId, _courierId).Vehicle;
-            
-            // Create filter options with "All" as the first option BEFORE InitializeComponent
-            OrderTypeOptions = new[]
-            {
-                new OrderTypeOption(null, "All")
-            }.Concat(
-                Enum.GetValues(typeof(OrderType))
-                    .Cast<OrderType>()
-                    .Select(t => new OrderTypeOption(t, t.ToString()))
-            ).ToList();
+                _adminId = adminId;
+                _courierId = courierId;
+                _vehicle = _bl.Courier.Get(_adminId, _courierId).Vehicle;
 
-            ScheduleStatusOptions = new[]
-            {
-                new ScheduleStatusOption(null, "All")
-            }.Concat(
-                Enum.GetValues(typeof(ScheduleStatus))
-                    .Cast<ScheduleStatus>()
-                    .Select(s => new ScheduleStatusOption(s, s.ToString()))
-            ).ToList();
-            
-            InitializeComponent();
-            
-            // Set default selection to "All" (null value)
-            SelectedType = null;
-            SelectedStatus = null;
-            
-            System.Diagnostics.Debug.WriteLine($"[OpenOrdersForCourierWindow] Registering observer for order list");
-            (_bl.Order as IObservable)?.AddObserver(OnOrderListUpdated);
-            
-            LoadData();
-        }
-        
+                // Enable IE11 mode for WebBrowser control
+                SetBrowserEmulationVersion();
+
+                // Create filter options with "All" as the first option BEFORE InitializeComponent
+                OrderTypeOptions = new[]
+                {
+                    new OrderTypeOption(null, "All")
+                }.Concat(
+                    Enum.GetValues(typeof(OrderType))
+                        .Cast<OrderType>()
+                        .Select(t => new OrderTypeOption(t, t.ToString()))
+                ).ToList();
+
+                ScheduleStatusOptions = new[]
+                {
+                    new ScheduleStatusOption(null, "All")
+                }.Concat(
+                    Enum.GetValues(typeof(ScheduleStatus))
+                        .Cast<ScheduleStatus>()
+                        .Select(s => new ScheduleStatusOption(s, s.ToString()))
+                ).ToList();
+
+                InitializeComponent();
+
+                // Set default selection to "All" (null value)
+                SelectedType = null;
+                SelectedStatus = null;
+
+                System.Diagnostics.Debug.WriteLine($"[OpenOrdersForCourierWindow] Registering observer for order list");
+                (_bl.Order as IObservable)?.AddObserver(OnOrderListUpdated);
+
+                // Load data asynchronously after window loads to prevent UI freeze
+                Loaded += async (s, e) => await LoadDataAsync();
+            }
+
         private void OnOrderListUpdated()
         {
+            // Check if already processing - if so, exit immediately
+            if (_observerMutex.CheckAndSetInProgress())
+                return;
+
             System.Diagnostics.Debug.WriteLine($"[OpenOrdersForCourierWindow] Observer fired, refreshing order list");
-            Dispatcher.Invoke(() => LoadData());
+
+            // Schedule UI update on dispatcher and properly handle mutex release
+            Dispatcher.InvokeAsync(async () =>
+            {
+                try
+                {
+                    await LoadDataAsync();
+                }
+                finally
+                {
+                    _observerMutex.UnsetInProgress();
+                }
+            });
         }
 
-        private void LoadData()
+        private async System.Threading.Tasks.Task LoadDataAsync()
         {
             try
             {
                 System.Diagnostics.Debug.WriteLine($"[OpenOrdersForCourierWindow] Loading orders for courier {_courierId}, type filter: {SelectedType?.ToString() ?? "All"}, status filter: {SelectedStatus?.ToString() ?? "All"}");
-                Orders.Clear();
-                var list = _bl.Order.GetOpenOrdersForCourier(_adminId, _courierId, SelectedType, null);
-                
-                // Apply client-side ScheduleStatus filter if selected
-                if (SelectedStatus.HasValue)
+
+                IEnumerable<BO.OpenOrderInList>? list = null;
+
+                // Run BL query on background thread
+                await System.Threading.Tasks.Task.Run(() =>
                 {
-                    list = list.Where(o => o.ScheduleStatus == SelectedStatus.Value);
-                }
-                
-                // Sort by priority: Risk first, then Late, then OnTime
-                list = list.OrderBy(o => o.ScheduleStatus switch
-                {
-                    ScheduleStatus.Risk => 0,
-                    ScheduleStatus.Late => 1,
-                    ScheduleStatus.OnTime => 2,
-                    _ => 3
+                    list = _bl.Order.GetOpenOrdersForCourier(_adminId, _courierId, SelectedType, null);
+
+                    // Apply client-side ScheduleStatus filter if selected
+                    if (SelectedStatus.HasValue)
+                    {
+                        list = list.Where(o => o.ScheduleStatus == SelectedStatus.Value);
+                    }
+
+                    // Sort by priority: Risk first, then Late, then OnTime
+                    list = list.OrderBy(o => o.ScheduleStatus switch
+                    {
+                        ScheduleStatus.Risk => 0,
+                        ScheduleStatus.Late => 1,
+                        ScheduleStatus.OnTime => 2,
+                        _ => 3
+                    });
                 });
-                
-                foreach (var o in list)
+
+                // Update UI on UI thread
+                Orders.Clear();
+                foreach (var o in list!)
                     Orders.Add(o);
+
                 System.Diagnostics.Debug.WriteLine($"[OpenOrdersForCourierWindow] Loaded {Orders.Count} orders");
             }
             catch (Exception ex)
@@ -189,20 +224,28 @@ namespace PL.Courier
                         _bl.Order.AssignOrder(_adminId, orderId, _courierId);
                     });
 
-                    ModernMessageBox.Show($"Order {orderId} assigned.", "Success", ModernMessageBox.MessageBoxType.Success, ModernMessageBox.MessageBoxButtons.OK, this);
-                    DialogResult = true;
-                    Close();
+                    // Use Dispatcher.InvokeAsync to ensure UI updates happen on the UI thread
+                    await Dispatcher.InvokeAsync(() =>
+                    {
+                        ModernMessageBox.Show($"Order {orderId} assigned.", "Success", ModernMessageBox.MessageBoxType.Success, ModernMessageBox.MessageBoxButtons.OK, this);
+                        DialogResult = true;
+                        Close();
+                    });
                 }
             }
             catch (Exception ex)
             {
-                ModernMessageBox.Show($"Unable to assign: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
-                
-                // Re-enable the button if there was an error
-                if (sender is System.Windows.Controls.Button btn)
+                // Use Dispatcher.InvokeAsync for error handling as well
+                await Dispatcher.InvokeAsync(() =>
                 {
-                    btn.IsEnabled = true;
-                }
+                    ModernMessageBox.Show($"Unable to assign: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
+
+                    // Re-enable the button if there was an error
+                    if (sender is System.Windows.Controls.Button btn)
+                    {
+                        btn.IsEnabled = true;
+                    }
+                });
             }
         }
 
@@ -235,6 +278,29 @@ namespace PL.Courier
             base.OnClosed(e);
         }
 
+        private void SetBrowserEmulationVersion()
+        {
+            try
+            {
+                var appName = System.IO.Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule?.FileName ?? "");
+                var featureControl = @"SOFTWARE\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION";
+
+                using (var key = Registry.CurrentUser.CreateSubKey(featureControl, true))
+                {
+                    if (key != null)
+                    {
+                        // 11001 = IE11 edge mode
+                        key.SetValue(appName, 11001, RegistryValueKind.DWord);
+                        System.Diagnostics.Debug.WriteLine($"[OpenOrdersForCourierWindow] Set browser emulation to IE11 for {appName}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"[OpenOrdersForCourierWindow] Could not set browser emulation: {ex.Message}");
+            }
+        }
+
         private void ShowMapForSelection(OpenOrderInList? sel)
         {
             if (sel == null) return;
@@ -245,9 +311,8 @@ namespace PL.Courier
             double ordLon = sel.Longitude;
 
             double routeDistanceKm = sel.DistanceFromCompany;
-            
+
             // Use cached route distance if available, otherwise use aerial distance
-            // Don't make network calls on UI thread
             var cacheKey = (
                 Math.Round(compLat, 4),
                 Math.Round(compLon, 4),
@@ -255,96 +320,131 @@ namespace PL.Courier
                 Math.Round(ordLon, 4),
                 _vehicle
             );
-            
+
             if (BO.Tools.TryGetCachedRouteDistance(cacheKey.Item1, cacheKey.Item2, cacheKey.Item3, cacheKey.Item4, cacheKey.Item5, out double cached))
             {
                 routeDistanceKm = cached;
             }
 
-            // Simple simulated route polyline between points to visualize driving/walking/bike
-            // Build a couple of intermediate points to mimic a route instead of a straight line
-            double midLat = (compLat + ordLat) / 2.0 + 0.005;
-            double midLon = (compLon + ordLon) / 2.0 - 0.005;
+                        // Update the map with the selected order location
+                        ShowLeafletMap(compLat, compLon, ordLat, ordLon, routeDistanceKm);
+                    }
 
-            string vehicleColor = _vehicle switch
-            {
-                BO.Vehicle.Car => "#2E86DE",
-                BO.Vehicle.Motorcycle => "#8E44AD",
-                BO.Vehicle.Bicycle => "#27AE60",
-                BO.Vehicle.Foot => "#E67E22",
-                _ => "#2E86DE"
-            };
+                        private void ShowLeafletMap(double compLat, double compLon, double ordLat, double ordLon, double routeDistanceKm)
+                        {
+                            string vehicleColor = _vehicle switch
+                            {
+                                BO.Vehicle.Car => "#2E86DE",
+                                BO.Vehicle.Motorcycle => "#8E44AD",
+                                BO.Vehicle.Bicycle => "#27AE60",
+                                BO.Vehicle.Foot => "#E67E22",
+                                _ => "#2E86DE"
+                            };
 
-            string summary = $"Company: {compLat:F4},{compLon:F4} | Order: {ordLat:F4},{ordLon:F4} | Vehicle: {_vehicle} | Route: {routeDistanceKm:F2} km";
+                            string vehicleIcon = _vehicle switch
+                            {
+                                BO.Vehicle.Car => "🚗",
+                                BO.Vehicle.Motorcycle => "🏍️",
+                                BO.Vehicle.Bicycle => "🚴",
+                                BO.Vehicle.Foot => "🚶",
+                                _ => "📍"
+                            };
 
-            string html = $@"<html>
-  <head>
-    <meta http-equiv='X-UA-Compatible' content='IE=Edge'/>
-    <style>
-      html, body {{
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        font-family: Segoe UI, Arial;
-      }}
-      .container {{
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        padding: 10px;
-        box-sizing: border-box;
-      }}
-      h4 {{
-        margin: 0 0 8px 0;
-        font-size: 60px;
-        color: #2C3E50;
-      }}
-      .label {{
-        font-size: 50px;
-        color: #495057;
-        margin-bottom: 10px;
-      }}
-      .map-container {{
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 0;
-      }}
-      svg {{
-        width: 100%;
-        height: 100%;
-        max-width: 100%;
-        max-height: 100%;
-      }}
-    </style>
-  </head>
-  <body>
-    <div class='container'>
-      <h4>Map (demo)</h4>
-      <div class='label'>{summary}</div>
-      <div class='map-container'>
-        <svg viewBox='0 0 900 260' preserveAspectRatio='xMidYMid meet' xmlns='http://www.w3.org/2000/svg'>
-          <!-- Aerial line -->
-          <line x1='80' y1='180' x2='820' y2='60' stroke='gray' stroke-width='1.5' stroke-dasharray='4'/>
-          <!-- Simulated route polyline -->
-          <polyline points='80,180 450,200 820,60' fill='none' stroke='{vehicleColor}' stroke-width='3' stroke-linejoin='round' stroke-linecap='round' />
-          <circle cx='80' cy='180' r='7' fill='green' />
-          <text x='85' y='165' font-size='30'>Company ({compLat:F4},{compLon:F4})</text>
-          <circle cx='820' cy='60' r='7' fill='red' />
-          <text x='640' y='45' font-size='30'>Order ({ordLat:F4},{ordLon:F4})</text>
-          <text x='360' y='225' font-size='30'>Aerial distance: {sel.DistanceFromCompany:F2} km</text>
-          <text x='360' y='255' font-size='30'>Route distance: {routeDistanceKm:F2} km</text>
-          <text x='360' y='285' font-size='30'>(mode: {_vehicle})</text>
-        </svg>
-      </div>
-    </div>
-  </body>
-</html>
-";
+                                                                string html = $@"<!DOCTYPE html>
+                                    <html>
+                                    <head>
+                                        <meta http-equiv='X-UA-Compatible' content='IE=11' />
+                                        <meta charset='utf-8' />
+                                        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                                        <title>Order Map</title>
+                                        <link rel='stylesheet' href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css' 
+                                              integrity='sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY='
+                                              crossorigin='' />
+                                        <script src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
+                                                integrity='sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo='
+                                                crossorigin=''></script>
+                                        <style>
+                                            html, body {{
+                                                height: 100%;
+                                                margin: 0;
+                                                padding: 0;
+                                            }}
+                                            #map {{
+                                                width: 100%;
+                                                height: 100%;
+                                            }}
+                                        </style>
+                                    </head>
+                                    <body>
+                                        <div id='map'></div>
+                                        <script>
+                                            var map = L.map('map');
 
-            wbMap.NavigateToString(html);
-        }
-    }
-}
+                                            // Add OpenStreetMap tile layer
+                                            L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
+                                                attribution: '© OpenStreetMap contributors',
+                                                maxZoom: 19
+                                            }}).addTo(map);
+
+                                            // Company marker (green)
+                                            var companyMarker = L.marker([{compLat.ToString(System.Globalization.CultureInfo.InvariantCulture)}, {compLon.ToString(System.Globalization.CultureInfo.InvariantCulture)}], {{
+                                                icon: L.divIcon({{
+                                                    html: '<div style=""background-color: #28a745; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);""></div>',
+                                                    className: 'custom-marker',
+                                                    iconSize: [24, 24],
+                                                    iconAnchor: [12, 12]
+                                                }})
+                                            }}).addTo(map);
+                                            companyMarker.bindPopup('<b>Company Location</b><br>Start Point');
+
+                                            // Order marker (red)
+                                            var orderMarker = L.marker([{ordLat.ToString(System.Globalization.CultureInfo.InvariantCulture)}, {ordLon.ToString(System.Globalization.CultureInfo.InvariantCulture)}], {{
+                                                icon: L.divIcon({{
+                                                    html: '<div style=""background-color: #dc3545; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);""></div>',
+                                                    className: 'custom-marker',
+                                                    iconSize: [24, 24],
+                                                    iconAnchor: [12, 12]
+                                                }})
+                                            }}).addTo(map);
+                                            orderMarker.bindPopup('<b>Order Destination</b><br>Delivery Point');
+
+                                            // Draw straight line between company and order location
+                                            var straightLine = L.polyline([
+                                                [{compLat.ToString(System.Globalization.CultureInfo.InvariantCulture)}, {compLon.ToString(System.Globalization.CultureInfo.InvariantCulture)}],
+                                                [{ordLat.ToString(System.Globalization.CultureInfo.InvariantCulture)}, {ordLon.ToString(System.Globalization.CultureInfo.InvariantCulture)}]
+                                            ], {{
+                                                color: '{vehicleColor}',
+                                                weight: 4,
+                                                opacity: 0.7,
+                                                dashArray: '10, 10'
+                                            }}).addTo(map);
+
+                                            // Fit bounds to show all markers
+                                            var bounds = L.latLngBounds([
+                                                [{compLat.ToString(System.Globalization.CultureInfo.InvariantCulture)}, {compLon.ToString(System.Globalization.CultureInfo.InvariantCulture)}],
+                                                [{ordLat.ToString(System.Globalization.CultureInfo.InvariantCulture)}, {ordLon.ToString(System.Globalization.CultureInfo.InvariantCulture)}]
+                                            ]);
+                                            map.fitBounds(bounds, {{ padding: [50, 50] }});
+
+                                            // Add info panel
+                                            var info = L.control({{ position: 'bottomright' }});
+                                            info.onAdd = function(map) {{
+                                                var div = L.DomUtil.create('div', 'info-panel');
+                                                div.style.background = 'white';
+                                                div.style.padding = '10px';
+                                                div.style.borderRadius = '8px';
+                                                div.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+                                                div.style.fontSize = '12px';
+                                                div.innerHTML = '<b>{vehicleIcon} Vehicle: {_vehicle}</b><br>' +
+                                                               'Distance: <b>{routeDistanceKm.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)} km</b>';
+                                                return div;
+                                            }};
+                                            info.addTo(map);
+                                        </script>
+                                    </body>
+                                    </html>";
+
+                                                                wbMap.NavigateToString(html);
+                                                            }
+                }
+            }

@@ -1,0 +1,79 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!-- Delivery Truck Icon -->
+    <DrawingImage x:Key="DeliveryIcon">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <!-- Truck Body -->
+                <GeometryDrawing Brush="#FF5722">
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="10,30,50,35" RadiusX="3" RadiusY="3"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                
+                <!-- Truck Cabin -->
+                <GeometryDrawing Brush="#D84315">
+                    <GeometryDrawing.Geometry>
+                        <PathGeometry>
+                            <PathFigure StartPoint="10,30">
+                                <LineSegment Point="10,15"/>
+                                <LineSegment Point="25,15"/>
+                                <LineSegment Point="30,30"/>
+                                <LineSegment Point="10,30"/>
+                            </PathFigure>
+                        </PathGeometry>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                
+                <!-- Window -->
+                <GeometryDrawing Brush="#E3F2FD">
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="13,18,10,8" RadiusX="1" RadiusY="1"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                
+                <!-- Front Wheel -->
+                <GeometryDrawing Brush="#424242">
+                    <GeometryDrawing.Geometry>
+                        <EllipseGeometry Center="25,68" RadiusX="7" RadiusY="7"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                
+                <!-- Back Wheel -->
+                <GeometryDrawing Brush="#424242">
+                    <GeometryDrawing.Geometry>
+                        <EllipseGeometry Center="52,68" RadiusX="7" RadiusY="7"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                
+                <!-- Wheel Centers (white) -->
+                <GeometryDrawing Brush="#FFFFFF">
+                    <GeometryDrawing.Geometry>
+                        <EllipseGeometry Center="25,68" RadiusX="3" RadiusY="3"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing Brush="#FFFFFF">
+                    <GeometryDrawing.Geometry>
+                        <EllipseGeometry Center="52,68" RadiusX="3" RadiusY="3"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                
+                <!-- Package Icon on truck body -->
+                <GeometryDrawing Brush="#FFD54F">
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="40,38,12,12" RadiusX="1" RadiusY="1"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                
+                <!-- Package tape -->
+                <GeometryDrawing Brush="#FFA726">
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="45,38,2,12"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    
+</ResourceDictionary>

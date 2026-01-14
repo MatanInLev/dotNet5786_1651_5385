@@ -4,7 +4,13 @@
              xmlns:local="clr-namespace:PL"
              StartupUri="LoginWindow.xaml">
     <Application.Resources>
-        <local:ActiveFilterCollection x:Key="ActiveFilterCollectionKey" />
-        <local:DateTimeFormatConverter x:Key="DateTimeFormatConverterKey"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/AppIcon.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <local:ActiveFilterCollection x:Key="ActiveFilterCollectionKey" />
+            <local:DateTimeFormatConverter x:Key="DateTimeFormatConverterKey"/>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

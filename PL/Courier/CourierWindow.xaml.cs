@@ -173,12 +173,13 @@ namespace PL.Courier
                 }
 
                 int adminId = s_bl.Admin.GetConfig().AdminId;
-                
+                int courierIdToDelete = CurrentCourier.Id;
+
                 await System.Threading.Tasks.Task.Run(() =>
                 {
-                    s_bl.Courier.Delete(adminId, CurrentCourier.Id);
+                    s_bl.Courier.Delete(adminId, courierIdToDelete);
                 });
-                
+
                 ModernMessageBox.Show("Courier deleted successfully!", "Success", ModernMessageBox.MessageBoxType.Success, ModernMessageBox.MessageBoxButtons.OK, this);
                 Close();
             }
@@ -233,9 +234,12 @@ namespace PL.Courier
 
                 if (ButtonText == "Add")
                 {
+                    // Create a local copy to avoid cross-thread access issues
+                    var courierToAdd = CurrentCourier;
+
                     await System.Threading.Tasks.Task.Run(() =>
                     {
-                        s_bl.Courier.Add(adminId, CurrentCourier);
+                        s_bl.Courier.Add(adminId, courierToAdd);
                     });
 
                     ModernMessageBox.Show("Courier added successfully!", "Success", ModernMessageBox.MessageBoxType.Success, ModernMessageBox.MessageBoxButtons.OK, this);
@@ -287,11 +291,14 @@ namespace PL.Courier
                         }
                     }
 
+                    // Create a local copy to avoid cross-thread access issues
+                    var courierToUpdate = CurrentCourier;
+
                     await System.Threading.Tasks.Task.Run(() =>
                     {
-                        s_bl.Courier.Update(adminId, CurrentCourier);
+                        s_bl.Courier.Update(adminId, courierToUpdate);
                     });
-                    
+
                     ModernMessageBox.Show("Courier updated successfully!", "Success", ModernMessageBox.MessageBoxType.Success, ModernMessageBox.MessageBoxButtons.OK, this);
                 }
                 Close();
@@ -355,12 +362,12 @@ namespace PL.Courier
             if (_observerMutex.CheckAndSetInProgress())
                 return;
 
-            try
+            System.Diagnostics.Debug.WriteLine($"[CourierWindow] Observer fired for courier {CurrentCourier?.Id} at {DateTime.Now:HH:mm:ss.fff}");
+
+            // Use InvokeAsync to avoid blocking the BL thread (prevent deadlock)
+            Dispatcher.InvokeAsync(async () =>
             {
-                System.Diagnostics.Debug.WriteLine($"[CourierWindow] Observer fired for courier {CurrentCourier?.Id} at {DateTime.Now:HH:mm:ss.fff}");
-                
-                // Use InvokeAsync to avoid blocking the BL thread (prevent deadlock)
-                Dispatcher.InvokeAsync(async () =>
+                try
                 {
                     if (CurrentCourier?.Id == 0) return;
 
@@ -368,14 +375,14 @@ namespace PL.Courier
                     {
                         int adminId = s_bl.Admin.GetConfig().AdminId;
                         BO.Courier? updatedCourier = null;
-                        
+
                         await System.Threading.Tasks.Task.Run(() =>
                         {
                             updatedCourier = s_bl.Courier.Get(adminId, CurrentCourier!.Id);
                         });
-                        
+
                         System.Diagnostics.Debug.WriteLine($"[CourierWindow] Refreshing courier {CurrentCourier.Id}: {updatedCourier?.Name}");
-                        
+
                         // Replace the entire object and update the original
                         _originalCourier = updatedCourier;
                         CurrentCourier = CloneCourier(updatedCourier!);
@@ -386,12 +393,12 @@ namespace PL.Courier
                         // Courier was deleted or no longer accessible
                         Close();
                     }
-                });
-            }
-            finally
-            {
-                _observerMutex.UnsetInProgress();
-            }
+                }
+                finally
+                {
+                    _observerMutex.UnsetInProgress();
+                }
+            });
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

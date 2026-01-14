@@ -61,14 +61,18 @@ namespace PL.Courier
             if (_observerMutex.CheckAndSetInProgress())
                 return;
 
-            try
+            // Schedule UI update on dispatcher and properly handle mutex release
+            Dispatcher.InvokeAsync(async () =>
             {
-                Dispatcher.InvokeAsync(async () => await QueryCourierListAsync());
-            }
-            finally
-            {
-                _observerMutex.UnsetInProgress();
-            }
+                try
+                {
+                    await QueryCourierListAsync();
+                }
+                finally
+                {
+                    _observerMutex.UnsetInProgress();
+                }
+            });
         }
 
         /// <summary>

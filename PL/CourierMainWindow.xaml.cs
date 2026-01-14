@@ -149,11 +149,8 @@ namespace PL.Courier
 
         private void CourierMainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            if (CurrentCourier != null)
-            {
-                (s_bl.Courier as IObservable)?.AddObserver(_courierId, OnCourierUpdated);
-                _observerRegistered = true;
-            }
+            // Observer registration moved to constructor's Loaded handler
+            // after RefreshAsync completes
         }
 
         private void CourierMainWindow_Closed(object? sender, EventArgs e)
@@ -174,14 +171,18 @@ namespace PL.Courier
             if (_observerMutex.CheckAndSetInProgress())
                 return;
 
-            try
+            // Schedule UI update on dispatcher and properly handle mutex release
+            Dispatcher.InvokeAsync(async () =>
             {
-                Dispatcher.InvokeAsync(async () => await RefreshAsync());
-            }
-            finally
-            {
-                _observerMutex.UnsetInProgress();
-            }
+                try
+                {
+                    await RefreshAsync();
+                }
+                finally
+                {
+                    _observerMutex.UnsetInProgress();
+                }
+            });
         }
 
         private void BtnHistory_Click(object sender, RoutedEventArgs e)
@@ -219,14 +220,32 @@ namespace PL.Courier
                     return;
                 }
 
+                // Disable the button to prevent multiple clicks
+                if (sender is System.Windows.Controls.Button btn)
+                {
+                    btn.IsEnabled = false;
+                }
+
                 var win = new Courier.OpenOrdersForCourierWindow(_adminId, _courierId) { Owner = this };
                 win.ShowDialog();
-                
+
                 await RefreshAsync();
+
+                // Re-enable the button after refresh
+                if (sender is System.Windows.Controls.Button btn2)
+                {
+                    btn2.IsEnabled = true;
+                }
             }
             catch (Exception ex)
             {
                 ModernMessageBox.Show($"Error opening orders: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
+
+                // Re-enable the button on error
+                if (sender is System.Windows.Controls.Button btn)
+                {
+                    btn.IsEnabled = true;
+                }
             }
         }
 

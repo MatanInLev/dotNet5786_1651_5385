@@ -12,7 +12,8 @@
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Background="#F5F7FA"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="CanResize">
+        ResizeMode="CanResize"
+        Icon="/Resources/delivery_icon.ico">
 
     <Window.Resources>
         <!-- BoolToVis Converter -->

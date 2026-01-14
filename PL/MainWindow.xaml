@@ -5,10 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="Admin Dashboard" Height="700" Width="900"
+        Title="Admin Dashboard" Height="720" Width="650"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Background="#F5F7FA"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Icon="Resources/delivery_icon.ico">
 
     <Window.Resources>
         <!-- Modern Button Template -->

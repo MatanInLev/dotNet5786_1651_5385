@@ -83,15 +83,18 @@ namespace PL.Order
             if (_observerMutex.CheckAndSetInProgress())
                 return;
 
-            try
+            // Schedule UI update on dispatcher and properly handle mutex release
+            Dispatcher.InvokeAsync(() =>
             {
-                // Use InvokeAsync to avoid blocking the BL thread (prevent deadlock)
-                Dispatcher.InvokeAsync(() => QueryOrderList());
-            }
-            finally
-            {
-                _observerMutex.UnsetInProgress();
-            }
+                try
+                {
+                    QueryOrderList();
+                }
+                finally
+                {
+                    _observerMutex.UnsetInProgress();
+                }
+            });
         }
 
         /// <summary>

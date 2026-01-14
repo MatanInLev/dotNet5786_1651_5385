@@ -9,10 +9,11 @@
         xmlns:sys="clr-namespace:System;assembly=System.Runtime"
         mc:Ignorable="d"
         Title="Order Management" 
-        Height="750" 
-        Width="1200"
+        Height="800" 
+        Width="1000"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Background="#F0F2F5"
+        Icon="/Resources/delivery_icon.ico"
         WindowStartupLocation="CenterScreen"> 
     
     <Window.Resources>
@@ -194,7 +195,7 @@
             <Setter Property="CanUserDeleteRows" Value="False"/>
             <Setter Property="SelectionMode" Value="Single"/>
             <Setter Property="FontSize" Value="13"/>
-            <Setter Property="RowHeight" Value="48"/>
+            <Setter Property="RowHeight" Value="36"/>
         </Style>
 
         <!-- DataGrid Column Header Style -->
@@ -203,7 +204,7 @@
             <Setter Property="Foreground" Value="#495057"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Padding" Value="16,12"/>
+            <Setter Property="Padding" Value="12,8"/>
             <Setter Property="BorderThickness" Value="0,0,0,2"/>
             <Setter Property="BorderBrush" Value="#E9ECEF"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
@@ -212,7 +213,7 @@
         <!-- DataGrid Cell Style -->
         <Style x:Key="ModernCell" TargetType="DataGridCell">
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="16,0"/>
+            <Setter Property="Padding" Value="12,0"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="DataGridCell">
@@ -249,7 +250,7 @@
         </Style>
     </Window.Resources>
     
-    <Grid Margin="24">
+    <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -260,7 +261,7 @@
         <!-- Header with Gradient -->
         <Border Grid.Row="0" 
                 CornerRadius="12"
-                Margin="0,0,0,20">
+                Margin="0,0,0,15">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                     <GradientStop Color="#FF5722" Offset="0"/>
@@ -295,7 +296,7 @@
         </Border>
 
         <!-- Filter Panel -->
-        <Border Grid.Row="1" Style="{StaticResource CardPanel}" Margin="0,0,0,20">
+        <Border Grid.Row="1" Style="{StaticResource CardPanel}" Margin="0,0,0,15">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>

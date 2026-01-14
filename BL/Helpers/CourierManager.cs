@@ -236,7 +236,6 @@ internal static class CourierManager
                 {
                     s_dal.Courier.Create(doCourier);
                     Logger.LogInfo($"Successfully created courier {boCourier.Id}");
-                    Observers.NotifyListUpdated();
                 }
                 catch (DO.DalAlreadyExistsException ex)
                 {
@@ -244,6 +243,9 @@ internal static class CourierManager
                     throw new BO.BlAlreadyExistsException($"Courier with ID {boCourier.Id} already exists.", ex);
                 }
             } //stage 7
+
+            // Notify observers AFTER releasing the lock to prevent deadlock
+            Observers.NotifyListUpdated();
         }
         catch (BO.BlBaseException)
         {
@@ -436,14 +438,17 @@ internal static class CourierManager
                     Distance = boCourier.MaxDistance
                 };
 
-                // 6. Update in DAL
-                s_dal.Courier.Update(updatedCourier);
-                Logger.LogInfo($"Successfully updated courier {boCourier.Id}");
+                    // 6. Update in DAL
+                    System.Diagnostics.Debug.WriteLine($"[CourierManager] Updating courier {boCourier.Id} with name: {updatedCourier.Name}");
+                    s_dal.Courier.Update(updatedCourier);
+                    Logger.LogInfo($"Successfully updated courier {boCourier.Id}");
+                    System.Diagnostics.Debug.WriteLine($"[CourierManager] DAL Update completed for courier {boCourier.Id}");
+                } //stage 7
 
+                // Notify observers AFTER releasing the lock to prevent deadlock
                 System.Diagnostics.Debug.WriteLine($"[CourierManager] Notifying observers for courier {boCourier.Id}");
                 Observers.NotifyItemUpdated(boCourier.Id);
                 Observers.NotifyListUpdated();
-            } //stage 7
         }
         catch (BO.BlBaseException)
         {
@@ -489,17 +494,19 @@ internal static class CourierManager
                 s_dal.Delivery.Delete(delivery.Id);
             }
 
-            // 3. Perform Delete
-            try
-            {
-                s_dal.Courier.Delete(courierId);
-                Observers.NotifyListUpdated(); // notify PL to refresh lists after delete
-            }
-            catch (DO.DalDoesNotExistException ex)
-            {
-                throw new BO.BlDoesNotExistException($"Courier {courierId} does not exist.", ex);
-            }
-        } //stage 7
+                // 3. Perform Delete
+                try
+                {
+                    s_dal.Courier.Delete(courierId);
+                }
+                catch (DO.DalDoesNotExistException ex)
+                {
+                    throw new BO.BlDoesNotExistException($"Courier {courierId} does not exist.", ex);
+                }
+            } //stage 7
+
+            // Notify observers AFTER releasing the lock to prevent deadlock
+            Observers.NotifyListUpdated();
     }
 
     /// <summary>

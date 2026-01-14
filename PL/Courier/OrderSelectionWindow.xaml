@@ -7,7 +7,8 @@
         Width="1200"
         WindowStartupLocation="CenterOwner"
         Background="#F0F2F5"
-        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        Icon="/Resources/delivery_icon.ico">
     
     <Window.Resources>
         <!-- Modern Button Template -->
@@ -332,8 +333,8 @@
                             <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="90"/>
                             <DataGridTextColumn Header="Distance" Binding="{Binding DistanceFromCompany, StringFormat={}{0:F2} km}" Width="90"/>
                             <DataGridTextColumn Header="Schedule" Binding="{Binding ScheduleStatus}" Width="90"/>
-                            <DataGridTextColumn Header="Time Left" Binding="{Binding TimeLeft, StringFormat={}{0:hh\\:mm\\:ss}}" Width="100"/>
-                            <DataGridTextColumn Header="Max Delivery" Binding="{Binding MaxDeliveryDate, StringFormat={}{0:MMM dd, HH:mm}}" Width="120"/>
+                            <DataGridTextColumn Header="Time Left" Binding="{Binding TimeLeft, StringFormat='hh\\:mm\\:ss'}" Width="100"/>
+                            <DataGridTextColumn Header="Max Delivery" Binding="{Binding MaxDeliveryDate, StringFormat='MMM dd, HH:mm'}" Width="120"/>
                             <DataGridTemplateColumn Header="Action" Width="100">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>

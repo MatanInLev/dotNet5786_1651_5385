@@ -56,6 +56,8 @@ internal class CourierImplementation : ICourier
     [MethodImpl(MethodImplOptions.Synchronized)]
     public void Update(Courier item)
     {
+        System.Diagnostics.Debug.WriteLine($"[DalXml.Courier] Update called for courier {item.Id} with name: {item.Name}");
+
         // Load the current list from XML
         List<Courier> couriers = XMLTools.LoadListFromXMLSerializer<Courier>(Config.courier_file_name);
 
@@ -64,11 +66,15 @@ internal class CourierImplementation : ICourier
         if (idx == -1)
             throw new DalDoesNotExistException($"Courier with ID {item.Id} does not exist.");
 
+        System.Diagnostics.Debug.WriteLine($"[DalXml.Courier] Found courier at index {idx}, old name: {couriers[idx].Name}, new name: {item.Name}");
+
         // Replace the old item with the new item
         couriers[idx] = item;
 
         // Save the updated list back to XML
         XMLTools.SaveListToXMLSerializer(couriers, Config.courier_file_name);
+
+        System.Diagnostics.Debug.WriteLine($"[DalXml.Courier] Successfully saved courier {item.Id} to XML");
     }
     [MethodImpl(MethodImplOptions.Synchronized)]
     public void Delete(int id)

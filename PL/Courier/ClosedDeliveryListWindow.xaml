@@ -8,7 +8,8 @@
         Width="1100"
         WindowStartupLocation="CenterOwner"
         Background="#F0F2F5"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Icon="/Resources/delivery_icon.ico">
     
     <Window.Resources>
         <ObjectDataProvider x:Key="OrderTypeCollection" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">

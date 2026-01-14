@@ -12,7 +12,8 @@
         ResizeMode="NoResize"
         Background="Transparent"
         AllowsTransparency="True"
-        WindowStyle="None">
+        WindowStyle="None"
+        Icon="/Resources/delivery_icon.ico">
     
     <Window.Resources>
         <!-- Modern Button Template -->
