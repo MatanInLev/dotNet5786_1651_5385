@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <config>
-  <NextOrderId>8098</NextOrderId>
+  <NextOrderId>8298</NextOrderId>
   <NextCourierId>0</NextCourierId>
-  <NextDeliveryId>5675</NextDeliveryId>
-  <Clock>2026-01-14T19:02:57.7521763+02:00</Clock>
+  <NextDeliveryId>5859</NextDeliveryId>
+  <Clock>2026-01-15T14:29:12.1184129+02:00</Clock>
   <MaxRange>0</MaxRange>
   <AdminId>12345678</AdminId>
   <CompanyAddress></CompanyAddress>

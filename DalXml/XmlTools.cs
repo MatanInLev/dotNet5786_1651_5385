@@ -126,51 +126,66 @@ static class XMLTools
     {
         string xmlFilePath = s_xmlDir + xmlFileName;
 
-        try
-        {
-            if (File.Exists(xmlFilePath))
-            {
-                // Use FileStream with FileShare.Read to allow concurrent access
-                using FileStream file = new(xmlFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
-                return XElement.Load(file);
-            }
-            
-            // File doesn't exist - create it with retry logic
-            XElement rootElem = new(xmlFileName);
-            
-            // Retry logic for initial file creation
-            int maxRetries = 3;
-            int delayMs = 100;
+        // Retry logic for reading to handle concurrent access
+        int maxRetries = 10;
+        int delayMs = 30;
 
-            for (int attempt = 0; attempt < maxRetries; attempt++)
+        for (int attempt = 0; attempt < maxRetries; attempt++)
+        {
+            try
             {
-                try
+                if (File.Exists(xmlFilePath))
                 {
-                    if (attempt > 0)
-                    {
-                        GC.Collect();
-                        GC.WaitForPendingFinalizers();
-                        Thread.Sleep(delayMs * attempt);
+                    // Use FileStream with FileShare.Read to allow concurrent access
+                    using FileStream file = new(xmlFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                    return XElement.Load(file);
+                }
+
+                // File doesn't exist - create it with retry logic
+                XElement rootElem = new(xmlFileName);
+
+                // Retry logic for initial file creation
+                int createMaxRetries = 3;
+                int createDelayMs = 100;
+
+                            for (int createAttempt = 0; createAttempt < createMaxRetries; createAttempt++)
+                            {
+                                try
+                                {
+                                    if (createAttempt > 0)
+                                    {
+                                        GC.Collect();
+                                        GC.WaitForPendingFinalizers();
+                                        Thread.Sleep(createDelayMs * createAttempt);
+                                    }
+
+                                    rootElem.Save(xmlFilePath);
+                                    return rootElem;
+                                }
+                                catch (IOException) when (createAttempt < createMaxRetries - 1)
+                                {
+                                    continue;
+                                }
+                            }
+
+                            // Last attempt without catch
+                            rootElem.Save(xmlFilePath);
+                            return rootElem;
+                        }
+                        catch (IOException) when (attempt < maxRetries - 1)
+                        {
+                            // File is locked, wait and retry
+                            Thread.Sleep(delayMs * (attempt + 1));
+                            continue;
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new DalXMLFileLoadCreateException($"fail to load xml file: {xmlFilePath}, {ex.Message}");
+                        }
                     }
 
-                    rootElem.Save(xmlFilePath);
-                    return rootElem;
+                    throw new DalXMLFileLoadCreateException($"fail to load xml file: {xmlFilePath}, The process cannot access the file because it is being used by another process.");
                 }
-                catch (IOException) when (attempt < maxRetries - 1)
-                {
-                    continue;
-                }
-            }
-            
-            // Last attempt without catch
-            rootElem.Save(xmlFilePath);
-            return rootElem;
-        }
-        catch (Exception ex)
-        {
-            throw new DalXMLFileLoadCreateException($"fail to load xml file: {s_xmlDir + xmlFilePath}, {ex.Message}");
-        }
-    }
     #endregion
 
     #region XmlConfig
