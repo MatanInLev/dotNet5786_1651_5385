@@ -6,7 +6,7 @@
     <PhoneNumber>0571107094</PhoneNumber>
     <Email>Itay.Levi@company.com</Email>
     <Distance xsi:nil="true" />
-    <IsActive>true</IsActive>
+    <IsActive>false</IsActive>
     <Date>2026-01-15T14:29:12.1644003+02:00</Date>
     <VehicleType>Foot</VehicleType>
   </Courier>
@@ -16,7 +16,7 @@
     <PhoneNumber>0566136590</PhoneNumber>
     <Email>Daniel.Levi@company.com</Email>
     <Distance>8</Distance>
-    <IsActive>true</IsActive>
+    <IsActive>false</IsActive>
     <Date>2026-01-15T14:29:12.1827555+02:00</Date>
     <VehicleType>Motorcycle</VehicleType>
   </Courier>
@@ -26,7 +26,7 @@
     <PhoneNumber>0585070585</PhoneNumber>
     <Email>Daniel.Levi@company.com</Email>
     <Distance xsi:nil="true" />
-    <IsActive>true</IsActive>
+    <IsActive>false</IsActive>
     <Date>2026-01-15T14:29:12.1993012+02:00</Date>
     <VehicleType>Foot</VehicleType>
   </Courier>
@@ -36,7 +36,7 @@
     <PhoneNumber>0546267682</PhoneNumber>
     <Email>Eliran.Golan@company.com</Email>
     <Distance>18</Distance>
-    <IsActive>true</IsActive>
+    <IsActive>false</IsActive>
     <Date>2026-01-15T14:29:12.2123756+02:00</Date>
     <VehicleType>Foot</VehicleType>
   </Courier>
@@ -46,7 +46,7 @@
     <PhoneNumber>0510453519</PhoneNumber>
     <Email>Eliran.Golan@company.com</Email>
     <Distance>21</Distance>
-    <IsActive>true</IsActive>
+    <IsActive>false</IsActive>
     <Date>2026-01-15T14:29:12.2255192+02:00</Date>
     <VehicleType>Foot</VehicleType>
   </Courier>
@@ -56,7 +56,7 @@
     <PhoneNumber>0577025908</PhoneNumber>
     <Email>Shir.Israeli@company.com</Email>
     <Distance>26</Distance>
-    <IsActive>true</IsActive>
+    <IsActive>false</IsActive>
     <Date>2026-01-15T14:29:12.2384974+02:00</Date>
     <VehicleType>Car</VehicleType>
   </Courier>
@@ -66,7 +66,7 @@
     <PhoneNumber>0588054479</PhoneNumber>
     <Email>Omer.Adam@company.com</Email>
     <Distance xsi:nil="true" />
-    <IsActive>true</IsActive>
+    <IsActive>false</IsActive>
     <Date>2026-01-15T14:29:12.250689+02:00</Date>
     <VehicleType>Foot</VehicleType>
   </Courier>
@@ -75,10 +75,10 @@
     <Name>Noa Kirel</Name>
     <PhoneNumber>0580201983</PhoneNumber>
     <Email>Noa.Kirel@company.com</Email>
-    <Distance>20</Distance>
+    <Distance>2</Distance>
     <IsActive>true</IsActive>
     <Date>2026-01-15T14:29:12.2651432+02:00</Date>
-    <VehicleType>Foot</VehicleType>
+    <VehicleType>Motorcycle</VehicleType>
   </Courier>
   <Courier>
     <Id>352263697</Id>
@@ -86,7 +86,7 @@
     <PhoneNumber>0585156371</PhoneNumber>
     <Email>Noa.Kirel@company.com</Email>
     <Distance>19</Distance>
-    <IsActive>true</IsActive>
+    <IsActive>false</IsActive>
     <Date>2026-01-15T14:29:12.2774395+02:00</Date>
     <VehicleType>Car</VehicleType>
   </Courier>
@@ -96,7 +96,7 @@
     <PhoneNumber>0522934476</PhoneNumber>
     <Email>Dina.Klein@company.com</Email>
     <Distance>25</Distance>
-    <IsActive>true</IsActive>
+    <IsActive>false</IsActive>
     <Date>2026-01-15T14:29:12.2897208+02:00</Date>
     <VehicleType>Motorcycle</VehicleType>
   </Courier>
@@ -106,7 +106,7 @@
     <PhoneNumber>0519153827</PhoneNumber>
     <Email>Shir.Israeli@company.com</Email>
     <Distance>12</Distance>
-    <IsActive>true</IsActive>
+    <IsActive>false</IsActive>
     <Date>2026-01-15T14:29:12.3025014+02:00</Date>
     <VehicleType>Car</VehicleType>
   </Courier>
@@ -116,7 +116,7 @@
     <PhoneNumber>0546471613</PhoneNumber>
     <Email>Yair.Kahana@company.com</Email>
     <Distance>24</Distance>
-    <IsActive>true</IsActive>
+    <IsActive>false</IsActive>
     <Date>2026-01-15T14:29:12.3158852+02:00</Date>
     <VehicleType>Car</VehicleType>
   </Courier>
@@ -126,7 +126,7 @@
     <PhoneNumber>0599329670</PhoneNumber>
     <Email>Omer.Adam@company.com</Email>
     <Distance>17</Distance>
-    <IsActive>true</IsActive>
+    <IsActive>false</IsActive>
     <Date>2026-01-15T14:29:12.3287404+02:00</Date>
     <VehicleType>Foot</VehicleType>
   </Courier>
@@ -136,7 +136,7 @@
     <PhoneNumber>0521516510</PhoneNumber>
     <Email>Daniel.Levi@company.com</Email>
     <Distance xsi:nil="true" />
-    <IsActive>true</IsActive>
+    <IsActive>false</IsActive>
     <Date>2026-01-15T14:29:12.3481996+02:00</Date>
     <VehicleType>Bike</VehicleType>
   </Courier>
@@ -146,7 +146,7 @@
     <PhoneNumber>0558692949</PhoneNumber>
     <Email>Daniel.Levi@company.com</Email>
     <Distance xsi:nil="true" />
-    <IsActive>true</IsActive>
+    <IsActive>false</IsActive>
     <Date>2026-01-15T14:29:12.3652614+02:00</Date>
     <VehicleType>Foot</VehicleType>
   </Courier>
@@ -156,7 +156,7 @@
     <PhoneNumber>0584296758</PhoneNumber>
     <Email>Ariela.Levin@company.com</Email>
     <Distance>21</Distance>
-    <IsActive>true</IsActive>
+    <IsActive>false</IsActive>
     <Date>2026-01-15T14:29:12.3792207+02:00</Date>
     <VehicleType>Foot</VehicleType>
   </Courier>
@@ -166,7 +166,7 @@
     <PhoneNumber>0513858499</PhoneNumber>
     <Email>Ariela.Levin@company.com</Email>
     <Distance>28</Distance>
-    <IsActive>true</IsActive>
+    <IsActive>false</IsActive>
     <Date>2026-01-15T14:29:12.3917315+02:00</Date>
     <VehicleType>Bike</VehicleType>
   </Courier>
@@ -186,7 +186,7 @@
     <PhoneNumber>0588705110</PhoneNumber>
     <Email>Omer.Adam@company.com</Email>
     <Distance>21</Distance>
-    <IsActive>true</IsActive>
+    <IsActive>false</IsActive>
     <Date>2026-01-15T14:29:12.4157323+02:00</Date>
     <VehicleType>Motorcycle</VehicleType>
   </Courier>

@@ -7,8 +7,8 @@
     <VehicleType>Foot</VehicleType>
     <StartTime>2026-01-15T12:58:12.1184129+02:00</StartTime>
     <Distance xsi:nil="true" />
-    <EndOfDelivery xsi:nil="true" />
-    <EndTime xsi:nil="true" />
+    <EndOfDelivery>Failed</EndOfDelivery>
+    <EndTime>2027-01-15T14:29:12.1184129+02:00</EndTime>
   </Delivery>
   <Delivery>
     <Id>5790</Id>
@@ -17,8 +17,8 @@
     <VehicleType>Foot</VehicleType>
     <StartTime>2026-01-15T12:31:12.1184129+02:00</StartTime>
     <Distance xsi:nil="true" />
-    <EndOfDelivery xsi:nil="true" />
-    <EndTime xsi:nil="true" />
+    <EndOfDelivery>Failed</EndOfDelivery>
+    <EndTime>2027-01-15T14:29:12.1184129+02:00</EndTime>
   </Delivery>
   <Delivery>
     <Id>5791</Id>
@@ -27,8 +27,8 @@
     <VehicleType>Bike</VehicleType>
     <StartTime>2026-01-15T14:02:12.1184129+02:00</StartTime>
     <Distance xsi:nil="true" />
-    <EndOfDelivery xsi:nil="true" />
-    <EndTime xsi:nil="true" />
+    <EndOfDelivery>Failed</EndOfDelivery>
+    <EndTime>2027-01-15T14:29:12.1184129+02:00</EndTime>
   </Delivery>
   <Delivery>
     <Id>5792</Id>
@@ -37,8 +37,8 @@
     <VehicleType>Foot</VehicleType>
     <StartTime>2026-01-15T12:22:12.1184129+02:00</StartTime>
     <Distance xsi:nil="true" />
-    <EndOfDelivery xsi:nil="true" />
-    <EndTime xsi:nil="true" />
+    <EndOfDelivery>Failed</EndOfDelivery>
+    <EndTime>2027-01-15T14:29:12.1184129+02:00</EndTime>
   </Delivery>
   <Delivery>
     <Id>5793</Id>
@@ -47,8 +47,8 @@
     <VehicleType>Motorcycle</VehicleType>
     <StartTime>2026-01-15T13:57:12.1184129+02:00</StartTime>
     <Distance xsi:nil="true" />
-    <EndOfDelivery xsi:nil="true" />
-    <EndTime xsi:nil="true" />
+    <EndOfDelivery>Failed</EndOfDelivery>
+    <EndTime>2027-01-15T14:29:12.1184129+02:00</EndTime>
   </Delivery>
   <Delivery>
     <Id>5794</Id>
@@ -57,8 +57,8 @@
     <VehicleType>Foot</VehicleType>
     <StartTime>2026-01-15T13:49:12.1184129+02:00</StartTime>
     <Distance xsi:nil="true" />
-    <EndOfDelivery xsi:nil="true" />
-    <EndTime xsi:nil="true" />
+    <EndOfDelivery>Failed</EndOfDelivery>
+    <EndTime>2027-01-15T14:29:12.1184129+02:00</EndTime>
   </Delivery>
   <Delivery>
     <Id>5795</Id>
@@ -67,8 +67,8 @@
     <VehicleType>Foot</VehicleType>
     <StartTime>2026-01-15T14:16:12.1184129+02:00</StartTime>
     <Distance xsi:nil="true" />
-    <EndOfDelivery xsi:nil="true" />
-    <EndTime xsi:nil="true" />
+    <EndOfDelivery>Failed</EndOfDelivery>
+    <EndTime>2027-01-15T14:29:12.1184129+02:00</EndTime>
   </Delivery>
   <Delivery>
     <Id>5796</Id>
@@ -77,8 +77,8 @@
     <VehicleType>Car</VehicleType>
     <StartTime>2026-01-15T14:21:12.1184129+02:00</StartTime>
     <Distance xsi:nil="true" />
-    <EndOfDelivery xsi:nil="true" />
-    <EndTime xsi:nil="true" />
+    <EndOfDelivery>Failed</EndOfDelivery>
+    <EndTime>2027-01-15T14:29:12.1184129+02:00</EndTime>
   </Delivery>
   <Delivery>
     <Id>5797</Id>
@@ -87,8 +87,8 @@
     <VehicleType>Car</VehicleType>
     <StartTime>2026-01-15T14:25:12.1184129+02:00</StartTime>
     <Distance xsi:nil="true" />
-    <EndOfDelivery xsi:nil="true" />
-    <EndTime xsi:nil="true" />
+    <EndOfDelivery>Failed</EndOfDelivery>
+    <EndTime>2027-01-15T14:29:12.1184129+02:00</EndTime>
   </Delivery>
   <Delivery>
     <Id>5798</Id>
@@ -97,8 +97,8 @@
     <VehicleType>Car</VehicleType>
     <StartTime>2026-01-15T13:27:12.1184129+02:00</StartTime>
     <Distance xsi:nil="true" />
-    <EndOfDelivery xsi:nil="true" />
-    <EndTime xsi:nil="true" />
+    <EndOfDelivery>Failed</EndOfDelivery>
+    <EndTime>2027-01-15T14:29:12.1184129+02:00</EndTime>
   </Delivery>
   <Delivery>
     <Id>5799</Id>
@@ -699,5 +699,15 @@
     <Distance xsi:nil="true" />
     <EndOfDelivery>Refused</EndOfDelivery>
     <EndTime>2026-01-15T12:29:12.1184129+02:00</EndTime>
+  </Delivery>
+  <Delivery>
+    <Id>5859</Id>
+    <OrderId>8200</OrderId>
+    <CourierId>0</CourierId>
+    <VehicleType>Bike</VehicleType>
+    <StartTime>2027-04-18T17:31:12.1184129+03:00</StartTime>
+    <Distance xsi:nil="true" />
+    <EndOfDelivery>Canceled</EndOfDelivery>
+    <EndTime>2027-04-18T17:31:12.1184129+03:00</EndTime>
   </Delivery>
 </ArrayOfDelivery>

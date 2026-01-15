@@ -1400,4 +1400,17 @@
     <Fragile xsi:nil="true" />
     <OrderTime>2026-01-15T12:58:12.1184129+02:00</OrderTime>
   </Order>
+  <Order>
+    <Id>8298</Id>
+    <OrderType>Sushi</OrderType>
+    <Address>ino shaki 10</Address>
+    <Latitude>31.7579178</Latitude>
+    <Longitude>35.1864575</Longitude>
+    <CustomerName>az</CustomerName>
+    <CustomerPhone>0587096988</CustomerPhone>
+    <Weight xsi:nil="true" />
+    <Volume xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+    <OrderTime>2027-04-18T17:31:12.1184129+03:00</OrderTime>
+  </Order>
 </ArrayOfOrder>
