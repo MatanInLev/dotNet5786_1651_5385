@@ -15,10 +15,10 @@
     <OrderId>8367</OrderId>
     <CourierId>257914108</CourierId>
     <VehicleType>Foot</VehicleType>
-    <StartTime>2026-01-15T14:43:14.7679868+02:00</StartTime>
-    <Distance>2.7855574737665503</Distance>
+    <StartTime>2026-01-15T12:58:12.1184129+02:00</StartTime>
+    <Distance xsi:nil="true" />
     <EndOfDelivery>Failed</EndOfDelivery>
-    <EndTime>2026-01-15T15:10:14.7679868+02:00</EndTime>
+    <EndTime>2027-01-15T14:29:12.1184129+02:00</EndTime>
   </Delivery>
   <Delivery>
     <Id>5861</Id>
@@ -107,8 +107,8 @@
     <VehicleType>Bike</VehicleType>
     <StartTime>2026-01-15T13:03:14.7679868+02:00</StartTime>
     <Distance xsi:nil="true" />
-    <EndOfDelivery>Delivered</EndOfDelivery>
-    <EndTime>2026-01-15T14:38:14.7679868+02:00</EndTime>
+    <EndOfDelivery>Failed</EndOfDelivery>
+    <EndTime>2027-01-15T14:29:12.1184129+02:00</EndTime>
   </Delivery>
   <Delivery>
     <Id>5870</Id>
@@ -118,7 +118,7 @@
     <StartTime>2026-01-15T11:03:14.7679868+02:00</StartTime>
     <Distance xsi:nil="true" />
     <EndOfDelivery>Failed</EndOfDelivery>
-    <EndTime>2026-01-15T15:03:14.7679868+02:00</EndTime>
+    <EndTime>2027-01-15T14:29:12.1184129+02:00</EndTime>
   </Delivery>
   <Delivery>
     <Id>5871</Id>
@@ -137,8 +137,8 @@
     <VehicleType>Foot</VehicleType>
     <StartTime>2026-01-15T13:06:14.7679868+02:00</StartTime>
     <Distance xsi:nil="true" />
-    <EndOfDelivery>Delivered</EndOfDelivery>
-    <EndTime>2026-01-15T14:40:14.7679868+02:00</EndTime>
+    <EndOfDelivery>Failed</EndOfDelivery>
+    <EndTime>2027-01-15T14:29:12.1184129+02:00</EndTime>
   </Delivery>
   <Delivery>
     <Id>5873</Id>
@@ -147,8 +147,8 @@
     <VehicleType>Motorcycle</VehicleType>
     <StartTime>2026-01-15T13:51:14.7679868+02:00</StartTime>
     <Distance xsi:nil="true" />
-    <EndOfDelivery>Delivered</EndOfDelivery>
-    <EndTime>2026-01-15T14:51:14.7679868+02:00</EndTime>
+    <EndOfDelivery>Failed</EndOfDelivery>
+    <EndTime>2027-01-15T14:29:12.1184129+02:00</EndTime>
   </Delivery>
   <Delivery>
     <Id>5874</Id>
@@ -157,8 +157,8 @@
     <VehicleType>Foot</VehicleType>
     <StartTime>2026-01-15T11:03:14.7679868+02:00</StartTime>
     <Distance xsi:nil="true" />
-    <EndOfDelivery>Delivered</EndOfDelivery>
-    <EndTime>2026-01-15T13:03:14.7679868+02:00</EndTime>
+    <EndOfDelivery>Failed</EndOfDelivery>
+    <EndTime>2027-01-15T14:29:12.1184129+02:00</EndTime>
   </Delivery>
   <Delivery>
     <Id>5875</Id>
@@ -167,8 +167,8 @@
     <VehicleType>Motorcycle</VehicleType>
     <StartTime>2026-01-15T13:03:14.7679868+02:00</StartTime>
     <Distance xsi:nil="true" />
-    <EndOfDelivery>Delivered</EndOfDelivery>
-    <EndTime>2026-01-15T14:37:14.7679868+02:00</EndTime>
+    <EndOfDelivery>Failed</EndOfDelivery>
+    <EndTime>2027-01-15T14:29:12.1184129+02:00</EndTime>
   </Delivery>
   <Delivery>
     <Id>5876</Id>
@@ -177,8 +177,8 @@
     <VehicleType>Bike</VehicleType>
     <StartTime>2026-01-15T13:40:14.7679868+02:00</StartTime>
     <Distance xsi:nil="true" />
-    <EndOfDelivery>Delivered</EndOfDelivery>
-    <EndTime>2026-01-15T14:40:14.7679868+02:00</EndTime>
+    <EndOfDelivery>Failed</EndOfDelivery>
+    <EndTime>2027-01-15T14:29:12.1184129+02:00</EndTime>
   </Delivery>
   <Delivery>
     <Id>5877</Id>
@@ -187,8 +187,8 @@
     <VehicleType>Foot</VehicleType>
     <StartTime>2026-01-15T14:40:14.7679868+02:00</StartTime>
     <Distance xsi:nil="true" />
-    <EndOfDelivery>Delivered</EndOfDelivery>
-    <EndTime>2026-01-15T14:51:14.7679868+02:00</EndTime>
+    <EndOfDelivery>Failed</EndOfDelivery>
+    <EndTime>2027-01-15T14:29:12.1184129+02:00</EndTime>
   </Delivery>
   <Delivery>
     <Id>5878</Id>
@@ -197,8 +197,8 @@
     <VehicleType>Bike</VehicleType>
     <StartTime>2026-01-15T13:24:14.7679868+02:00</StartTime>
     <Distance xsi:nil="true" />
-    <EndOfDelivery>Delivered</EndOfDelivery>
-    <EndTime>2026-01-15T14:24:14.7679868+02:00</EndTime>
+    <EndOfDelivery>Failed</EndOfDelivery>
+    <EndTime>2027-01-15T14:29:12.1184129+02:00</EndTime>
   </Delivery>
   <Delivery>
     <Id>5879</Id>
@@ -1079,5 +1079,15 @@
     <Distance>2.6905204464363255</Distance>
     <EndOfDelivery>Delivered</EndOfDelivery>
     <EndTime>2026-01-15T15:28:14.7679868+02:00</EndTime>
+  </Delivery>
+  <Delivery>
+    <Id>5859</Id>
+    <OrderId>8200</OrderId>
+    <CourierId>0</CourierId>
+    <VehicleType>Bike</VehicleType>
+    <StartTime>2027-04-18T17:31:12.1184129+03:00</StartTime>
+    <Distance xsi:nil="true" />
+    <EndOfDelivery>Canceled</EndOfDelivery>
+    <EndTime>2027-04-18T17:31:12.1184129+03:00</EndTime>
   </Delivery>
 </ArrayOfDelivery>

@@ -299,6 +299,7 @@ namespace PL.Courier
 
         private async void BtnUpdateCourier_Click(object sender, RoutedEventArgs e)
         {
+            var button = sender as System.Windows.Controls.Button;
             try
             {
                 if (CurrentCourier == null)
@@ -323,7 +324,6 @@ namespace PL.Courier
                 }
 
                 // Disable button during operation
-                var button = sender as System.Windows.Controls.Button;
                 if (button != null)
                 {
                     button.IsEnabled = false;
@@ -345,21 +345,22 @@ namespace PL.Courier
                 };
 
                 int adminId = s_bl.Admin.GetConfig().AdminId;
-                
+
                 await System.Threading.Tasks.Task.Run(() =>
                 {
                     s_bl.Courier.Update(adminId, updated);
                 });
-                
+
                 ModernMessageBox.Show("Profile updated.", "Success", ModernMessageBox.MessageBoxType.Success, ModernMessageBox.MessageBoxButtons.OK, this);
-                
+
                 await RefreshAsync();
             }
             catch (Exception ex)
             {
                 ModernMessageBox.Show($"Update failed: {ex.Message}", "Error", ModernMessageBox.MessageBoxType.Error, ModernMessageBox.MessageBoxButtons.OK, this);
-                
-                var button = sender as System.Windows.Controls.Button;
+            }
+            finally
+            {
                 if (button != null)
                 {
                     button.IsEnabled = true;
