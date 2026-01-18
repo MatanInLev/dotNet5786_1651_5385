@@ -16,7 +16,8 @@
     <Window.Resources>
         <!-- Converters -->
         <pl:OrderCanBeUpdatedOrIsNewConverter x:Key="OrderCanBeUpdatedOrIsNewConverter"/>
-        
+        <pl:DateTimeFormatConverter x:Key="DateTimeFormatConverter"/>
+
         <!-- Enum collections for ComboBox bindings -->
         <ObjectDataProvider x:Key="OrderTypeCollection" MethodName="GetValues" ObjectType="{x:Type bo:OrderType}">
             <ObjectDataProvider.MethodParameters>
@@ -320,7 +321,7 @@
                                VerticalAlignment="Center" 
                                Margin="0,6,15,6"/>
                     <TextBlock Grid.Row="11" Grid.Column="1" 
-                               Text="{Binding CurrentOrder.ExpectedDelivery, StringFormat='dd/MM/yyyy HH:mm'}" 
+                               Text="{Binding CurrentOrder.ExpectedDelivery, Converter={StaticResource DateTimeFormatConverter}}" 
                                FontSize="12"
                                VerticalAlignment="Center" 
                                Margin="0,6"/>

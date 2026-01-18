@@ -16,6 +16,9 @@ namespace PL
         {
             if (value is DateTime dateTime)
             {
+                if (dateTime == DateTime.MinValue)
+                    return "Not set";
+
                 // Force the desired format: Day/Month/Year Hour:Minute:Second
                 return dateTime.ToString("dd/MM/yyyy HH:mm:ss");
             }

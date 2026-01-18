@@ -122,60 +122,81 @@ public static class Tools
 
         // Use Nominatim (OpenStreetMap) geocoding service
         string baseUrl = "https://nominatim.openstreetmap.org/search";
-        string queryParams = $"?q={Uri.EscapeDataString(address)}&format=json&limit=1";
-        string url = baseUrl + queryParams;
+
+        // Prepare retry candidates
+        var attempts = new List<string> { address };
+
+        // Add fallback: remove common street suffixes which might confuse the strict parser in Nominatim
+        // e.g. "Agripas Street" -> "Agripas" (which works better if the street is mapped as "Agrippas")
+        string simplified = System.Text.RegularExpressions.Regex.Replace(address, 
+            @"\s+(street|st\.?|road|rd\.?|avenue|ave\.?|lane|ln\.?|boulevard|blvd\.?)\b", 
+            "", 
+            System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.CultureInvariant);
+
+        if (!simplified.Equals(address, StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(simplified))
+        {
+            attempts.Add(simplified);
+        }
 
         using (var client = new HttpClient())
         {
             // Nominatim requires User-Agent header
             client.DefaultRequestHeaders.Add("User-Agent", "DeliveryManagementSystem/1.0 (educational-project)");
 
-            string jsonContent;
-            try
+            foreach (var tryAddress in attempts)
             {
-                progressCallback?.Invoke($"Sending request to geocoding service...");
-                jsonContent = await client.GetStringAsync(url);
-            }
-            catch (Exception ex)
-            {
-                throw new BO.BlTemporaryNotAvailableException($"Network error while geocoding address: {address}", ex);
-            }
+                if (tryAddress != attempts[0])
+                    progressCallback?.Invoke($"Retrying with simplified address: {tryAddress}...");
 
-            try
-            {
-                progressCallback?.Invoke($"Parsing geocoding response...");
-                
-                using (JsonDocument doc = JsonDocument.Parse(jsonContent))
+                string queryParams = $"?q={Uri.EscapeDataString(tryAddress)}&format=json&limit=1";
+                string url = baseUrl + queryParams;
+
+                string jsonContent;
+                try
                 {
-                    var results = doc.RootElement;
-                    
-                    if (results.GetArrayLength() == 0)
+                    progressCallback?.Invoke($"Sending request to geocoding service...");
+                    jsonContent = await client.GetStringAsync(url);
+                }
+                catch (Exception ex)
+                {
+                    throw new BO.BlTemporaryNotAvailableException($"Network error while geocoding address: {address}", ex);
+                }
+
+                try
+                {
+                    progressCallback?.Invoke($"Parsing geocoding response...");
+
+                    using (JsonDocument doc = JsonDocument.Parse(jsonContent))
                     {
-                        throw new BO.BlInvalidValueException($"Address not found: {address}");
+                        var results = doc.RootElement;
+
+                        if (results.GetArrayLength() > 0)
+                        {
+                            var firstResult = results[0];
+                            double latitude = firstResult.GetProperty("lat").GetString()!.ParseDouble();
+                            double longitude = firstResult.GetProperty("lon").GetString()!.ParseDouble();
+
+                            var coordinates = (latitude, longitude);
+
+                            // Cache the result (using the original normalized address as key)
+                            _geocodingCache.TryAdd(normalizedAddress, coordinates);
+
+                            progressCallback?.Invoke($"Successfully geocoded: {tryAddress} → ({latitude:F6}, {longitude:F6})");
+
+                            return coordinates;
+                        }
                     }
-
-                    var firstResult = results[0];
-                    double latitude = firstResult.GetProperty("lat").GetString()!.ParseDouble();
-                    double longitude = firstResult.GetProperty("lon").GetString()!.ParseDouble();
-
-                    var coordinates = (latitude, longitude);
-                    
-                    // Cache the result
-                    _geocodingCache.TryAdd(normalizedAddress, coordinates);
-                    
-                    progressCallback?.Invoke($"Successfully geocoded: {address} → ({latitude:F6}, {longitude:F6})");
-                    
-                    return coordinates;
+                }
+                catch (Exception ex)
+                {
+                    // If parsing failed (not just empty results), log or rethrow if it was the last attempt
+                     if (attempts.IndexOf(tryAddress) == attempts.Count - 1)
+                        throw new BO.BlTemporaryNotAvailableException($"Failed to parse geocoding response for address: {address}", ex);
                 }
             }
-            catch (BO.BlInvalidValueException)
-            {
-                throw; // Re-throw address not found
-            }
-            catch (Exception ex)
-            {
-                throw new BO.BlTemporaryNotAvailableException($"Failed to parse geocoding response for address: {address}", ex);
-            }
+
+            // If we get here, no results were found in any attempt
+            throw new BO.BlInvalidValueException($"Address not found: {address}");
         }
     }
 

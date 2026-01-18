@@ -700,4 +700,14 @@
     <EndOfDelivery>Delivered</EndOfDelivery>
     <EndTime>2026-01-17T22:18:27.8051662+02:00</EndTime>
   </Delivery>
+  <Delivery>
+    <Id>5930</Id>
+    <OrderId>8399</OrderId>
+    <CourierId>202483501</CourierId>
+    <VehicleType>Car</VehicleType>
+    <StartTime>2026-01-17T22:57:27.8051662+02:00</StartTime>
+    <Distance xsi:nil="true" />
+    <EndOfDelivery>Failed</EndOfDelivery>
+    <EndTime>2026-01-17T22:57:27.8051662+02:00</EndTime>
+  </Delivery>
 </ArrayOfDelivery>
